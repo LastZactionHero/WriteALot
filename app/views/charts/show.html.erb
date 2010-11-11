@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @chart.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @chart.description %>
+</p>
+
+<p>
+  <b>Startdate:</b>
+  <%= @chart.startdate %>
+</p>
+
+<p>
+  <b>Enddate:</b>
+  <%= @chart.enddate %>
+</p>
+
+
+<%= link_to 'Edit', edit_chart_path(@chart) %> |
+<%= link_to 'Back', charts_path %>

@@ -1,0 +1,8 @@
+Chart Overview: <%= @chart_name %>
+<br><br>
+<%= link_to "Add New Entry", :controller => "entries", :action => "new" %>
+<br><br>
+
+<% @entries.each do |entry| %>
+<%= entry.inspect %><br>
+<% end %>

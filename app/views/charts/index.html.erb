@@ -1,0 +1,29 @@
+<h1>Listing charts</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Startdate</th>
+    <th>Enddate</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @charts.each do |chart| %>
+  <tr>
+    <td><%= chart.name %></td>
+    <td><%= chart.description %></td>
+    <td><%= chart.startdate %></td>
+    <td><%= chart.enddate %></td>
+    <td><%= link_to 'Show', chart %></td>
+    <td><%= link_to 'Edit', edit_chart_path(chart) %></td>
+    <td><%= link_to 'Destroy', chart, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Chart', new_chart_path %>
