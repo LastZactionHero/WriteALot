@@ -1,4 +1,15 @@
-<%= @real_name %><br>
-<%= @user_name %><br>
-<img src="<%= @user_image %>"><br>
+#<% if @exists %>
+#<%= "Welcome Back!" %>
+#<% else %>
+#<%= "New User!" %>
+#<% end %>
+#<br><br>
+#You are user id <%= @user_id %><br><br>
 
+
+#<% @charts.each do |chart| %>
+#<%= link_to chart[:name], :controller => "charts", :action => "overview", :id => chart[:id] %><br>
+#<% end %>
+
+#<br><br>
+#<%= link_to "Create New Chart", :controller => "charts", :action => "new" %>
