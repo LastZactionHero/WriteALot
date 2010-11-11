@@ -105,32 +105,32 @@ class UsersController < ApplicationController
       session[:user_image] = @user_image
     end
             
-    @exists = false
-    @user_id = -1
+    #@exists = false
+    #@user_id = -1
     
     # Check if user already exists in database
-    User.find( @user_name ) do |user|
-      @exists = true
-      @user_id = user.id
-      session[:user_id] = @user_id
-    end
+    #User.find( @user_name ) do |user|
+    #  @exists = true
+    #  @user_id = user.id
+    #  session[:user_id] = @user_id
+    #end
     
-    if !@exists
-      new_user = User.new( :twitter => @user_name, :name => @real_name )
-      new_user.save
-      
-      @user_id = new_user.id
-      session[:user_id] = @user_id
-    end
+    #if !@exists
+    #  new_user = User.new( :twitter => @user_name, :name => @real_name )
+    #  new_user.save
+    #  
+    #  @user_id = new_user.id
+    #  session[:user_id] = @user_id
+    #end
     
     
     # Chart Listing
     # Find number of charts associated with this user
-    @charts = Chart.where( :creator => session[:user_id] )
-    @chart_count = @charts.size
-    
-    @current_user = User.find( session[:user_id] )
-    puts @current_user.inspect
+    #@charts = Chart.where( :creator => session[:user_id] )
+    #@chart_count = @charts.size
+    #
+    #@current_user = User.find( session[:user_id] )
+    #puts @current_user.inspect
   end
 
 end
