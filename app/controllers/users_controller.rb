@@ -109,11 +109,11 @@ class UsersController < ApplicationController
     @user_id = -1
     
     # Check if user already exists in database
-    #User.find( @user_name ) do |user|
-    #  @exists = true
-    #  @user_id = user.id
-    #  session[:user_id] = @user_id
-    #end
+    User.find( @user_name ) do |user|
+      @exists = true
+      @user_id = user.id
+      session[:user_id] = @user_id
+    end
     
     #if !@exists
     #  new_user = User.new( :twitter => @user_name, :name => @real_name )
