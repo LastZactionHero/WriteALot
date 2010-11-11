@@ -115,13 +115,13 @@ class UsersController < ApplicationController
       session[:user_id] = @user_id
     end
     
-    #if !@exists
-    #  new_user = User.new( :twitter => @user_name, :name => @real_name )
-    #  new_user.save
-    #  
-    #  @user_id = new_user.id
-    #  session[:user_id] = @user_id
-    #end
+    if !@exists
+      new_user = User.new( :twitter => @user_name, :name => @real_name )
+      new_user.save
+      
+      @user_id = new_user.id
+      session[:user_id] = @user_id
+    end
     
     
     # Chart Listing
