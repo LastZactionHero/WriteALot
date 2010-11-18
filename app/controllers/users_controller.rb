@@ -126,7 +126,8 @@ class UsersController < ApplicationController
     
     # Chart Listing
     # Find number of charts associated with this user
-    @charts = Chart.where( :creator => session[:user_id] )
+    #@charts = Chart.where( :creator => session[:user_id] )
+    @charts = Chart.all
     @chart_count = @charts.size
   end
 
