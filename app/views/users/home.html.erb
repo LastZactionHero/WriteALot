@@ -63,7 +63,8 @@
   
   <% @user_entries.each do |entry| %>
     <div id="div_entry_new" style="position:relative; top:0px; width:100%; left:0px; height:75px; background-color:white;">
-      Words: <%= entry.words %> Hours: <%= entry.hours %> Comment: <%= entry.comments %>
+      Words: <%= entry.words %> Hours: <%= entry.hours %> Comment: <%= entry.comments %><br>
+      <%= entry.inspect %>
     </div>
   <% end %>
   <% if @user_entries.empty? %>
