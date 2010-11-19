@@ -109,7 +109,8 @@ class EntriesController < ApplicationController
     @entry[:hours] = params[:hours]
     @entry[:starttime] = DateTime.now
     @entry[:endtime] = DateTime.now
-    @entry[:user] = session[:user_id]
+    #@entry[:user] = session[:user_id]
+    @entry[:userid] = session[:user_id]
     @entry.save
     
     puts @entry.inspect
