@@ -170,6 +170,7 @@ class UsersController < ApplicationController
       days_entry = dseconds / ( 60 * 60 * 24 )
       if( days_entry < 7 )
         @hours_this_week += entry[:hours]
+        @hours_this_week += entry[:minutes].to_f / 60
         @words_this_week += entry[:words]
       end
     end

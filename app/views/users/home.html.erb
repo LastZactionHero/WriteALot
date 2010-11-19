@@ -11,8 +11,8 @@
     document.getElementById( "div_entry_new" ).style.height = "150px";
     
     var entryString = "Add New Log Entry<br><form><table>";
-    entryString = entryString + "<tr><td>Hours:</td><td><input id=\"form_entry_hours\" type=text name=\"entry_hours\"></td></tr>";
-    entryString = entryString + "<tr><td>Words:</td><td><input id=\"form_entry_words\"type=text name=\"entry_words\"></td></tr>";
+    entryString = entryString + "<tr><td>Hours:</td><td><input id=\"form_entry_hours\" value=\"0\" type=text name=\"entry_hours\"></td><td>Minutes:</td><td><input id=\"form_entry_minutes\" type=text value=\"0\" name=\"entry_minutes\"></td></tr>";
+    entryString = entryString + "<tr><td>Words:</td><td><input value=\"0\" id=\"form_entry_words\"type=text name=\"entry_words\"></td></tr>";
     entryString = entryString + "<tr><td>Comments:</td><td><input id=\"form_entry_comments\" type=text name=\"entry_comments\"></td></tr>";
     entryString = entryString + "<tr><td></td><td><a onclick=\"javascript:submitNewEntry()\">Add</a></td></tr>";
     entryString = entryString + "</table></form>";
@@ -22,7 +22,8 @@
   
   function submitNewEntry()
   {
-    var hours = parseFloat( document.getElementById( "form_entry_hours" ).value );
+    var hours = parseInt( document.getElementById( "form_entry_hours" ).value );
+    var minutes = parseInt( document.getElementById( "form_entry_minutes" ).value );
     var words = parseInt( document.getElementById( "form_entry_words" ).value );
     var comments = document.getElementById( "form_entry_comments" ).value;
     
@@ -30,6 +31,16 @@
     if( isNaN( hours ) )
     {
       document.getElementById( "form_entry_hours" ).value = "Invalid Hours"
+      fail = true;
+    }
+    if( isNaN( minutes ) )
+    {
+      document.getElementById( "form_entry_minutes" ).value = "Invalid Minutes"
+      fail = true;    
+    }
+    else if( minutes < 0 || minutes > 59 )
+    {
+      document.getElementById( "form_entry_minutes" ).value = "0 <= Minutes < 59"
       fail = true;
     }
     if( isNaN( words ) )
@@ -43,7 +54,7 @@
     if( !fail )
     {
       words = Math.floor( words )
-      var submitString = "hours=" + hours + "&words=" + words + "&comment=" + encodeURIComponent( comments );
+      var submitString = "hours=" + hours + "&words=" + words + "&minutes=" + minutes + "&comment=" + encodeURIComponent( comments );
       var httpString = "/entries/createinline?" + submitString;
     
       window.location = httpString;
@@ -87,7 +98,7 @@
   
   <% @user_entries.each do |entry| %>
     <div id="div_entry_new" style="position:relative; top:0px; width:100%; left:0px; height:75px; background-color:white;">
-      Words: <%= entry.words %><br>Hours: <%= entry.hours %><br>Comment: <%= entry.comments %>&nbsp
+      Words: <%= entry.words %><br>Hours: <%= entry.hours %> Minutes: <%= entry.minutes %><br>Comment: <%= entry.comments %>&nbsp
       <a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a>
     </div>
   <% end %>

@@ -106,6 +106,7 @@ class EntriesController < ApplicationController
     @entry = Entry.new
     @entry[:comments] = params[:comment]
     @entry[:words] = params[:words]
+    @entry[:minutes] = params[:minutes]
     @entry[:hours] = params[:hours]
     @entry[:timestart] = Time.now
     @entry[:timeend] = Time.now
