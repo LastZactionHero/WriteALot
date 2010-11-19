@@ -144,8 +144,36 @@ class UsersController < ApplicationController
       redirect_to :action => "login"
     end
     
-    #@user_entries = Entry.all
+    # Get all entries for this user
     @user_entries = Entry.find( :all, :conditions => ["userid = #{session[:user_id]}"], :order => "id desc" )
+      
+    # Get the days since last entry
+    @days_last_use = -1
+    if !@user_entries.empty?
+      user = @user_entries[0]
+      timestart = user[:created_at].to_i
+      timenow = Time.now
+      
+      puts "Time End: #{user[:created_at].to_i}"
+      dseconds = timenow.to_i - timestart.to_i
+      @days_last_use = dseconds / ( 60 * 60 * 24 )
+    end
+    
+    # Count number of hours this week
+    @hours_this_week = 0
+    @words_this_week = 0
+    @user_entries.each do |entry|
+      timestart = entry[:created_at].to_i
+      timenow = Time.now.to_i
+      
+      dseconds = timenow - timestart
+      days_entry = dseconds / ( 60 * 60 * 24 )
+      if( days_entry < 7 )
+        @hours_this_week += entry[:hours]
+        @words_this_week += entry[:words]
+      end
+    end
+    
   end
   
 end

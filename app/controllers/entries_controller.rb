@@ -107,8 +107,8 @@ class EntriesController < ApplicationController
     @entry[:comments] = params[:comment]
     @entry[:words] = params[:words]
     @entry[:hours] = params[:hours]
-    @entry[:starttime] = DateTime.now
-    @entry[:endtime] = DateTime.now
+    @entry[:timestart] = Time.now
+    @entry[:timeend] = Time.now
     #@entry[:user] = session[:user_id]
     @entry[:userid] = session[:user_id]
     @entry.save

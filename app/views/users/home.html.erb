@@ -47,9 +47,16 @@
   <div id="div_titlebar_row_2" style="position:relative; top:10px; left:10px; height: 20px;">
     <span style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">
       <table width=40%><tr>
-        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Last Entry: 3 Days Ago</td> 
-        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Hours This Week: 5</td>
-        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Words This Week: 1500</td>
+        <% day_string = "None" %>
+        <% if @days_last_use == 0 %>
+        <%   day_string = "Today" %>
+        <% elsif @days_last_use > 0 %>
+        <%   day_string = "#{@days_last_use} Days Ago" %>
+        <% end %>
+        
+        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Last Entry: <%= day_string %></td> 
+        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Hours This Week: <%= @hours_this_week %></td>
+        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Words This Week: <%= @words_this_week %></td>
       </tr></table>
     </span>  
   </div>
@@ -62,8 +69,7 @@
   
   <% @user_entries.each do |entry| %>
     <div id="div_entry_new" style="position:relative; top:0px; width:100%; left:0px; height:75px; background-color:white;">
-      Words: <%= entry.words %> Hours: <%= entry.hours %> Comment: <%= entry.comments %><br>
-      <%= entry.inspect %>
+      Words: <%= entry.words %><br>Hours: <%= entry.hours %><br>Comment: <%= entry.comments %><br>
     </div>
   <% end %>
   <% if @user_entries.empty? %>
