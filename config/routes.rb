@@ -1,5 +1,6 @@
 AuthTest::Application.routes.draw do
   match 'entries/createinline' => 'entries#createinline'
+  match 'entries/removeinline' => 'entries#removeinline'
   resources :entries
 
   resources :charts

@@ -22,14 +22,32 @@
   
   function submitNewEntry()
   {
-    var hours = document.getElementById( "form_entry_hours" ).value;
-    var words = document.getElementById( "form_entry_words" ).value;
+    var hours = parseFloat( document.getElementById( "form_entry_hours" ).value );
+    var words = parseInt( document.getElementById( "form_entry_words" ).value );
     var comments = document.getElementById( "form_entry_comments" ).value;
     
-    var submitString = "hours=" + hours + "&words=" + words + "&comment=" + encodeURIComponent( comments );
-    var httpString = "/entries/createinline?" + submitString;
+    var fail = false;
+    if( isNaN( hours ) )
+    {
+      document.getElementById( "form_entry_hours" ).value = "Invalid Hours"
+      fail = true;
+    }
+    if( isNaN( words ) )
+    {
+      document.getElementById( "form_entry_words" ).value = "Invalid Word Count"
+      fail = true;
+    }
     
-    window.location = httpString;
+    
+    
+    if( !fail )
+    {
+      words = Math.floor( words )
+      var submitString = "hours=" + hours + "&words=" + words + "&comment=" + encodeURIComponent( comments );
+      var httpString = "/entries/createinline?" + submitString;
+    
+      window.location = httpString;
+    }
   }
   
 </script>
@@ -69,7 +87,8 @@
   
   <% @user_entries.each do |entry| %>
     <div id="div_entry_new" style="position:relative; top:0px; width:100%; left:0px; height:75px; background-color:white;">
-      Words: <%= entry.words %><br>Hours: <%= entry.hours %><br>Comment: <%= entry.comments %><br>
+      Words: <%= entry.words %><br>Hours: <%= entry.hours %><br>Comment: <%= entry.comments %>&nbsp
+      <a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a>
     </div>
   <% end %>
   <% if @user_entries.empty? %>

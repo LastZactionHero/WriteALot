@@ -117,4 +117,14 @@ class EntriesController < ApplicationController
     
     redirect_to :controller => "users", :action => "home"
   end
+  
+  def removeinline
+    puts params[:entry]
+    
+    entry = Entry.find( params[:entry] )
+    entry.destroy
+          
+    redirect_to :controller => "users", :action => "home"
+  end
+
 end
