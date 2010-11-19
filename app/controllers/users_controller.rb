@@ -144,8 +144,8 @@ class UsersController < ApplicationController
       redirect_to :action => "login"
     end
     
-    #@user_entries = Entry.all
-    @user_entries = Entry.find( :all, :conditions => ["user = #{session[:user_id]}"], :order => "id desc" )
+    @user_entries = Entry.all
+    #@user_entries = Entry.find( :all, :conditions => ["user = #{session[:user_id]}"], :order => "id desc" )
   end
   
 end
