@@ -1,11 +1,13 @@
 AuthTest::Application.routes.draw do
+  match 'entries/createinline' => 'entries#createinline'
   resources :entries
 
   resources :charts
   match 'charts/overview/:id'=> 'charts#overview'
   
   resources :users
-
+  match 'home' => 'users#home'
+  
   match '/twitter_callback' => 'users#proc_twitter_login'
   match '/auth/twitter/callback' => 'users#proc_twitter_login'
   root :to => "users#login"

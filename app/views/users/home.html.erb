@@ -1,0 +1,76 @@
+<script type="text/javascript">
+
+  var newEntryDialogVisible = false;
+  function showDialogNewEntry()
+  {
+    if( !newEntryDialogVisible )
+      newEntryDialogVisible = true;
+    else
+      return;
+      
+    document.getElementById( "div_entry_new" ).style.height = "150px";
+    
+    var entryString = "Add New Log Entry<br><form><table>";
+    entryString = entryString + "<tr><td>Hours:</td><td><input id=\"form_entry_hours\" type=text name=\"entry_hours\"></td></tr>";
+    entryString = entryString + "<tr><td>Words:</td><td><input id=\"form_entry_words\"type=text name=\"entry_words\"></td></tr>";
+    entryString = entryString + "<tr><td>Comments:</td><td><input id=\"form_entry_comments\" type=text name=\"entry_comments\"></td></tr>";
+    entryString = entryString + "<tr><td></td><td><a onclick=\"javascript:submitNewEntry()\">Add</a></td></tr>";
+    entryString = entryString + "</table></form>";
+    
+    document.getElementById( "div_entry_new" ).innerHTML = entryString;
+  }
+  
+  function submitNewEntry()
+  {
+    var hours = document.getElementById( "form_entry_hours" ).value;
+    var words = document.getElementById( "form_entry_words" ).value;
+    var comments = document.getElementById( "form_entry_comments" ).value;
+    
+    var submitString = "hours=" + hours + "&words=" + words + "&comment=" + encodeURIComponent( comments );
+    var httpString = "/entries/createinline?" + submitString;
+    alert( httpString );
+    
+    window.location = httpString;
+  }
+  
+</script>
+
+
+<div id="div_titlebar" style="top:0px; left: 0px; width:100%; height:80px; background-color:black;">
+  <div id="div_titlebar_row_1" style="position:relative; top:10px; left:10px; height: 40px;">
+    <span style="color:white; font-size:30px; font-family: Georgia,Serif;Times;">
+      <%= @user_name %>
+      <image height=30 width=30 src=" <%= @user_image %> ">
+      <span style="font-size:14px;">Sign Out</span>
+    </span>  
+  </div>
+  
+  <div id="div_titlebar_row_2" style="position:relative; top:10px; left:10px; height: 20px;">
+    <span style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">
+      <table width=40%><tr>
+        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Last Entry: 3 Days Ago</td> 
+        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Hours This Week: 5</td>
+        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Words This Week: 1500</td>
+      </tr></table>
+    </span>  
+  </div>
+</div>
+
+<div id="div_entry_list" style="position:relative; top:0px; width:50%; height:500px; background-color:white; overflow-x: hidden; overflow-y:scroll;">
+  <div id="div_entry_new" style="position:relative; top:0px; width:100%; left:0px; height:25px; background-color:#DDDDDD;" onclick="javascript:showDialogNewEntry()">
+    Add New Log Entry
+  </div>
+  
+  <% @user_entries.each do |entry| %>
+    <div id="div_entry_new" style="position:relative; top:0px; width:100%; left:0px; height:75px; background-color:white;">
+      Words: <%= entry.words %> Hours: <%= entry.hours %> Comment: <%= entry.comments %>
+    </div>
+  <% end %>
+  <% if @user_entries.empty? %>
+    <%= "You Have No Log Entries" %>
+  <% end %> 
+</div>
+
+<div id="div_entry_list" style="position:relative; top:-500px; left:50%; width:50%; height:500px; background-color:white; overflow:hidden;">
+
+</div>

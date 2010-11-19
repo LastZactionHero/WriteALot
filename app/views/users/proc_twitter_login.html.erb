@@ -1,5 +1,3 @@
-Proc Twitter Login
-
 <% if @exists %>
 <%= "Welcome Back!" %>
 <% else %>
@@ -7,15 +5,3 @@ Proc Twitter Login
 <% end %>
 <br><br>
 You are user id <%= @user_id %><br><br>
-
-
-<% if false %>
-<% @charts.each do |chart| %>
-<%= link_to chart[:name], :controller => "charts", :action => "overview", :id => chart[:id] %><br>
-<% end %>
-
-<br><br>
-<%= link_to "Create New Chart", :controller => "charts", :action => "new" %>
-
-
-<% end %>

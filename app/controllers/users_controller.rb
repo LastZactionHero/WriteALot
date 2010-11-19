@@ -88,14 +88,17 @@ class UsersController < ApplicationController
     end
   end
  
-  # proc_twitter
+  # Process Twitter Login Success
   def proc_twitter_login
     
+    # If user is already logged in, grab session variables
+    # THIS CAN LIKELY BE REMOVED
     if session[:user_name]
       @real_name = session[:real_name] 
       @user_name = session[:user_name]
       @user_image = session[:user_image]
-    else 
+    else
+    # If user is not logged in, grab authentication varaibles
       @real_name = request.env['rack.auth']['user_info']['name']
       @user_name = request.env['rack.auth']['user_info']['nickname']
       @user_image = request.env['rack.auth']['user_info']['image']
@@ -115,6 +118,7 @@ class UsersController < ApplicationController
       session[:user_id] = @user_id
     end
     
+    # User does not exist in database. Add new user
     if !@exists
       new_user = User.new( :twitter => @user_name, :name => @real_name )
       new_user.save
@@ -123,12 +127,25 @@ class UsersController < ApplicationController
       session[:user_id] = @user_id
     end
     
-    
-    # Chart Listing
-    # Find number of charts associated with this user
-    #@charts = Chart.where( :creator => session[:user_id] )
-    @charts = Chart.all
-    @chart_count = @charts.size
+    # Redirect to the user home page
+    redirect_to :action => "home"
   end
 
+  # User Home Page
+  def home
+    # Get info for the current user
+    @user_id = session[:user_id]
+    @user_name = session[:user_name]
+    @user_image = session[:user_image]
+    @real_name = session[:real_name]
+    
+    # If information is missing, redirect to log in
+    if @user_id.nil?
+      redirect_to :action => "login"
+    end
+    
+    #@user_entries = Entry.all
+    @user_entries = Entry.find( :all, :conditions => ["user = #{session[:user_id]}"], :order => "id desc" )
+  end
+  
 end

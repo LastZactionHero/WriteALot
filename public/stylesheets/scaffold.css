@@ -16,6 +16,8 @@ a { color: #000; }
 a:visited { color: #666; }
 a:hover { color: #fff; background-color:#000; }
 
+a#link_login:hover {color: transparent; background-color: transparent;}
+
 div.field, div.actions {
   margin-bottom: 10px;
 }

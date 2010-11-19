@@ -97,4 +97,23 @@ class EntriesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  def createinline
+    puts params[:hours]
+    puts params[:words]
+    puts params[:comment]
+  
+    @entry = Entry.new
+    @entry[:comments] = params[:comment]
+    @entry[:words] = params[:words]
+    @entry[:hours] = params[:hours]
+    @entry[:starttime] = DateTime.now
+    @entry[:endtime] = DateTime.now
+    @entry[:user] = session[:user_id]
+    @entry.save
+    
+    puts @entry.inspect
+    
+    redirect_to :controller => "users", :action => "home"
+  end
 end

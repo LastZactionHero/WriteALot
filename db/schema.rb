@@ -10,19 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101111051134) do
+ActiveRecord::Schema.define(:version => 20101119022218) do
 
 # Could not dump table "charts" because of following StandardError
 #   Unknown type 'user' for column 'creator'
 
-  create_table "entries", :force => true do |t|
-    t.datetime "starttime"
-    t.datetime "endtime"
-    t.string   "comments"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "chart",      :limit => nil
-  end
+# Could not dump table "entries" because of following StandardError
+#   Unknown type 'User' for column 'user'
 
 # Could not dump table "users" because of following StandardError
 #   Unknown type 'Entry' for column 'timeentries'
