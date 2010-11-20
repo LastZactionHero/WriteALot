@@ -56,3 +56,124 @@ div.field, div.actions {
   font-size: 12px;
   list-style: square;
 }
+
+.font_title {
+  color:black; font-size:30px; font-family: Georgia,Serif;Times;
+}
+
+.font_signout {
+  color:black; font-size:14px; font-family: Georgia,Serif;Times;
+}
+
+.font_title_stats {
+  color:#444444; font-size:12px; font-family: Georgia,Serif;Times
+}
+
+.font_new_entry {
+  font-family: Georgia,Serif;Times;
+}
+
+.box_watermark {
+  position:absolute; top:0px; left:0px; color:#EEEEEE; font-size:256px; font-family: Georgia,Serif;Times;
+}
+
+.box_titlebar {
+  top:0px; 
+  left: 0px; 
+  width:100%; 
+  height:80px; 
+  background-color:white;
+}
+
+.box_titlebar_row_1{
+  position:relative; 
+  top:10px; 
+  left:10px; 
+  height: 40px;
+}
+
+.box_titlebar_row_2{
+  position:relative; 
+  top:0px; 
+  left:10px; 
+  height: 16px;
+}
+
+.box_titlebar_divider{
+  position:relative; 
+  top:0px; 
+  left:0px; 
+  width:100%; 
+  height:10px; 
+  background-color:black;
+}
+
+.box_bottom_divider{
+  position:relative; top; 0px; left:0px; width:100%; height:10px; background-color:black;
+}
+
+.box_entry_list{
+  position:relative; 
+  top:0px; 
+  width:50%; 
+  height:500px; 
+  background-color:white; 
+  overflow-x: hidden; 
+  overflow-y:scroll;
+}
+
+.box_entry_new{
+  position:relative; 
+  overflow:hidden; 
+  border:0px black solid; 
+  top:0px; 
+  width:100%; 
+  left:0px; 
+  height:20px; 
+  background-color:#EEEEEE;
+}
+
+.box_entry_new_title{
+  height:20px; 
+  width:100%; 
+  color:black; 
+  background-color:#CCCCCC; 
+  font-family: Georgia,Serif;Times;
+}
+
+.box_entry_log{
+  position:relative; 
+  top:0px; 
+  width:100%; 
+  left:0px; 
+  height:75px; 
+  border:1px #777777 dashed; 
+  background-color:white;
+}
+
+.box_entry_log_top_left{
+  position:relative; top:5px; height:30px; left:0px; width:75%; font-family: Georgia,Serif;Times; font-size:24px; color:black;
+}
+
+.box_entry_log_top_right{
+  position:relative; top:-25px; height:30px; left:75%; width:25%; font-family: Georgia,Serif;Times; font-size:24px; color:#777777; text-align:right;
+}
+
+.box_entry_log_bottom_left{
+  position:relative; top:-25px; height:30px; left:0px; width:75%; font-family: Georgia,Serif;Times; font-size:12px; color:#777777;
+}
+
+.box_entry_log_bottom_right{
+  position:relative; top:-55px; height:30px; left:75%; width:25%; font-family: Georgia,Serif;Times; font-size:12px; color:#777777; text-align:right;"
+}
+
+.box_log_empty{
+  font-family: Georgia,Serif;Times; 
+  font-size:24px; 
+  color:black; 
+  text-align:center;
+}
+
+.box_graphs{
+  position:relative; top:-510px; left:50%; width:50%; height:500px; background-color:#444444; overflow:hidden;
+}

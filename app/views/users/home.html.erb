@@ -1,81 +1,82 @@
 <script type="text/javascript">
 
+ /**
+ * Expand New Entry Dialog Box
+ */
   var newEntryDialogVisible = false;
   function showDialogNewEntry()
   {
     if( !newEntryDialogVisible )
-      newEntryDialogVisible = true;
+      document.getElementById( "div_entry_new" ).style.height = "150px";
     else
-      return;
-      
-    document.getElementById( "div_entry_new" ).style.height = "150px";
-    
-    var entryString = "Add New Log Entry<br><form><table>";
-    entryString = entryString + "<tr><td>Hours:</td><td><input id=\"form_entry_hours\" value=\"0\" type=text name=\"entry_hours\"></td><td>Minutes:</td><td><input id=\"form_entry_minutes\" type=text value=\"0\" name=\"entry_minutes\"></td></tr>";
-    entryString = entryString + "<tr><td>Words:</td><td><input value=\"0\" id=\"form_entry_words\"type=text name=\"entry_words\"></td></tr>";
-    entryString = entryString + "<tr><td>Comments:</td><td><input id=\"form_entry_comments\" type=text name=\"entry_comments\"></td></tr>";
-    entryString = entryString + "<tr><td></td><td><a onclick=\"javascript:submitNewEntry()\">Add</a></td></tr>";
-    entryString = entryString + "</table></form>";
-    
-    document.getElementById( "div_entry_new" ).innerHTML = entryString;
+      document.getElementById( "div_entry_new" ).style.height = "20px";    
+ 
+    newEntryDialogVisible = !newEntryDialogVisible;
   }
-  
+ 
+  /**
+  * Submit New Entry to the Log
+  */ 
   function submitNewEntry()
   {
+    // Get parameters from the form
     var hours = parseInt( document.getElementById( "form_entry_hours" ).value );
     var minutes = parseInt( document.getElementById( "form_entry_minutes" ).value );
     var words = parseInt( document.getElementById( "form_entry_words" ).value );
     var comments = document.getElementById( "form_entry_comments" ).value;
     
+    // Validate data
     var fail = false;
     if( isNaN( hours ) )
     {
-      document.getElementById( "form_entry_hours" ).value = "Invalid Hours"
+      document.getElementById( "form_entry_hours" ).value = "0"
       fail = true;
     }
     if( isNaN( minutes ) )
     {
-      document.getElementById( "form_entry_minutes" ).value = "Invalid Minutes"
+      document.getElementById( "form_entry_minutes" ).value = "0"
       fail = true;    
     }
     else if( minutes < 0 || minutes > 59 )
     {
-      document.getElementById( "form_entry_minutes" ).value = "0 <= Minutes < 59"
+      document.getElementById( "form_entry_minutes" ).value = "0"
       fail = true;
     }
     if( isNaN( words ) )
     {
-      document.getElementById( "form_entry_words" ).value = "Invalid Word Count"
+      document.getElementById( "form_entry_words" ).value = "0"
+      fail = true;
+    }
+    if( hours < 0 || minutes < 0 || ( minutes == 0 && hours == 0 ) )
+    {
       fail = true;
     }
     
-    
-    
+    // If data is valid, submit
     if( !fail )
     {
       words = Math.floor( words )
       var submitString = "hours=" + hours + "&words=" + words + "&minutes=" + minutes + "&comment=" + encodeURIComponent( comments );
       var httpString = "/entries/createinline?" + submitString;
-    
       window.location = httpString;
     }
   }
   
 </script>
 
-
-<div id="div_titlebar" style="top:0px; left: 0px; width:100%; height:80px; background-color:black;">
-  <div id="div_titlebar_row_1" style="position:relative; top:10px; left:10px; height: 40px;">
-    <span style="color:white; font-size:30px; font-family: Georgia,Serif;Times;">
+<div id="div_watermark" class="box_watermark">writealot</div>
+<div id="div_titlebar" class="box_titlebar">
+  <div id="div_titlebar_row_1" class="box_titlebar_row_1">
+    <span class="font_title">
       <%= @user_name %>
       <image height=30 width=30 src=" <%= @user_image %> ">
-      <span style="font-size:14px;">Sign Out</span>
+      <span class="font_signout">Sign Out</span>
     </span>  
   </div>
   
-  <div id="div_titlebar_row_2" style="position:relative; top:10px; left:10px; height: 20px;">
-    <span style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">
-      <table width=40%><tr>
+  <div id="div_titlebar_row_2" class="box_titlebar_row_2">
+    <span style="valign: middle; color:#444444; font-size:14px; font-family: Georgia,Serif;Times;">
+      <table width=50%><tr>
         <% day_string = "None" %>
         <% if @days_last_use == 0 %>
         <%   day_string = "Today" %>
@@ -83,30 +84,44 @@
         <%   day_string = "#{@days_last_use} Days Ago" %>
         <% end %>
         
-        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Last Entry: <%= day_string %></td> 
-        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Hours This Week: <%= @hours_this_week %></td>
-        <td style="valign: middle; color:white; font-size:14px; font-family: Georgia,Serif;Times;">Words This Week: <%= @words_this_week %></td>
+        <td class="font_title_stats">Last Entry: <%= day_string %></td> 
+        <td class="font_title_stats">Hours This Week: <%= @hours_this_week %></td>
+        <td class="font_title_stats">Words This Week: <%= @words_this_week %></td>
       </tr></table>
     </span>  
   </div>
 </div>
 
-<div id="div_entry_list" style="position:relative; top:0px; width:50%; height:500px; background-color:white; overflow-x: hidden; overflow-y:scroll;">
-  <div id="div_entry_new" style="position:relative; top:0px; width:100%; left:0px; height:25px; background-color:#DDDDDD;" onclick="javascript:showDialogNewEntry()">
-    Add New Log Entry
+<div id="div_title_divider" class="box_titlebar_divider"></div>
+<div id="div_entry_list" class="box_entry_list">
+  <div id="div_entry_new" class="box_entry_new">
+    <div id="div_entry_new_title" class="box_entry_new_title" onclick="javascript:showDialogNewEntry()">Add New Log Entry</div>
+    <form><table>
+    <tr><td class="font_new_entry">Hours:</td><td class="font_new_entry"><input id="form_entry_hours" value="0" size=4 type=text name="entry_hours"></td></tr>
+    <tr><td class="font_new_entry">Minutes:</td><td class="font_new_entry"><input id="form_entry_minutes" type=text size=4 value="0" name="entry_minutes"></td></tr>
+    <tr><td class="font_new_entry">Words:</td><td class="font_new_entry"><input value="0" id="form_entry_words"type=text size=4 name="entry_words"></td></tr>
+    <tr><td class="font_new_entry">Notes:</td><td class="font_new_entry"><input id="form_entry_comments" type=text name="entry_comments">
+    &nbsp&nbsp&nbsp<a onclick="javascript:submitNewEntry()">Add Entry</a></td></tr>
+    </table></form>
   </div>
   
   <% @user_entries.each do |entry| %>
-    <div id="div_entry_new" style="position:relative; top:0px; width:100%; left:0px; height:75px; background-color:white;">
-      Words: <%= entry.words %><br>Hours: <%= entry.hours %> Minutes: <%= entry.minutes %><br>Comment: <%= entry.comments %>&nbsp
-      <a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a>
+    <div class="box_entry_log">
+      <div class="box_entry_log_top_left"><%= entry.words %> words/<%= entry.hours %> hr <%= entry.minutes %> min</div>
+      <div class="box_entry_log_top_right">11/20/2010</div>
+      <div class="box_entry_log_bottom_left"><%= entry.comments %></div>
+      <div class="box_entry_log_bottom_right"><a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a></div>
     </div>
   <% end %>
   <% if @user_entries.empty? %>
-    <%= "You Have No Log Entries" %>
+    <div class="box_log_empty">
+    <br>
+    No Log Entries
+    </div>
   <% end %> 
 </div>
 
-<div id="div_entry_list" style="position:relative; top:-500px; left:50%; width:50%; height:500px; background-color:white; overflow:hidden;">
+<div id="div_bottom_divider" class="box_bottom_divider"></div>
+<div id="div_graph_box" class="box_graphs">
 
 </div>

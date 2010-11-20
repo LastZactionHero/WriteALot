@@ -90,7 +90,7 @@ class UsersController < ApplicationController
  
   # Process Twitter Login Success
   def proc_twitter_login
-    
+      
     # If user is already logged in, grab session variables
     # THIS CAN LIKELY BE REMOVED
     if session[:user_name]
@@ -133,6 +133,11 @@ class UsersController < ApplicationController
 
   # User Home Page
   def home
+    #session[:user_name] = "LastZactionHero"
+    #session[:real_name] = "Zach D"
+    #session[:user_image] = ""
+    #session[:user_id] = 6
+        
     # Get info for the current user
     @user_id = session[:user_id]
     @user_name = session[:user_name]
