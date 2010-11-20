@@ -8,7 +8,8 @@ AuthTest::Application.routes.draw do
   
   resources :users
   match 'home' => 'users#home'
-  
+  match 'signout' => 'users#signout'
+
   match '/twitter_callback' => 'users#proc_twitter_login'
   match '/auth/twitter/callback' => 'users#proc_twitter_login'
   root :to => "users#login"

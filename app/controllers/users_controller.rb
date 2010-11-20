@@ -83,7 +83,7 @@ class UsersController < ApplicationController
 
   # LOGIN /users/login
   def login
-    if session[:user_name]
+    if session[:user_name] && !session[:user_name].empty?
       redirect_to :action => "proc_twitter_login"
     end
   end
@@ -93,7 +93,7 @@ class UsersController < ApplicationController
       
     # If user is already logged in, grab session variables
     # THIS CAN LIKELY BE REMOVED
-    if session[:user_name]
+    if session[:user_name] && !session[:user_name].empty?
       @real_name = session[:real_name] 
       @user_name = session[:user_name]
       @user_image = session[:user_image]
@@ -179,7 +179,16 @@ class UsersController < ApplicationController
         @words_this_week += entry[:words]
       end
     end
-    
+  end
+  
+  def signout
+    session[:user_id] = ""
+    session[:user_name] = ""
+    session[:user_image] = ""
+    session[:real_name] = ""
+      
+    # Redirect to the user home page
+    redirect_to "/"
   end
   
 end

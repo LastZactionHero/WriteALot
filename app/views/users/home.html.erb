@@ -24,6 +24,7 @@
     var minutes = parseInt( document.getElementById( "form_entry_minutes" ).value );
     var words = parseInt( document.getElementById( "form_entry_words" ).value );
     var comments = document.getElementById( "form_entry_comments" ).value;
+    var editing = document.getElementById( "form_entry_editing" ).checked;
     
     // Validate data
     var fail = false;
@@ -56,7 +57,7 @@
     if( !fail )
     {
       words = Math.floor( words )
-      var submitString = "hours=" + hours + "&words=" + words + "&minutes=" + minutes + "&comment=" + encodeURIComponent( comments );
+      var submitString = "hours=" + hours + "&words=" + words + "&minutes=" + minutes + "&editing=" + editing + "&comment=" + encodeURIComponent( comments );
       var httpString = "/entries/createinline?" + submitString;
       window.location = httpString;
     }
@@ -64,18 +65,19 @@
   
 </script>
 
+<!-- Watermark -->
 <div id="div_watermark" class="box_watermark">writealot</div>
+
 <div id="div_titlebar" class="box_titlebar">
   <div id="div_titlebar_row_1" class="box_titlebar_row_1">
     <span class="font_title">
       <%= @user_name %>
       <image height=30 width=30 src=" <%= @user_image %> ">
-      <span class="font_signout">Sign Out</span>
+      <span class="font_signout"><%= link_to "Sign Out", :action=>'signout' %></span>
     </span>  
   </div>
   
   <div id="div_titlebar_row_2" class="box_titlebar_row_2">
-    <span style="valign: middle; color:#444444; font-size:14px; font-family: Georgia,Serif;Times;">
       <table width=50%><tr>
         <% day_string = "None" %>
         <% if @days_last_use == 0 %>
@@ -85,10 +87,9 @@
         <% end %>
         
         <td class="font_title_stats">Last Entry: <%= day_string %></td> 
-        <td class="font_title_stats">Hours This Week: <%= @hours_this_week %></td>
+        <td class="font_title_stats">Hours This Week: <%= '%.2f' % @hours_this_week %></td>
         <td class="font_title_stats">Words This Week: <%= @words_this_week %></td>
       </tr></table>
-    </span>  
   </div>
 </div>
 
@@ -99,17 +100,29 @@
     <form><table>
     <tr><td class="font_new_entry">Hours:</td><td class="font_new_entry"><input id="form_entry_hours" value="0" size=4 type=text name="entry_hours"></td></tr>
     <tr><td class="font_new_entry">Minutes:</td><td class="font_new_entry"><input id="form_entry_minutes" type=text size=4 value="0" name="entry_minutes"></td></tr>
-    <tr><td class="font_new_entry">Words:</td><td class="font_new_entry"><input value="0" id="form_entry_words"type=text size=4 name="entry_words"></td></tr>
+    <tr><td class="font_new_entry">Words:</td><td class="font_new_entry"><input value="0" id="form_entry_words"type=text size=4 name="entry_words"><input id="form_entry_editing" value="editing" type="checkbox" />Editing</td></tr>
     <tr><td class="font_new_entry">Notes:</td><td class="font_new_entry"><input id="form_entry_comments" type=text name="entry_comments">
     &nbsp&nbsp&nbsp<a onclick="javascript:submitNewEntry()">Add Entry</a></td></tr>
     </table></form>
   </div>
   
   <% @user_entries.each do |entry| %>
+    <% editing_text = "" %>
+    <% if entry.editing? %>
+    <%   editing_text = "Editing" %>
+    <% else %>
+    <%   editing_text = "Writing" %>
+    <% end %>
+    
+    <% notes_text = "" %>
+    <% if !entry.comments.empty? %>
+    <%   notes_text = ": " + entry.comments %>
+    <% end %>
+    
     <div class="box_entry_log">
-      <div class="box_entry_log_top_left"><%= entry.words %> words/<%= entry.hours %> hr <%= entry.minutes %> min</div>
-      <div class="box_entry_log_top_right">11/20/2010</div>
-      <div class="box_entry_log_bottom_left"><%= entry.comments %></div>
+      <div class="box_entry_log_top_left">+<%= entry.words %> words/<%= entry.hours %> hr <%= entry.minutes %> min</div>
+      <div class="box_entry_log_top_right"><%= entry.created_at.strftime( "%m/%d/%Y" ) %></div>
+      <div class="box_entry_log_bottom_left"><strong><%= editing_text %></strong><%= notes_text %></div>
       <div class="box_entry_log_bottom_right"><a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a></div>
     </div>
   <% end %>

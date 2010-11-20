@@ -102,7 +102,8 @@ class EntriesController < ApplicationController
     puts params[:hours]
     puts params[:words]
     puts params[:comment]
-  
+    puts params[:editing]
+      
     @entry = Entry.new
     @entry[:comments] = params[:comment]
     @entry[:words] = params[:words]
@@ -110,6 +111,7 @@ class EntriesController < ApplicationController
     @entry[:hours] = params[:hours]
     @entry[:timestart] = Time.now
     @entry[:timeend] = Time.now
+    @entry[:editing] = params[:editing]
     #@entry[:user] = session[:user_id]
     @entry[:userid] = session[:user_id]
     @entry.save

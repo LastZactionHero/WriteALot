@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101119044357) do
+ActiveRecord::Schema.define(:version => 20101120232052) do
 
 # Could not dump table "charts" because of following StandardError
 #   Unknown type 'user' for column 'creator'
