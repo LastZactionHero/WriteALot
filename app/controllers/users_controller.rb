@@ -165,20 +165,70 @@ class UsersController < ApplicationController
     end
     
     # Count number of hours this week
-    @hours_this_week = 0
-    @words_this_week = 0
+    @this_week_hours = 0
+    @this_week_hours_writing = 0
+    @this_week_hours_editing = 0
+    @this_week_words = 0
+    @arr_this_week_words = [ 0, 0, 0, 0, 0, 0, 0]
+    
+    @this_month_hours = 0
+    @this_month_hours_writing = 0
+    @this_month_hours_editing = 0
+    @this_month_words = 0
+    
+    @all_time_hours = 0
+    @all_time_words = 0
+    @all_time_hours_writing = 0
+    @all_time_hours_editing = 0
+    
     @user_entries.each do |entry|
+      entry_time = entry[:hours] + entry[:minutes].to_f / 60
+        
       timestart = entry[:created_at].to_i
-      timenow = Time.now.to_i
-      
-      dseconds = timenow - timestart
-      days_entry = dseconds / ( 60 * 60 * 24 )
+      timenow = Time.now.to_i        
+      days_entry = (timenow - timestart) / ( 60 * 60 * 24 )
+  
       if( days_entry < 7 )
-        @hours_this_week += entry[:hours]
-        @hours_this_week += entry[:minutes].to_f / 60
-        @words_this_week += entry[:words]
+        @this_week_hours += entry_time
+        @this_week_words += entry[:words]
+        @arr_this_week_words[days_entry] += entry[:words]
+        if entry.editing? 
+          @this_week_hours_editing += entry_time
+        else
+          @this_week_hours_writing += entry_time
+        end
       end
+      
+      if( days_entry < 30 )
+        @this_month_hours += entry_time
+        @this_month_words += entry[:words]
+        if entry.editing? 
+          @this_month_hours_editing += entry_time
+        else
+          @this_month_hours_writing += entry_time
+        end        
+      end
+      
+      @all_time_hours += entry_time
+      @all_time_words += entry[:words]
+      if entry.editing? 
+        @all_time_hours_editing += entry_time
+      else
+        @all_time_hours_writing += entry_time
+      end 
     end
+    
+    @graph_words_seven_days = ""
+    @graph_words_seven_days_max = 0
+    (0..7).each do |i|
+      @graph_words_seven_days += @arr_this_week_words[i].to_s
+      if i < 6
+        @graph_words_seven_days += ","
+      end
+      
+      @graph_words_seven_days_max = @arr_this_week_words[i].to_i>@graph_words_seven_days_max.to_i ? @arr_this_week_words[i] : @graph_words_seven_days_max
+    end
+
   end
   
   def signout

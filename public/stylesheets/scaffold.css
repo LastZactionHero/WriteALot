@@ -175,5 +175,5 @@ div.field, div.actions {
 }
 
 .box_graphs{
-  position:relative; top:-510px; left:50%; width:50%; height:500px; background-color:#444444; overflow:hidden;
+  position:relative; top:-510px; left:50%; width:50%; height:500px; background-color:white; overflow:hidden; overflow-x: hidden; overflow-y:scroll;
 }

@@ -1,3 +1,7 @@
+<!--[if IE]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="javascripts/flot/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="javascripts/flot/jquery.flot.js"></script>
+
 <script type="text/javascript">
 
  /**
@@ -87,8 +91,8 @@
         <% end %>
         
         <td class="font_title_stats">Last Entry: <%= day_string %></td> 
-        <td class="font_title_stats">Hours This Week: <%= '%.2f' % @hours_this_week %></td>
-        <td class="font_title_stats">Words This Week: <%= @words_this_week %></td>
+        <td class="font_title_stats">Hours This Week: <%= '%.2f' % @this_week_hours %></td>
+        <td class="font_title_stats">Words This Week: <%= @this_week_words %></td>
       </tr></table>
   </div>
 </div>
@@ -136,5 +140,45 @@
 
 <div id="div_bottom_divider" class="box_bottom_divider"></div>
 <div id="div_graph_box" class="box_graphs">
+
+<!-- 7-Day Stats -->
+<div id="div_stats_heading_weekly" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">Last 7 Days</div>
+
+<table>
+<tr><td>Words:</td><td><%= @this_week_words %></td></tr>
+<tr><td>Time, Total:</td><td><%= '%.2f' % @this_week_hours %> hrs</td></tr>
+<tr><td>Time, Writing:</td><td><%= '%.2f' % @this_week_hours_writing %> hrs</td></tr>
+<tr><td>Time, Editing:</td><td><%= '%.2f' % @this_week_hours_editing %> hrs</td></tr>
+</table>
+<br>
+<div id="graph_words_last_7_days">
+ <iframe src="http://chart.apis.google.com/chart?chxr=0,0,<%= @graph_words_seven_days_max.to_s %>&chxt=y&chbh=a&chs=300x225&cht=bvg&chco=A2C180&chd=t:<%= @graph_words_seven_days %>&chtt=Words%2C+Last+7+Days" width="300" height="225" marginwidth="0" marginheight="0" frameborder="no" scrolling="no" style="border-width:0px; border-color:#333; background:#FFF; border-style:solid;"></iframe>
+</div>
+<br><br>
+
+<!-- 30 Stats -->
+<div id="div_stats_heading_monthly" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">Last 30 Days</div>
+
+<table>
+<tr><td>Words:</td><td><%= @this_month_words %></td></tr>
+<tr><td>Time, Total:</td><td><%= '%.2f' % @this_month_hours %></td></tr>
+<tr><td>Time, Writing:</td><td><%= '%.2f' % @this_month_hours_writing %></td></tr>
+<tr><td>Time, Editing:</td><td><%= '%.2f' % @this_month_hours_editing %></td></tr>
+</table>
+
+<br><br>
+
+<!-- All-Time Stas -->
+<div id="div_stats_heading_alltime" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">All Time</div>
+
+<table>
+<tr><td>Words:</td><td><%= @all_time_words %></td></tr>
+<tr><td>Time, Total:</td><td><%= '%.2f' % @all_time_hours %></td></tr>
+<tr><td>Time, Writing:</td><td><%= '%.2f' % @all_time_hours_writing %></td></tr>
+<tr><td>Time, Editing:</td><td><%= '%.2f' % @all_time_hours_editing %></td></tr>
+</table>
+
+
+<br><br>
 
 </div>
