@@ -91,8 +91,8 @@
         <% end %>
         
         <td class="font_title_stats">Last Entry: <%= day_string %></td> 
-        <td class="font_title_stats">Hours This Week: <%= '%.2f' % @this_week_hours %></td>
-        <td class="font_title_stats">Words This Week: <%= @this_week_words %></td>
+        <td class="font_title_stats">Hours This Week: <%= '%.2f' % @writing_stats[ "seven_days" ][ "total" ] %></td>
+        <td class="font_title_stats">Words This Week: <%= @writing_stats[ "seven_days" ][ "words" ] %></td>
       </tr></table>
   </div>
 </div>
@@ -145,14 +145,14 @@
 <div id="div_stats_heading_weekly" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">Last 7 Days</div>
 
 <table>
-<tr><td>Words:</td><td><%= @this_week_words %></td></tr>
-<tr><td>Time, Total:</td><td><%= '%.2f' % @this_week_hours %> hrs</td></tr>
-<tr><td>Time, Writing:</td><td><%= '%.2f' % @this_week_hours_writing %> hrs</td></tr>
-<tr><td>Time, Editing:</td><td><%= '%.2f' % @this_week_hours_editing %> hrs</td></tr>
+<tr><td>Words:</td><td><%= @writing_stats[ "seven_days" ][ "words" ] %></td></tr>
+<tr><td>Time, Total:</td><td><%= '%.2f' % @writing_stats[ "seven_days" ][ "total" ] %> hrs</td></tr>
+<tr><td>Time, Writing:</td><td><%= '%.2f' % @writing_stats[ "seven_days" ][ "writing" ] %> hrs</td></tr>
+<tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "seven_days" ][ "editing" ] %> hrs</td></tr>
 </table>
 <br>
 <div id="graph_words_last_7_days">
- <iframe src="http://chart.apis.google.com/chart?chxr=0,0,<%= @graph_words_seven_days_max.to_s %>&chxt=y&chbh=a&chs=300x225&cht=bvg&chco=A2C180&chd=t:<%= @graph_words_seven_days %>&chtt=Words%2C+Last+7+Days" width="300" height="225" marginwidth="0" marginheight="0" frameborder="no" scrolling="no" style="border-width:0px; border-color:#333; background:#FFF; border-style:solid;"></iframe>
+ <!-- <iframe src="http://chart.apis.google.com/chart?chxr=0,0,<%= @graph_words_seven_days_max.to_s %>&chxt=y&chbh=a&chs=300x225&cht=bvg&chco=A2C180&chd=t:<%= @graph_words_seven_days %>&chtt=Words%2C+Last+7+Days" width="300" height="225" marginwidth="0" marginheight="0" frameborder="no" scrolling="no" style="border-width:0px; border-color:#333; background:#FFF; border-style:solid;"></iframe> -->
 </div>
 <br><br>
 
@@ -160,10 +160,10 @@
 <div id="div_stats_heading_monthly" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">Last 30 Days</div>
 
 <table>
-<tr><td>Words:</td><td><%= @this_month_words %></td></tr>
-<tr><td>Time, Total:</td><td><%= '%.2f' % @this_month_hours %></td></tr>
-<tr><td>Time, Writing:</td><td><%= '%.2f' % @this_month_hours_writing %></td></tr>
-<tr><td>Time, Editing:</td><td><%= '%.2f' % @this_month_hours_editing %></td></tr>
+<tr><td>Words:</td><td><%= @writing_stats[ "thirty_days" ][ "words" ] %></td></tr>
+<tr><td>Time, Total:</td><td><%= '%.2f' % @writing_stats[ "thirty_days" ][ "total" ] %></td></tr>
+<tr><td>Time, Writing:</td><td><%= '%.2f' % @writing_stats[ "thirty_days" ][ "writing" ] %></td></tr>
+<tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "thirty_days" ][ "editing" ] %></td></tr>
 </table>
 
 <br><br>
@@ -172,10 +172,10 @@
 <div id="div_stats_heading_alltime" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">All Time</div>
 
 <table>
-<tr><td>Words:</td><td><%= @all_time_words %></td></tr>
-<tr><td>Time, Total:</td><td><%= '%.2f' % @all_time_hours %></td></tr>
-<tr><td>Time, Writing:</td><td><%= '%.2f' % @all_time_hours_writing %></td></tr>
-<tr><td>Time, Editing:</td><td><%= '%.2f' % @all_time_hours_editing %></td></tr>
+<tr><td>Words:</td><td><%= @writing_stats[ "all_time" ][ "words" ] %></td></tr>
+<tr><td>Time, Total:</td><td><%= '%.2f' % @writing_stats[ "all_time" ][ "total" ] %></td></tr>
+<tr><td>Time, Writing:</td><td><%= '%.2f' % @writing_stats[ "all_time" ][ "writing" ] %></td></tr>
+<tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "all_time" ][ "editing" ] %></td></tr>
 </table>
 
 

@@ -133,6 +133,7 @@ class UsersController < ApplicationController
 
   # User Home Page
   def home
+    # Debug User
     #session[:user_name] = "LastZactionHero"
     #session[:real_name] = "Zach D"
     #session[:user_image] = ""
@@ -151,83 +152,25 @@ class UsersController < ApplicationController
     
     # Get all entries for this user
     @user_entries = Entry.find( :all, :conditions => ["userid = #{session[:user_id]}"], :order => "id desc" )
+    @user = User.find( @user_id )
       
     # Get the days since last entry
-    @days_last_use = -1
-    if !@user_entries.empty?
-      user = @user_entries[0]
-      timestart = user[:created_at].to_i
-      timenow = Time.now
-      
-      puts "Time End: #{user[:created_at].to_i}"
-      dseconds = timenow.to_i - timestart.to_i
-      @days_last_use = dseconds / ( 60 * 60 * 24 )
-    end
+    @days_last_use = @user.get_days_last_use
     
-    # Count number of hours this week
-    @this_week_hours = 0
-    @this_week_hours_writing = 0
-    @this_week_hours_editing = 0
-    @this_week_words = 0
-    @arr_this_week_words = [ 0, 0, 0, 0, 0, 0, 0]
+    # Get writing stats
+    @writing_stats = @user.get_writing_stats
     
-    @this_month_hours = 0
-    @this_month_hours_writing = 0
-    @this_month_hours_editing = 0
-    @this_month_words = 0
     
-    @all_time_hours = 0
-    @all_time_words = 0
-    @all_time_hours_writing = 0
-    @all_time_hours_editing = 0
-    
-    @user_entries.each do |entry|
-      entry_time = entry[:hours] + entry[:minutes].to_f / 60
-        
-      timestart = entry[:created_at].to_i
-      timenow = Time.now.to_i        
-      days_entry = (timenow - timestart) / ( 60 * 60 * 24 )
-  
-      if( days_entry < 7 )
-        @this_week_hours += entry_time
-        @this_week_words += entry[:words]
-        @arr_this_week_words[days_entry] += entry[:words]
-        if entry.editing? 
-          @this_week_hours_editing += entry_time
-        else
-          @this_week_hours_writing += entry_time
-        end
-      end
-      
-      if( days_entry < 30 )
-        @this_month_hours += entry_time
-        @this_month_words += entry[:words]
-        if entry.editing? 
-          @this_month_hours_editing += entry_time
-        else
-          @this_month_hours_writing += entry_time
-        end        
-      end
-      
-      @all_time_hours += entry_time
-      @all_time_words += entry[:words]
-      if entry.editing? 
-        @all_time_hours_editing += entry_time
-      else
-        @all_time_hours_writing += entry_time
-      end 
-    end
-    
-    @graph_words_seven_days = ""
-    @graph_words_seven_days_max = 0
-    (0..7).each do |i|
-      @graph_words_seven_days += @arr_this_week_words[i].to_s
-      if i < 6
-        @graph_words_seven_days += ","
-      end
-      
-      @graph_words_seven_days_max = @arr_this_week_words[i].to_i>@graph_words_seven_days_max.to_i ? @arr_this_week_words[i] : @graph_words_seven_days_max
-    end
+    #@graph_words_seven_days = ""
+    #@graph_words_seven_days_max = 0
+    #(0..7).each do |i|
+    #  @graph_words_seven_days += @arr_this_week_words[i].to_s
+    #  if i < 6
+    #    @graph_words_seven_days += ","
+    #  end
+    #  
+    #  @graph_words_seven_days_max = @arr_this_week_words[i].to_i>@graph_words_seven_days_max.to_i ? @arr_this_week_words[i] : @graph_words_seven_days_max
+    #end
 
   end
   
