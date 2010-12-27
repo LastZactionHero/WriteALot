@@ -131,7 +131,9 @@
 </div>
 
 <% localServerTime = Time.now %>
+<% if !session[:timezone_offset].nil? %>
 <% localServerTime = localServerTime + ( session[:timezone_offset] * 3600 ) %>
+<% end %>
 <div id="div_title_divider" class="box_titlebar_divider"></div>
 <div id="div_entry_list" class="box_entry_list">
   <div id="div_entry_new" class="box_entry_new">
