@@ -90,8 +90,9 @@ class UsersController < ApplicationController
  
   # LOGIN_BROWSERSTATS /users/login_browserstats
   def login_browserstats
-    session[:timezone_offset] = params[:timezone_offset]
+    session[:timezone_offset] = params[:timezone_offset].to_i
       
+    puts "Timezone Offset: #{session[:timezone_offset]}"
     redirect_to( "/auth/twitter" )
   end
   
