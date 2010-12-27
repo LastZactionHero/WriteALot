@@ -46,16 +46,23 @@
  	return times;
  }
  
+ /**
+  * Update Hours and Minutes Text
+  * Updates Hours and Minutes text field with the difference between the Start Time and End Time fields
+  */
  function updateHoursMinutes()
  {	
+ 	// Get times
  	var times = getStartEndTimes();
  	var start_date = new Date( times.start_year, times.start_month, times.start_day, times.start_hour, times.start_minute, 0 );
     var end_date = new Date( times.end_year, times.end_month, times.end_day, times.end_hour, times.end_minute,  0 );
     
+    // Calculate times
     var seconds = ( ( end_date - start_date ) / 1000 );
 	var hours = Math.floor( seconds / 3600 );
 	var minutes = Math.floor( ( seconds / 60 ) - 60 * hours );
 	
+	// Update field
  	document.getElementById( "div_hours_minutes" ).innerHTML = Math.floor( hours ) + " hr, " + Math.floor( minutes ) + " min" 
  }
  
@@ -71,6 +78,7 @@
     var comments = document.getElementById( "form_entry_comments" ).value;
     var editing = document.getElementById( "form_entry_editing" ).checked;
     
+    // Get start and end times
     var times = getStartEndTimes();
     var start_date = new Date( times.start_year, times.start_month, times.start_day, times.start_hour, times.start_minute, 0 );
     var end_date = new Date( times.end_year, times.end_month, times.end_day, times.end_hour, times.end_minute,  0 );
@@ -93,7 +101,6 @@
     if( !fail )
     {
       words = Math.floor( words )
-      //var submitString = "hours=" + hours + "&words=" + words + "&minutes=" + minutes + "&editing=" + editing + "&comment=" + encodeURIComponent( comments );
       var submitString = "start_year=" + times.start_year + "&start_month=" + times.start_month + "&start_day=" + times.start_day + "&start_hour=" + times.start_hour + "&start_minute=" + times.start_minute + "&end_year=" + times.end_year + "&end_month=" + times.end_month + "&end_day=" + times.end_day + "&end_hour=" + times.end_hour + "&end_minute=" + times.end_minute + "&words=" + words + "&editing=" + editing + "&comment=" + encodeURIComponent( comments );  
       var httpString = "/entries/createinline?" + submitString;
       window.location = httpString;
@@ -130,10 +137,12 @@
   </div>
 </div>
 
+
 <% localServerTime = Time.now %>
 <% if !session[:timezone_offset].nil? %>
-<% localServerTime = localServerTime + ( session[:timezone_offset] * 3600 ) %>
+  <% localServerTime = localServerTime + ( session[:timezone_offset] * 3600 ) %>
 <% end %>
+
 <div id="div_title_divider" class="box_titlebar_divider"></div>
 <div id="div_entry_list" class="box_entry_list">
   <div id="div_entry_new" class="box_entry_new">

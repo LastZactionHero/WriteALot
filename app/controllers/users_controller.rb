@@ -83,12 +83,15 @@ class UsersController < ApplicationController
 
   # LOGIN /users/login
   def login
+    # If already logged in, forward to the Twitter login process
     if session[:user_name] && !session[:user_name].empty?
       redirect_to :action => "proc_twitter_login"
     end
   end
  
   # LOGIN_BROWSERSTATS /users/login_browserstats
+  # Records any necessary browser stats after the index page
+  # prior to Twitter login
   def login_browserstats
     session[:timezone_offset] = params[:timezone_offset].to_i
       
@@ -98,17 +101,12 @@ class UsersController < ApplicationController
   
   # Process Twitter Login Success
   def proc_twitter_login
-      
-    puts "proc_twitter_login"
-    
+     
     # If user is already logged in, grab session variables
-    # THIS CAN LIKELY BE REMOVED
     if session[:user_name] && !session[:user_name].empty?
       @real_name = session[:real_name] 
       @user_name = session[:user_name]
-      @user_image = session[:user_image]
-        
-      puts "User is already logged in: #{@real_name} #{@user_name}"
+      @user_image = session[:user_image]       
     else
     # If user is not logged in, grab authentication varaibles
       @real_name = request.env['rack.auth']['user_info']['name']
@@ -117,9 +115,7 @@ class UsersController < ApplicationController
         
       session[:user_name] = @user_name
       session[:real_name] = @real_name
-      session[:user_image] = @user_image
-        
-      puts "User is not already logged in: #{@real_name} #{@user_name}"
+      session[:user_image] = @user_image     
     end
        
     @exists = false
@@ -139,7 +135,6 @@ class UsersController < ApplicationController
     
     # User does not exist in database. Add new user
     if !@exists
-      puts "User does not exist. Creating new user."
       new_user = User.new( :twitter => @user_name, :name => @real_name )
       new_user.save
       
@@ -153,12 +148,7 @@ class UsersController < ApplicationController
 
   # User Home Page
   def home
-    # Debug User
-    #session[:user_name] = "LastZactionHero"
-    #session[:real_name] = "Zach D"
-    #session[:user_image] = ""
-    #session[:user_id] = 6
-        
+            
     # Get info for the current user
     @user_id = session[:user_id]
     @user_name = session[:user_name]

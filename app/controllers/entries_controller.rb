@@ -98,69 +98,67 @@ class EntriesController < ApplicationController
     end
   end
   
+  # Create Entry entries/createinline
+  # Create an entry and return to home
   def createinline
+    # Invalid Data Failure
     fail = false;
     
-    puts params[:hours]
-    puts params[:words]
-    puts params[:comment]
-    puts params[:editing]
-      
+    # Pull data from parameters
     @entry = Entry.new
     @entry[:comments] = params[:comment]
     @entry[:words] = params[:words]
-    @entry[:minutes] = params[:minutes]
-    @entry[:hours] = params[:hours]
     @entry[:timestart] = Time.now
     @entry[:timeend] = Time.now
     @entry[:editing] = params[:editing]
     @entry[:userid] = session[:user_id]
 
+    # Pull start time and end time data from parameters
     start_year = params[:start_year].to_i
     start_month = params[:start_month].to_i
     start_day = params[:start_day].to_i
     start_hour = params[:start_hour].to_i
     start_minute = params[:start_minute].to_i
-    puts "Params: #{params.inspect}"
-    puts "Start DateTime: #{start_year} #{start_month} #{start_day} #{start_hour} #{start_minute}"
 
     end_year = params[:end_year].to_i
     end_month = params[:end_month].to_i
     end_day = params[:end_day].to_i
     end_hour = params[:end_hour].to_i
-    end_minute = params[:end_minute].to_i
-    puts "End DateTime: #{end_year} #{end_month} #{end_day} #{end_hour} #{end_minute}"
+    end_minute = params[:end_minute].to_i    
     
-    
+    # Set start and end dates
     start_datetime = DateTime.new( start_year, start_month, start_day, start_hour, start_minute )
     end_datetime = DateTime.new( end_year, end_month, end_day, end_hour, end_minute )
-    
     @entry[:starttime] = start_datetime
     @entry[:endtime] = end_datetime 
     
+    # Calculate number of hours and minutes
     time_difference = end_datetime.to_time - start_datetime.to_time
-    puts "Difference: #{time_difference}"
     hours = 0
     minutes = 0
+    
     if( time_difference <= 0 )
-      puts "FAILURE: Negative time"
+      # Negative time failure
       fail = true;
     else
+      # Times Ok
       seconds = time_difference.to_i
-      hours = seconds / ( 60 * 60 )
-      minutes = ( seconds - hours * 60 * 60 ) / 60
-      puts "Hours: #{hours} Minutes: #{minutes}"
-      @entry[:hours] = hours
-      @entry[:minutes] = minutes
+      @entry[:hours] = seconds / ( 3600 ).to_i
+      @entry[:minutes] = ( ( seconds - @entry[:hours] * 3600 ) / 60 ).to_i
     end
       
+    # Save if not failed
     if( !fail )
       @entry.save
       puts @entry.inspect
     end
+    
+    # Forward back to home
     redirect_to :controller => "users", :action => "home"
   end
   
+  # Remove Entry entries/removeinline
+  # Delete an entry and return to home  
   def removeinline
     puts params[:entry]
     

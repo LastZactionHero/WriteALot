@@ -10,6 +10,9 @@
 
 <script type="text/javascript">
 	
+	/**
+	 * Get browser data and foward to authentication
+	 */
 	function authenticate()
 	{
 		var offset = calc_local_timezone_offset();
@@ -17,14 +20,20 @@
 		window.location.href = 'users/login_browserstats?timezone_offset=' + offset;
 	}
 	
+	/**
+	 * Get local server and local machine timezone offsets
+	 * 
+	 * @return int Timezone offset between local machine and server in hours
 	function calc_local_timezone_offset()
 	{	
+		// Get server timezone offset in hours
 		<% gmttime = Time.now %>
 		<% local = gmttime.getlocal %>
 		<% offset = local.gmt_offset %>
 		<% offset = offset / -3600 %>
 		<%= "var zoneServer = #{offset};" %>
 
+		// Get local machine timezone offset in hours
 		var myDate = new Date();
 		var zoneLocal = myDate.getTimezoneOffset() / 60; 
 			
