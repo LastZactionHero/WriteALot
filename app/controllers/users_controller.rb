@@ -91,12 +91,16 @@ class UsersController < ApplicationController
   # Process Twitter Login Success
   def proc_twitter_login
       
+    puts "proc_twitter_login"
+    
     # If user is already logged in, grab session variables
     # THIS CAN LIKELY BE REMOVED
     if session[:user_name] && !session[:user_name].empty?
       @real_name = session[:real_name] 
       @user_name = session[:user_name]
       @user_image = session[:user_image]
+        
+      puts "User is already logged in: #{@real_name} #{@user_name}"
     else
     # If user is not logged in, grab authentication varaibles
       @real_name = request.env['rack.auth']['user_info']['name']
@@ -106,20 +110,28 @@ class UsersController < ApplicationController
       session[:user_name] = @user_name
       session[:real_name] = @real_name
       session[:user_image] = @user_image
+        
+      puts "User is not already logged in: #{@real_name} #{@user_name}"
     end
-            
+       
     @exists = false
     @user_id = -1
     
+    puts "Checking if user already exists in database..."
+    
     # Check if user already exists in database
-    User.find( @user_name ) do |user|
-      @exists = true
-      @user_id = user.id
-      session[:user_id] = @user_id
+    User.all.each do |user|
+      if user[:twitter] == @user_name
+        @exists = true
+        @user_id = user.id
+        session[:user_id] = @user_id
+      break;
+      end
     end
     
     # User does not exist in database. Add new user
     if !@exists
+      puts "User does not exist. Creating new user."
       new_user = User.new( :twitter => @user_name, :name => @real_name )
       new_user.save
       
