@@ -130,13 +130,15 @@
   </div>
 </div>
 
+<% localServerTime = Time.now %>
+<% localServerTime = localServerTime + ( session[:timezone_offset] * 60 ).to_i %>
 <div id="div_title_divider" class="box_titlebar_divider"></div>
 <div id="div_entry_list" class="box_entry_list">
   <div id="div_entry_new" class="box_entry_new">
     <div id="div_entry_new_title" class="box_entry_new_title" onclick="javascript:showDialogNewEntry()">Add New Log Entry</div>
     <form onchange="javascript:updateHoursMinutes()"><table>
 	<tr><td class="font_new_entry">Start Time:</td><td class="font_new_entry"><%= select_datetime(date = Time.now, { :prefix => "form_starttime" } ) %></td></tr>
-    <tr><td class="font_new_entry">End Time:</td><td class="font_new_entry"><%= select_datetime(date = Time.now, :prefix => "form_endtime" ) %><span id="div_hours_minutes"> 0 hr, 0 min</span></td></tr>
+    <tr><td class="font_new_entry">End Time:</td><td class="font_new_entry"><%= select_datetime(date = Time.now, :prefix => "form_endtime" ) %><span id="div_hours_minutes"></span></td></tr>
     <tr><td class="font_new_entry">Words:</td><td class="font_new_entry"><input value="0" id="form_entry_words"type=text size=4 name="entry_words"><input id="form_entry_editing" value="editing" type="checkbox" />Editing</td></tr>
     <tr><td class="font_new_entry">Notes:</td><td class="font_new_entry"><input id="form_entry_comments" type=text name="entry_comments">
     &nbsp&nbsp&nbsp<a onclick="javascript:submitNewEntry()">Add Entry</a></td></tr>

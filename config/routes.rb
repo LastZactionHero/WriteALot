@@ -6,7 +6,9 @@ AuthTest::Application.routes.draw do
   resources :charts
   match 'charts/overview/:id'=> 'charts#overview'
   
+  match 'users/login_browserstats' => 'users#login_browserstats'
   resources :users
+  
   match 'home' => 'users#home'
   match 'signout' => 'users#signout'
 

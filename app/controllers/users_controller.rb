@@ -88,6 +88,13 @@ class UsersController < ApplicationController
     end
   end
  
+  # LOGIN_BROWSERSTATS /users/login_browserstats
+  def login_browserstats
+    session[:timezone_offset] = params[:timezone_offset]
+      
+    redirect_to( "/auth/twitter" )
+  end
+  
   # Process Twitter Login Success
   def proc_twitter_login
       
