@@ -35,38 +35,42 @@ class User < ActiveRecord::Base
     # Loop through entries and increment totals  
     user_entries.each do |entry|
       
+      if( entry.words.nil? || entry.hours.nil? || entry.minutes.nil? )
+        next  
+      end
+      
       # Get number of days since entry
       d_days = ( Time.now - entry.created_at ) / ( 60 * 60 * 24 )
        
       # Add if within last seven days
       if( d_days < 7 )
         writing_stats[ "seven_days" ][ "words" ] += entry.words
-        writing_stats[ "seven_days" ][ "total" ] += entry.hours
+        writing_stats[ "seven_days" ][ "total" ] += entry.hours + entry.minutes.to_f / 60
         if entry.editing
-          writing_stats[ "seven_days" ][ "editing" ] += entry.hours
+          writing_stats[ "seven_days" ][ "editing" ] += entry.hours + entry.minutes.to_f / 60
         else
-          writing_stats[ "seven_days" ][ "writing" ] += entry.hours
+          writing_stats[ "seven_days" ][ "writing" ] += entry.hours + entry.minutes.to_f / 60
         end  
       end
       
       # Add if within last thirty days
       if( d_days < 30 )
         writing_stats[ "thirty_days" ][ "words" ] += entry.words
-        writing_stats[ "thirty_days" ][ "total" ] += entry.hours
+        writing_stats[ "thirty_days" ][ "total" ] += entry.hours + entry.minutes.to_f / 60
         if entry.editing
-          writing_stats[ "thirty_days" ][ "editing" ] += entry.hours
+          writing_stats[ "thirty_days" ][ "editing" ] += entry.hours + entry.minutes.to_f / 60
         else
-          writing_stats[ "thirty_days" ][ "writing" ] += entry.hours
+          writing_stats[ "thirty_days" ][ "writing" ] += entry.hours + entry.minutes.to_f / 60
         end  
       end      
       
       # Add to All-Time
       writing_stats[ "all_time" ][ "words" ] += entry.words
-      writing_stats[ "all_time" ][ "total" ] += entry.hours
+      writing_stats[ "all_time" ][ "total" ] += entry.hours + entry.minutes.to_f / 60
       if entry.editing
-        writing_stats[ "all_time" ][ "editing" ] += entry.hours
+        writing_stats[ "all_time" ][ "editing" ] += entry.hours + entry.minutes.to_f / 60
       else
-        writing_stats[ "all_time" ][ "writing" ] += entry.hours
+        writing_stats[ "all_time" ][ "writing" ] += entry.hours + entry.minutes.to_f / 60
       end
       
     end 

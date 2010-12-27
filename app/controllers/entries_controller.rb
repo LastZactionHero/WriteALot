@@ -99,6 +99,8 @@ class EntriesController < ApplicationController
   end
   
   def createinline
+    fail = false;
+    
     puts params[:hours]
     puts params[:words]
     puts params[:comment]
@@ -112,12 +114,50 @@ class EntriesController < ApplicationController
     @entry[:timestart] = Time.now
     @entry[:timeend] = Time.now
     @entry[:editing] = params[:editing]
-    #@entry[:user] = session[:user_id]
     @entry[:userid] = session[:user_id]
-    @entry.save
+
+    start_year = params[:start_year].to_i
+    start_month = params[:start_month].to_i
+    start_day = params[:start_day].to_i
+    start_hour = params[:start_hour].to_i
+    start_minute = params[:start_minute].to_i
+    puts "Params: #{params.inspect}"
+    puts "Start DateTime: #{start_year} #{start_month} #{start_day} #{start_hour} #{start_minute}"
+
+    end_year = params[:end_year].to_i
+    end_month = params[:end_month].to_i
+    end_day = params[:end_day].to_i
+    end_hour = params[:end_hour].to_i
+    end_minute = params[:end_minute].to_i
+    puts "End DateTime: #{end_year} #{end_month} #{end_day} #{end_hour} #{end_minute}"
     
-    puts @entry.inspect
     
+    start_datetime = DateTime.new( start_year, start_month, start_day, start_hour, start_minute )
+    end_datetime = DateTime.new( end_year, end_month, end_day, end_hour, end_minute )
+    
+    @entry[:starttime] = start_datetime
+    @entry[:endtime] = end_datetime 
+    
+    time_difference = end_datetime.to_time - start_datetime.to_time
+    puts "Difference: #{time_difference}"
+    hours = 0
+    minutes = 0
+    if( time_difference <= 0 )
+      puts "FAILURE: Negative time"
+      fail = true;
+    else
+      seconds = time_difference.to_i
+      hours = seconds / ( 60 * 60 )
+      minutes = ( seconds - hours * 60 * 60 ) / 60
+      puts "Hours: #{hours} Minutes: #{minutes}"
+      @entry[:hours] = hours
+      @entry[:minutes] = minutes
+    end
+      
+    if( !fail )
+      @entry.save
+      puts @entry.inspect
+    end
     redirect_to :controller => "users", :action => "home"
   end
   

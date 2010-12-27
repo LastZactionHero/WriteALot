@@ -16,7 +16,48 @@
       document.getElementById( "div_entry_new" ).style.height = "20px";    
  
     newEntryDialogVisible = !newEntryDialogVisible;
+    
+    updateHoursMinutes();
   }
+ 
+ 
+ /**
+  * Pull Date Time
+  */
+ function getStartEndTimes()
+ {
+ 	var times = new Object();
+ 	
+ 	if( document.getElementById( "form_starttime_year" ) )
+ 	{
+	    times.start_year = document.getElementById( "form_starttime_year" ).value;
+	    times.start_month = document.getElementById( "form_starttime_month" ).value; 
+	    times.start_day =  document.getElementById( "form_starttime_day" ).value;
+	    times.start_hour =  document.getElementById( "form_starttime_hour" ).value;
+	    times.start_minute =  document.getElementById( "form_starttime_minute" ).value;
+	
+	    times.end_year = document.getElementById( "form_endtime_year" ).value;
+	    times.end_month = document.getElementById( "form_endtime_month" ).value; 
+	    times.end_day =  document.getElementById( "form_endtime_day" ).value;
+	    times.end_hour =  document.getElementById( "form_endtime_hour" ).value;
+	    times.end_minute =  document.getElementById( "form_endtime_minute" ).value;
+ 	}
+ 	
+ 	return times;
+ }
+ 
+ function updateHoursMinutes()
+ {	
+ 	var times = getStartEndTimes();
+ 	var start_date = new Date( times.start_year, times.start_month, times.start_day, times.start_hour, times.start_minute, 0 );
+    var end_date = new Date( times.end_year, times.end_month, times.end_day, times.end_hour, times.end_minute,  0 );
+    
+    var seconds = ( ( end_date - start_date ) / 1000 );
+	var hours = Math.floor( seconds / 3600 );
+	var minutes = Math.floor( ( seconds / 60 ) - 60 * hours );
+	
+ 	document.getElementById( "div_hours_minutes" ).innerHTML = Math.floor( hours ) + " hr, " + Math.floor( minutes ) + " min" 
+ }
  
   /**
   * Submit New Entry to the Log
@@ -24,44 +65,36 @@
   function submitNewEntry()
   {
     // Get parameters from the form
-    var hours = parseInt( document.getElementById( "form_entry_hours" ).value );
-    var minutes = parseInt( document.getElementById( "form_entry_minutes" ).value );
+    var hours = 0;
+    var minutes = 0;
     var words = parseInt( document.getElementById( "form_entry_words" ).value );
     var comments = document.getElementById( "form_entry_comments" ).value;
     var editing = document.getElementById( "form_entry_editing" ).checked;
     
+    var times = getStartEndTimes();
+    var start_date = new Date( times.start_year, times.start_month, times.start_day, times.start_hour, times.start_minute, 0 );
+    var end_date = new Date( times.end_year, times.end_month, times.end_day, times.end_hour, times.end_minute,  0 );
+    
+    
     // Validate data
     var fail = false;
-    if( isNaN( hours ) )
-    {
-      document.getElementById( "form_entry_hours" ).value = "0"
-      fail = true;
-    }
-    if( isNaN( minutes ) )
-    {
-      document.getElementById( "form_entry_minutes" ).value = "0"
-      fail = true;    
-    }
-    else if( minutes < 0 || minutes > 59 )
-    {
-      document.getElementById( "form_entry_minutes" ).value = "0"
-      fail = true;
-    }
     if( isNaN( words ) )
     {
       document.getElementById( "form_entry_words" ).value = "0"
       fail = true;
     }
-    if( hours < 0 || minutes < 0 || ( minutes == 0 && hours == 0 ) )
+    if( end_date - start_date <= 0 )
     {
-      fail = true;
+    	alert( "Start Time must be before End Time" );
+    	fail = true;
     }
-    
+        
     // If data is valid, submit
     if( !fail )
     {
       words = Math.floor( words )
-      var submitString = "hours=" + hours + "&words=" + words + "&minutes=" + minutes + "&editing=" + editing + "&comment=" + encodeURIComponent( comments );
+      //var submitString = "hours=" + hours + "&words=" + words + "&minutes=" + minutes + "&editing=" + editing + "&comment=" + encodeURIComponent( comments );
+      var submitString = "start_year=" + times.start_year + "&start_month=" + times.start_month + "&start_day=" + times.start_day + "&start_hour=" + times.start_hour + "&start_minute=" + times.start_minute + "&end_year=" + times.end_year + "&end_month=" + times.end_month + "&end_day=" + times.end_day + "&end_hour=" + times.end_hour + "&end_minute=" + times.end_minute + "&words=" + words + "&editing=" + editing + "&comment=" + encodeURIComponent( comments );  
       var httpString = "/entries/createinline?" + submitString;
       window.location = httpString;
     }
@@ -101,9 +134,9 @@
 <div id="div_entry_list" class="box_entry_list">
   <div id="div_entry_new" class="box_entry_new">
     <div id="div_entry_new_title" class="box_entry_new_title" onclick="javascript:showDialogNewEntry()">Add New Log Entry</div>
-    <form><table>
-    <tr><td class="font_new_entry">Hours:</td><td class="font_new_entry"><input id="form_entry_hours" value="0" size=4 type=text name="entry_hours"></td></tr>
-    <tr><td class="font_new_entry">Minutes:</td><td class="font_new_entry"><input id="form_entry_minutes" type=text size=4 value="0" name="entry_minutes"></td></tr>
+    <form onchange="javascript:updateHoursMinutes()"><table>
+	<tr><td class="font_new_entry">Start Time:</td><td class="font_new_entry"><%= select_datetime(date = Time.now, { :prefix => "form_starttime" } ) %></td></tr>
+    <tr><td class="font_new_entry">End Time:</td><td class="font_new_entry"><%= select_datetime(date = Time.now, :prefix => "form_endtime" ) %><span id="div_hours_minutes"> 0 hr, 0 min</span></td></tr>
     <tr><td class="font_new_entry">Words:</td><td class="font_new_entry"><input value="0" id="form_entry_words"type=text size=4 name="entry_words"><input id="form_entry_editing" value="editing" type="checkbox" />Editing</td></tr>
     <tr><td class="font_new_entry">Notes:</td><td class="font_new_entry"><input id="form_entry_comments" type=text name="entry_comments">
     &nbsp&nbsp&nbsp<a onclick="javascript:submitNewEntry()">Add Entry</a></td></tr>
