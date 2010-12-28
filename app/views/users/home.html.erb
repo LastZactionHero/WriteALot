@@ -5,9 +5,23 @@
  /**
   * Get Data
   */
- function getDataString()
+ function getDataString
+ 	(
+ 	in_data_type
+ 	)
  {
- 	<%= "return '#{@user.get_data_words_this_week() }';" %>
+ 	var dataString = "";
+ 	
+ 	if( in_data_type == "words_this_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_words_this_week() }';" %>
+ 	}
+ 	else if( in_data_type == "words_every_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_words_every_week() }';" %>
+ 	}
+ 	
+ 	return dataString;
  }
   
  /**
@@ -204,6 +218,8 @@
 </table>
 <br>
 <div id="div_graph_words_this_week"></div>
+<br>
+<div id="div_graph_words_every_week"></div>
 <br><br>
 
 <!-- 30 Stats -->
@@ -235,4 +251,5 @@
 
 <script type="text/javascript">
 	generateGraphWordsThisWeek( "div_graph_words_this_week" );
+	generateGraphWordsEveryWeek( "div_graph_words_every_week" );
 </script>

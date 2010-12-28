@@ -11,7 +11,7 @@ function generateGraphWordsThisWeek
 	if( div_graph )
 	{
 		var chartMax = 0;
-		var data = getDataString().split( ',' );
+		var data = getDataString( "words_this_week" ).split( ',' );
 		for( var i = 0; i < data.length; i++ )
 		{
 			if( parseInt( data[i] ) > chartMax )
@@ -27,8 +27,43 @@ function generateGraphWordsThisWeek
 									"&cht=bvg" +
 									"&chco=A2C180" +
 									"&chds=0," + chartMax + 
-									"&chd=t:" + getDataString() + 
+									"&chd=t:" + getDataString( "words_this_week" ) + 
 									"&chtt=Words+this+Week\"" +
+									" width=\"400\"" +
+									" height=\"225\"" +
+									" alt=\"Words this Week\" />";
+
+	}
+}
+
+
+function generateGraphWordsEveryWeek
+	(
+	in_div_graph		
+	)
+{
+	div_graph = document.getElementById( in_div_graph );
+	if( div_graph )
+	{
+		var chartMax = 0;
+		var data = getDataString( "words_every_week" ).split( ',' );
+		for( var i = 0; i < data.length; i++ )
+		{
+			if( parseInt( data[i] ) > chartMax )
+				chartMax = parseInt( data[i] );
+		}
+		
+		div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
+									"?chxl=1:|Sun|Mon|Tues|Wed|Thur|Fri|Sat" +
+									"&chxr=0,0," + chartMax + "|1,0,6" +
+									"&chxt=y,x" +
+									"&chbh=a" +
+									"&chs=400x225" +
+									"&cht=bvg" +
+									"&chco=A2C180" +
+									"&chds=0," + chartMax + 
+									"&chd=t:" + getDataString( "words_every_week" ) + 
+									"&chtt=Words+per+Weekday\"" +
 									" width=\"400\"" +
 									" height=\"225\"" +
 									" alt=\"Words this Week\" />";

@@ -129,6 +129,39 @@ class User < ActiveRecord::Base
     return writing_stats  
   end
   
+
+  # Get Words Every Week Data String
+  def get_data_words_every_week
+    words_per_day = Array.new( 7, 0 )
+        
+    # Loop through entries and increment totals
+    user_entries = Entry.find( :all, :conditions => ["userid = #{id}"] )
+      
+    user_entries.each do |entry|
+      if( entry.words.nil? || entry.hours.nil? || entry.minutes.nil? )
+        next      
+      end
+    
+      dayEntry = entry.starttime.wday().to_i
+
+      words_per_day[dayEntry] += entry.words
+    end
+    
+    # Assemble Data String
+    data_string = ""
+    
+    (0..(words_per_day.length - 1)).each do |i|
+      data_string = data_string + words_per_day[i].to_s
+      if( i < words_per_day.length - 1 )
+        data_string = data_string + ","
+      end
+    end
+    
+    return data_string
+  end
+    
+  
+  # Get Words this Week Data String
   def get_data_words_this_week
     words_per_day = Array.new( 7, 0 )
     
@@ -171,7 +204,6 @@ class User < ActiveRecord::Base
     end
     
     return data_string
-    
   end
-  
+    
 end
