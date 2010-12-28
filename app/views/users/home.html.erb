@@ -1,9 +1,15 @@
-<!--[if IE]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
-<script language="javascript" type="text/javascript" src="javascripts/flot/jquery.js"></script>
-<script language="javascript" type="text/javascript" src="javascripts/flot/jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="javascripts/graph.js"></script>
 
 <script type="text/javascript">
 
+ /**
+  * Get Data
+  */
+ function getDataString()
+ {
+ 	<%= "return '#{@user.get_data_words_this_week() }';" %>
+ }
+  
  /**
  * Expand New Entry Dialog Box
  */
@@ -171,7 +177,7 @@
     
     <div class="box_entry_log">
       <div class="box_entry_log_top_left">+<%= entry.words %> words/<%= entry.hours %> hr <%= entry.minutes %> min</div>
-      <div class="box_entry_log_top_right"><%= entry.created_at.strftime( "%m/%d/%Y" ) %></div>
+      <div class="box_entry_log_top_right"><%= entry.starttime.strftime( "%m/%d/%Y" ) %></div>
       <div class="box_entry_log_bottom_left"><strong><%= editing_text %></strong><%= notes_text %></div>
       <div class="box_entry_log_bottom_right"><a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a></div>
     </div>
@@ -187,19 +193,17 @@
 <div id="div_bottom_divider" class="box_bottom_divider"></div>
 <div id="div_graph_box" class="box_graphs">
 
-<!-- 7-Day Stats -->
-<div id="div_stats_heading_weekly" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">Last 7 Days</div>
+<!-- Weekly Stats -->
+<div id="div_stats_heading_this_week" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">This Week</div>
 
 <table>
-<tr><td>Words:</td><td><%= @writing_stats[ "seven_days" ][ "words" ] %></td></tr>
-<tr><td>Time, Total:</td><td><%= '%.2f' % @writing_stats[ "seven_days" ][ "total" ] %> hrs</td></tr>
-<tr><td>Time, Writing:</td><td><%= '%.2f' % @writing_stats[ "seven_days" ][ "writing" ] %> hrs</td></tr>
-<tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "seven_days" ][ "editing" ] %> hrs</td></tr>
+<tr><td>Words:</td><td><%= @writing_stats[ "this_week" ][ "words" ] %></td></tr>
+<tr><td>Time, Total:</td><td><%= '%.2f' % @writing_stats[ "this_week" ][ "total" ] %> hrs</td></tr>
+<tr><td>Time, Writing:</td><td><%= '%.2f' % @writing_stats[ "this_week" ][ "writing" ] %> hrs</td></tr>
+<tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "this_week" ][ "editing" ] %> hrs</td></tr>
 </table>
 <br>
-<div id="graph_words_last_7_days">
- <!-- <iframe src="http://chart.apis.google.com/chart?chxr=0,0,<%= @graph_words_seven_days_max.to_s %>&chxt=y&chbh=a&chs=300x225&cht=bvg&chco=A2C180&chd=t:<%= @graph_words_seven_days %>&chtt=Words%2C+Last+7+Days" width="300" height="225" marginwidth="0" marginheight="0" frameborder="no" scrolling="no" style="border-width:0px; border-color:#333; background:#FFF; border-style:solid;"></iframe> -->
-</div>
+<div id="div_graph_words_this_week"></div>
 <br><br>
 
 <!-- 30 Stats -->
@@ -228,3 +232,7 @@
 <br><br>
 
 </div>
+
+<script type="text/javascript">
+	generateGraphWordsThisWeek( "div_graph_words_this_week" );
+</script>
