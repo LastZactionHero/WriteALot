@@ -161,7 +161,7 @@ class UsersController < ApplicationController
     end
     
     # Get all entries for this user
-    @user_entries = Entry.find( :all, :conditions => ["userid = #{session[:user_id]}"], :order => "id desc" )
+    @user_entries = Entry.find( :all, :conditions => ["userid = #{session[:user_id]}"], :order => "starttime desc" )
     @user = User.find( @user_id )
       
     # Get the days since last entry

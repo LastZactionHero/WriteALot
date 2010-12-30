@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
     days_last_use = -1
     
     # Get all entries from this user
-    user_entries = Entry.find( :all, :conditions => ["userid = #{id}"], :order => "id desc" )
+    user_entries = Entry.find( :all, :conditions => ["userid = #{id}"], :order => "starttime desc" )
       
     if !user_entries.empty?
       timestart = user_entries[0][:starttime]
