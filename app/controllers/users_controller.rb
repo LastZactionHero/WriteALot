@@ -169,19 +169,7 @@ class UsersController < ApplicationController
     
     # Get writing stats
     @writing_stats = @user.get_writing_stats
-    
-    
-    #@graph_words_seven_days = ""
-    #@graph_words_seven_days_max = 0
-    #(0..7).each do |i|
-    #  @graph_words_seven_days += @arr_this_week_words[i].to_s
-    #  if i < 6
-    #    @graph_words_seven_days += ","
-    #  end
-    #  
-    #  @graph_words_seven_days_max = @arr_this_week_words[i].to_i>@graph_words_seven_days_max.to_i ? @arr_this_week_words[i] : @graph_words_seven_days_max
-    #end
-
+   
   end
   
   def signout
@@ -192,6 +180,15 @@ class UsersController < ApplicationController
       
     # Redirect to the user home page
     redirect_to "/"
+  end
+  
+  def become
+    session[:user_id] = params[:id]
+    session[:user_name] = params[:twitter]
+    session[:real_name] = params[:name]
+    puts "User ID: #{session[:user_id]}"  
+      
+    redirect_to :action => "home"
   end
   
 end

@@ -16,6 +16,7 @@
     <td><%= link_to 'Show', user %></td>
     <td><%= link_to 'Edit', edit_user_path(user) %></td>
     <td><%= link_to 'Destroy', user, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Become', :action => :become, :id => user, :name => user.name, :twitter => user.twitter  %></td>
   </tr>
 <% end %>
 </table>

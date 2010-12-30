@@ -44,15 +44,7 @@ class EntriesController < ApplicationController
 
     puts "Creating Entry"
     
-#    if session[:chart]
-#      puts "Found Session Chart: #{session[:chart]}"
-#      chart = Chart.find( session[:chart] )
-#        
-#      puts chart.inspect
-#      puts @entry.inspect
-#      @entry[:chart] = chart[:id]
-#    end
-    
+
     Chart.find( session[:chart] ) do |chart|
       puts @entry.inspect
       @entry[:chart] = chart[:id]
@@ -111,7 +103,11 @@ class EntriesController < ApplicationController
     @entry[:timestart] = Time.now
     @entry[:timeend] = Time.now
     @entry[:editing] = params[:editing]
-    @entry[:userid] = session[:user_id]
+    
+    @entry[:userid] = session[:user_id]  
+    if params[:userid]
+      @entry[:userid] = params[:userid]
+    end
 
     # Pull start time and end time data from parameters
     start_year = params[:start_year].to_i
