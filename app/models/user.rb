@@ -205,5 +205,46 @@ class User < ActiveRecord::Base
     
     return data_string
   end
+
+# Get Words Each Week Data String
+def get_data_words_each_week
+  
+  # Get Current Year
+  yearCurrent = Time.now.year
+  
+  # One entry for each week of the year
+  words_per_week = Array.new( 52, 0 )
     
+  # Loop through entries and increment totals
+  user_entries = Entry.find( :all, :conditions => ["userid = #{id}"] )
+    
+  user_entries.each do |entry|
+    if( entry.words.nil? || entry.hours.nil? || entry.minutes.nil? )
+      next      
+    end
+  
+    if( yearCurrent != entry.starttime.year )
+      next
+    end
+      
+    week = entry.starttime.strftime( "%W" ).to_i
+    puts "Week: #{week}  Time: #{entry.starttime}"
+  
+    words_per_week[week] = words_per_week[week] + entry.words
+  end
+  
+  # Assemble Data String
+  data_string = ""
+  
+  (0..(words_per_week.length - 1)).each do |i|
+    data_string = data_string + words_per_week[i].to_s
+    if( i < words_per_week.length - 1 )
+      data_string = data_string + ","
+    end
+  end
+  
+  puts data_string
+  return data_string
+end
+      
 end

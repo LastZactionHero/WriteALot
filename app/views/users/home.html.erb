@@ -20,7 +20,11 @@
  	{
  		<%= "dataString = '#{@user.get_data_words_every_week() }';" %>
  	}
- 	
+ 	else if( in_data_type == "words_each_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_words_each_week() }';" %>
+ 	}
+ 	 	
  	return dataString;
  }
   
@@ -243,7 +247,8 @@
 <tr><td>Time, Writing:</td><td><%= '%.2f' % @writing_stats[ "all_time" ][ "writing" ] %></td></tr>
 <tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "all_time" ][ "editing" ] %></td></tr>
 </table>
-
+<div id="div_graph_words_each_week"></div>
+<br>
 
 <br><br>
 
@@ -252,4 +257,5 @@
 <script type="text/javascript">
 	generateGraphWordsThisWeek( "div_graph_words_this_week" );
 	generateGraphWordsEveryWeek( "div_graph_words_every_week" );
+	generateGraphWordsEachWeek( "div_graph_words_each_week" );
 </script>

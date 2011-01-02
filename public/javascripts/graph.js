@@ -70,3 +70,54 @@ function generateGraphWordsEveryWeek
 
 	}
 }
+
+function generateGraphWordsEachWeek
+(
+in_div_graph		
+)
+{
+div_graph = document.getElementById( in_div_graph );
+if( div_graph )
+{
+	var chartMax = 0;
+	var data = getDataString( "words_each_week" ).split( ',' );
+	for( var i = 0; i < data.length; i++ )
+	{
+		if( parseInt( data[i] ) > chartMax )
+			chartMax = parseInt( data[i] );
+	}
+	
+	//alert( getDataString( "words_each_week" ) );
+	
+	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
+	   							"?chxr=1,1,52" + 
+	   							"&chxs=1,676767,9,0,l,676767" + 
+								//"&chxr=0,0," + chartMax +
+								"&chxt=y" +
+								"&chbh=a" +
+								"&chs=400x225" +
+								"&cht=bvg" +
+								"&chco=A2C180" +
+								"&chds=0," + chartMax +
+								"&chd=t:" + getDataString( "words_each_week" ) + //10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,300,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60" +
+								"&chtt=Words+Each+Week\"" +
+								" width=\"400\" " +
+								" height=\"225\"" +
+								" alt=\"Words Each Week\" />";
+	
+	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
+								"?chxr=0,0," + chartMax + "|1,1,52" +
+								"&chxs=1,676767,9,0,l,676767" +
+								"&chxt=y,x" +
+								"&chbh=a" +
+								"&chs=700x225" +
+								"&cht=bvg" +
+								"&chco=A2C180" +
+								"&chds=0," + chartMax +
+								"&chd=t:" + getDataString( "words_each_week" ) + //10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,300,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60" +
+								"&chtt=Words+Each+Week\"" + 
+								" width=\"700\"" +
+								" height=\"225\"" +
+								" alt=\"Words Each Week\" />";
+	}
+}
