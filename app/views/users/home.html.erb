@@ -217,12 +217,13 @@
   <% if !@user_entries.empty? %>
 	  <table style="width:100%">
 	  	<tr>
-	  		<td class="row_log_title">Date</td>
-	  		<td class="row_log_title">Activity</td>
-	  		<td class="row_log_title">Words</td>
-	  		<td class="row_log_title">Duration</td>
+	  		<td class="row_log_title" width="10%" >Date</td>
+	  		<td class="row_log_title" width="5%" >Activity</td>
+	  		<td class="row_log_title" style="text-align:right;" width="7%">Words</td>
+	  		<td class="row_log_title" style="text-align:right;" width="7%">Duration</td>
+	  		<td width="5%"></td>
 	  		<td class="row_log_title">Notes</td>
-	  		<td class="row_log_title"></td>
+	  		<td class="row_log_title" width="10%"></td>
 	  	</tr>
 	  	
 	  <% @user_entries.each do |entry| %>
@@ -241,8 +242,11 @@
 		<tr>
 			<td class="row_log_weak" style=""><%= entry.starttime.strftime( "%m/%d/%Y" ) %></td>
 			<td class="row_log_weak"><%= editing_text %></td>
-			<td class="row_log_strong" style=""><%= entry.words %> words</td>
-			<td class="row_log_strong"><%= entry.hours %> hr <%= entry.minutes %> min</td>
+			<td class="row_log_strong" style="text-align:right;"><%= entry.words %></td>
+			<td class="row_log_strong" style="text-align:right;">			
+				<%= entry.hours %>:<% if entry.minutes > 0 %><%= entry.minutes %><% else %><%= "00" %><% end %>
+			</td>
+			<td class="row_log_strong"></td>
 			<td class="row_log_weak"><%= notes_text %></td>
 			<td class="row_log_weak"><a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a></td>
 		</tr>
