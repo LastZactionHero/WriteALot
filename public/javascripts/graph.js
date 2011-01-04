@@ -25,7 +25,7 @@ function generateGraphWordsThisWeek
 									"&chbh=a" +
 									"&chs=400x225" +
 									"&cht=bvg" +
-									"&chco=A2C180" +
+									"&chco=003DF5" +
 									"&chds=0," + chartMax + 
 									"&chd=t:" + getDataString( "words_this_week" ) + 
 									"&chtt=Words+this+Week\"" +
@@ -60,10 +60,10 @@ function generateGraphWordsEveryWeek
 									"&chbh=a" +
 									"&chs=400x225" +
 									"&cht=bvg" +
-									"&chco=A2C180" +
+									"&chco=003DF5" +
 									"&chds=0," + chartMax + 
 									"&chd=t:" + getDataString( "words_every_week" ) + 
-									"&chtt=Words+per+Weekday\"" +
+									"&chtt=Cumulative+Words+per+Weekday\"" +
 									" width=\"400\"" +
 									" height=\"225\"" +
 									" alt=\"Words this Week\" />";
@@ -87,24 +87,6 @@ if( div_graph )
 			chartMax = parseInt( data[i] );
 	}
 	
-	//alert( getDataString( "words_each_week" ) );
-	
-	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
-	   							"?chxr=1,1,52" + 
-	   							"&chxs=1,676767,9,0,l,676767" + 
-								//"&chxr=0,0," + chartMax +
-								"&chxt=y" +
-								"&chbh=a" +
-								"&chs=400x225" +
-								"&cht=bvg" +
-								"&chco=A2C180" +
-								"&chds=0," + chartMax +
-								"&chd=t:" + getDataString( "words_each_week" ) + //10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,300,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60" +
-								"&chtt=Words+Each+Week\"" +
-								" width=\"400\" " +
-								" height=\"225\"" +
-								" alt=\"Words Each Week\" />";
-	
 	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
 								"?chxr=0,0," + chartMax + "|1,1,52" +
 								"&chxs=1,676767,9,0,l,676767" +
@@ -112,10 +94,10 @@ if( div_graph )
 								"&chbh=a" +
 								"&chs=700x225" +
 								"&cht=bvg" +
-								"&chco=A2C180" +
+								"&chco=003DF5" +
 								"&chds=0," + chartMax +
-								"&chd=t:" + getDataString( "words_each_week" ) + //10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,300,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60,80,40,60,30,10,50,60" +
-								"&chtt=Words+Each+Week\"" + 
+								"&chd=t:" + getDataString( "words_each_week" ) +
+								"&chtt=Words+Each+Week+this+Year\"" + 
 								" width=\"700\"" +
 								" height=\"225\"" +
 								" alt=\"Words Each Week\" />";

@@ -153,8 +153,8 @@
   		else
   		{
   			document.getElementById( panel[i] ).style.visibility = "visible";
-  			document.getElementById( tabs[i] ).style.backgroundColor = "#EEEEEE";
-  			document.getElementById( tabs[i] ).style.color = "#000000";
+  			document.getElementById( tabs[i] ).style.backgroundColor = "#003DF5";
+  			document.getElementById( tabs[i] ).style.color = "#EEEEEE";
   		}
   	}	
   }
@@ -198,9 +198,14 @@
 <div id="div_title_divider" class="box_titlebar_divider"></div>
 
 <div id="div_tab_bar" class="box_tab_container">
-	<div id="div_tab_log" onclick="javascript:switchTab( 'div_tab_log' )" style="position:relative; top:0px; width:150px; height:25px; background-color:#DDDDDD;">Log</div>
-	<div id="div_tab_stats" onclick="javascript:switchTab( 'div_tab_stats' )" style="position:relative; left:155px; top:-25px; width:150px; height:100%; background-color:#DDDDDD;">Stats</div>
+	<div id="div_tab_log" onclick="javascript:switchTab( 'div_tab_log' )" class="box_tab" style="">
+		<table><tr><td><img src="images/tab_log.png"></td><td class="font_tab">Log</td></tr></table>
+	</div>
+	<div id="div_tab_stats" onclick="javascript:switchTab( 'div_tab_stats' )" class="box_tab" style="top:-25px; left:150px;">
+		<table><tr><td><img src="images/tab_stats.png"></td><td class="font_tab">Stats</td></tr></table>
+	</div>
 </div>
+
 
 <div id="div_entry_list" class="box_entry_list">
   <div id="div_entry_new" class="box_entry_new">
@@ -263,6 +268,7 @@
 </div>
 
 <div id="div_bottom_divider" class="box_bottom_divider"></div>
+
 <div id="div_graph_box" class="box_graphs">
 
 <!-- Weekly Stats -->
@@ -275,9 +281,12 @@
 <tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "this_week" ][ "editing" ] %> hrs</td></tr>
 </table>
 <br>
-<div id="div_graph_words_this_week"></div>
-<br>
-<div id="div_graph_words_every_week"></div>
+<table>
+<tr>
+<td><div id="div_graph_words_this_week"></div></td>
+<td><div id="div_graph_words_every_week"></div></td>
+</tr>
+</table>
 <br><br>
 
 <!-- 30 Stats -->
@@ -292,7 +301,7 @@
 
 <br><br>
 
-<!-- All-Time Stas -->
+<!-- All-Time Stats -->
 <div id="div_stats_heading_alltime" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">All Time</div>
 
 <table>
@@ -302,9 +311,6 @@
 <tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "all_time" ][ "editing" ] %></td></tr>
 </table>
 <div id="div_graph_words_each_week"></div>
-<br>
-
-<br><br>
 
 </div>
 
@@ -314,4 +320,6 @@
 	generateGraphWordsEachWeek( "div_graph_words_each_week" );
 	
 	switchTab( 'div_tab_log' );
+	
+	document.body.style.height = "100px;"
 </script>

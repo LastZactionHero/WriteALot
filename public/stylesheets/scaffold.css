@@ -69,6 +69,10 @@ div.field, div.actions {
   color:#444444; font-size:12px; font-family: Georgia,Serif;Times
 }
 
+.font_tab {
+ color:#FFFFFF; font-size:14px; font-family: Georgia,Serif;Times
+}
+
 .font_new_entry {
   font-family: Georgia,Serif;Times;
 }
@@ -108,6 +112,15 @@ div.field, div.actions {
   background-color:black;
 }
 
+.box_panel_divider{
+  position:relative; 
+  top:0px; 
+  left:0px; 
+  width:100%; 
+  height:5px; 
+  background-color:white;
+}
+
 .box_tab_container{
   position:relative; 
   top:0px; 
@@ -119,6 +132,17 @@ div.field, div.actions {
 
 .box_bottom_divider{
   position:relative; top; 0px; left:0px; width:100%; height:10px; background-color:black;
+}
+
+.box_tab{
+	position:relative; 
+	width:150px; 
+	height:25px; 
+	text-indent:5px; 
+	background-color:#DDDDDD;
+	font-weight: bold;
+	font-family: Georgia,Serif;Times;
+	vertical-align: middle;
 }
 
 .box_entry_list{
@@ -146,7 +170,8 @@ div.field, div.actions {
   height:20px; 
   width:100%; 
   color:black; 
-  background-color:#CCCCCC; 
+  background-color:#BBBBBB;
+  text-indent: 5px; 
   font-family: Georgia,Serif;Times;
 }
 
@@ -165,14 +190,21 @@ div.field, div.actions {
 	font-family: Georgia,Serif;Times; 
 	font-size:16px; 
 	color:#000000;
+	font-weight: bold;
 }
 
 .row_log_strong{
-	border-top: 1px dashed #CCCCCC; font-family: Georgia,Serif;Times; font-size:16px; color:#000000;
+	border-top: 1px dashed #CCCCCC; 
+	font-family: Georgia,Serif;Times; 
+	font-size:16px; 
+	color:#000000;
 }
 
 .row_log_weak{
-	border-top: 1px dashed #CCCCCC; font-family: Georgia,Serif;Times; font-size:16px; color:#888888;
+	border-top: 1px dashed #CCCCCC; 
+	font-family: Georgia,Serif;Times; 
+	font-size:16px; 
+	color:#888888;
 }
 
 .box_entry_log_top_left{
