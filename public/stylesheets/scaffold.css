@@ -108,6 +108,15 @@ div.field, div.actions {
   background-color:black;
 }
 
+.box_tab_container{
+  position:relative; 
+  top:0px; 
+  left:0px; 
+  width:100%; 
+  height:25px; 
+  background-color:#BBBBBB;
+}
+
 .box_bottom_divider{
   position:relative; top; 0px; left:0px; width:100%; height:10px; background-color:black;
 }
@@ -115,7 +124,7 @@ div.field, div.actions {
 .box_entry_list{
   position:relative; 
   top:0px; 
-  width:50%; 
+  width:100%; 
   height:500px; 
   background-color:white; 
   overflow-x: hidden; 
@@ -151,6 +160,21 @@ div.field, div.actions {
   background-color:white;
 }
 
+.row_log_title{
+	border-top: 1px dashed #CCCCCC; 
+	font-family: Georgia,Serif;Times; 
+	font-size:16px; 
+	color:#000000;
+}
+
+.row_log_strong{
+	border-top: 1px dashed #CCCCCC; font-family: Georgia,Serif;Times; font-size:16px; color:#000000;
+}
+
+.row_log_weak{
+	border-top: 1px dashed #CCCCCC; font-family: Georgia,Serif;Times; font-size:16px; color:#888888;
+}
+
 .box_entry_log_top_left{
   position:relative; top:5px; height:30px; left:0px; width:75%; font-family: Georgia,Serif;Times; font-size:24px; color:black;
 }
@@ -175,5 +199,13 @@ div.field, div.actions {
 }
 
 .box_graphs{
-  position:relative; top:-510px; left:50%; width:50%; height:500px; background-color:white; overflow:hidden; overflow-x: scroll; overflow-y:scroll;
+  position:relative; 
+  top:-510px; 
+  left:0%; 
+  width:100%; 
+  height:500px; 
+  background-color:white; 
+  overflow:hidden; 
+  overflow-x:scroll; 
+  overflow-y:scroll;
 }

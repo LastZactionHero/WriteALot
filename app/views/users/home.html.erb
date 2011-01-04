@@ -131,6 +131,34 @@
     }
   }
   
+  /**
+   * Switch Visible Tab
+   */
+  function switchTab
+  	(
+  	aDivActive
+  	)
+  {
+  	var tabs = [ "div_tab_log", "div_tab_stats" ];
+  	var panel = [ "div_entry_list", "div_graph_box" ];
+  	
+  	for( var i = 0; i < tabs.length; i++ )
+  	{
+  		if( aDivActive != tabs[i] )
+  		{
+  			document.getElementById( panel[i] ).style.visibility = "hidden";
+  			document.getElementById( tabs[i] ).style.backgroundColor = "#333333";
+  			document.getElementById( tabs[i] ).style.color = "#EEEEEE";
+  		}
+  		else
+  		{
+  			document.getElementById( panel[i] ).style.visibility = "visible";
+  			document.getElementById( tabs[i] ).style.backgroundColor = "#EEEEEE";
+  			document.getElementById( tabs[i] ).style.color = "#000000";
+  		}
+  	}	
+  }
+  	
 </script>
 
 <!-- Watermark -->
@@ -168,6 +196,12 @@
 <% end %>
 
 <div id="div_title_divider" class="box_titlebar_divider"></div>
+
+<div id="div_tab_bar" class="box_tab_container">
+	<div id="div_tab_log" onclick="javascript:switchTab( 'div_tab_log' )" style="position:relative; top:0px; width:150px; height:25px; background-color:#DDDDDD;">Log</div>
+	<div id="div_tab_stats" onclick="javascript:switchTab( 'div_tab_stats' )" style="position:relative; left:155px; top:-25px; width:150px; height:100%; background-color:#DDDDDD;">Stats</div>
+</div>
+
 <div id="div_entry_list" class="box_entry_list">
   <div id="div_entry_new" class="box_entry_new">
     <div id="div_entry_new_title" class="box_entry_new_title" onclick="javascript:showDialogNewEntry()">Add New Log Entry</div>
@@ -180,26 +214,42 @@
     </table></form>
   </div>
   
-  <% @user_entries.each do |entry| %>
-    <% editing_text = "" %>
-    <% if entry.editing? %>
-    <%   editing_text = "Editing" %>
-    <% else %>
-    <%   editing_text = "Writing" %>
-    <% end %>
-    
-    <% notes_text = "" %>
-    <% if !entry.comments.empty? %>
-    <%   notes_text = ": " + entry.comments %>
-    <% end %>
-    
-    <div class="box_entry_log">
-      <div class="box_entry_log_top_left">+<%= entry.words %> words/<%= entry.hours %> hr <%= entry.minutes %> min</div>
-      <div class="box_entry_log_top_right"><%= entry.starttime.strftime( "%m/%d/%Y" ) %></div>
-      <div class="box_entry_log_bottom_left"><strong><%= editing_text %></strong><%= notes_text %></div>
-      <div class="box_entry_log_bottom_right"><a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a></div>
-    </div>
+  <% if !@user_entries.empty? %>
+	  <table style="width:100%">
+	  	<tr>
+	  		<td class="row_log_title">Date</td>
+	  		<td class="row_log_title">Activity</td>
+	  		<td class="row_log_title">Words</td>
+	  		<td class="row_log_title">Duration</td>
+	  		<td class="row_log_title">Notes</td>
+	  		<td class="row_log_title"></td>
+	  	</tr>
+	  	
+	  <% @user_entries.each do |entry| %>
+	    <% editing_text = "" %>
+	    <% if entry.editing? %>
+	    <%   editing_text = "Editing" %>
+	    <% else %>
+	    <%   editing_text = "Writing" %>
+	    <% end %>
+	    
+	    <% notes_text = "" %>
+	    <% if !entry.comments.empty? %>
+	    <%   notes_text = entry.comments %>
+	    <% end %>
+	   
+		<tr>
+			<td class="row_log_weak" style=""><%= entry.starttime.strftime( "%m/%d/%Y" ) %></td>
+			<td class="row_log_weak"><%= editing_text %></td>
+			<td class="row_log_strong" style=""><%= entry.words %> words</td>
+			<td class="row_log_strong"><%= entry.hours %> hr <%= entry.minutes %> min</td>
+			<td class="row_log_weak"><%= notes_text %></td>
+			<td class="row_log_weak"><a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a></td>
+		</tr>
+	  <% end %>
+	  </table>
   <% end %>
+  
   <% if @user_entries.empty? %>
     <div class="box_log_empty">
     <br>
@@ -258,4 +308,6 @@
 	generateGraphWordsThisWeek( "div_graph_words_this_week" );
 	generateGraphWordsEveryWeek( "div_graph_words_every_week" );
 	generateGraphWordsEachWeek( "div_graph_words_each_week" );
+	
+	switchTab( 'div_tab_log' );
 </script>
