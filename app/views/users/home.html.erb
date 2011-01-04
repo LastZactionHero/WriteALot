@@ -244,7 +244,7 @@
 			<td class="row_log_weak"><%= editing_text %></td>
 			<td class="row_log_strong" style="text-align:right;"><%= entry.words %></td>
 			<td class="row_log_strong" style="text-align:right;">			
-				<%= entry.hours %>:<% if entry.minutes > 0 %><%= entry.minutes %><% else %><%= "00" %><% end %>
+				<%= entry.hours %>:<% if entry.minutes >= 10 %><%= entry.minutes %><% else %><%= "#{entry.minutes}0" %><% end %>
 			</td>
 			<td class="row_log_strong"></td>
 			<td class="row_log_weak"><%= notes_text %></td>
