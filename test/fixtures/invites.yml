@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  host_user: 1
+  target_user: 1
+  accepted: false
+  active: false
+
+two:
+  host_user: 1
+  target_user: 1
+  accepted: false
+  active: false

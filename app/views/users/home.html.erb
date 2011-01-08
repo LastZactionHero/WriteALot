@@ -206,7 +206,7 @@
 		<table><tr><td><img src="images/tab_stats.png"></td><td class="font_tab">Stats</td></tr></table>
 	</div>
 	<div id="div_tab_social" onclick="javascript:switchTab( 'div_tab_social' )" class="box_tab" style="top:-50px; left:300px;">
-		<table><tr><td><img src="images/tab_social.png"></td><td class="font_tab">Social</td></tr></table>
+		<table><tr><td><img src="images/tab_social.png"></td><td class="font_tab">Social <% if !@invites_pending.empty? %> <span style="color:red"> (+)</span><% end %></td></tr></table>
 	</div>	
 
 </div>
@@ -325,17 +325,148 @@
 </div>
 
 
-<div id="div_social"></div>
+<div id="div_social" style="height:0px; overflow:hidden;">
+	<div id="div_social_friends" style="position:relative; float:left; top:0px; left:0px; width:20%; height:100%; background-color:#EEEEEE; font-family: Georgia,Serif;Times; font-height:12px;">
+		<div class="font_friend" style="background-color:#BBBBBB; width=100%;">Friends</div>
+		
+		Add Friend:<br>
+		<input id="form_social_add" type="text" maxlength=20 value="Twitter Name" onclick="javascript:invitationTextClicked( 'form_social_add' )">
+		<a onclick="javascript:inviteAdd( 'form_social_add' )">Add Friend</add>
+		
+		<% if !@message.empty? %>
+			<br><span style="color:red;"><%= @message %></span>
+		<% end %>
+	
+		<% if !@invites_pending.empty? %>
+			<br><br>
+			<table width=100%>
+				<tr><td class="font_friend">Friend Requests:</td><td></td></tr>
+				
+				<% @invites_pending.each do |invite| %>
+				  <tr><td class="font_friend" ><%= invite.users[1].twitter %></td><td class="font_friend" style="text-align:right"><a onclick="inviteAccept( <%= invite.id %> )">Add</a> / <a onclick="inviteIgnore( <%= invite.id %> )">Ignore</a></td></tr>
+				<% end %>
+				
+			</table>
+		<% end %>
+		
+		<% if !@invites.empty? %>
+			<br><br>
+			<table width=100%>
+				<tr><td class="font_friend">Friends:</td><td></td></tr>
+				
+				<% @invites.each do |invite| %>
+					<tr><td class="font_friend"><%= invite.users[0].twitter %><% if !invite.accepted? %><%= " (pending)" %><% end %></td>
+					<td class="font_friend" style="text-align:right"><a onclick="javascript:inviteDelete( <%= invite.id %> )">Delete</a></td></tr>
+				<% end %>
+			</table>		
+		<% end %>
+		
+
+				
+	</div>
+	
+	<div id="div_social_graphs" style="position:relative; float:left; top:0px; left:0px; width:80%; height:100%; background-color:white;">
+		Graphs
+	</div>
+
+
+</div>
 
 
 
 
 <script type="text/javascript">
+
+    /**
+     * Add New Invitation
+     */
+   function inviteAdd
+   		(
+   		inInputId
+   		)
+   	{
+   		if( sDefaultInvitationText )
+   			return;
+   			
+   		username = String( document.getElementById( inInputId ).value );
+   		username = encodeURIComponent( username );
+   		
+   		if( username.length > 0 )
+   		{
+   			window.location = "/users/invite_add/" + encodeURIComponent( username );
+   		}
+   	}
+
+	/**
+	 * Accept Invitation
+	 */
+	function inviteAccept
+		(
+		inId
+		)
+	{
+		window.location = "/users/invite_accept/" + inId;
+	}
+	
+	/** 
+	 * Ignore Invite
+	 */
+    function inviteIgnore
+    	(
+    	inId
+    	)
+    {
+    	window.location = "/users/invite_ignore/" + inId;
+    }
+       	
+    /**
+     * Delete Invitation
+     */
+    function inviteDelete
+    	(
+    	inId
+    	)
+    {
+    	var deleteConfirmation = confirm ( "Are you sure you would like to remove this contact?" );
+    	if( deleteConfirmation )
+    	{
+    		window.location = "/users/invite_delete/" + inId;
+    	}
+    }
+    
+	/** 
+	 * Remove Default Invitation Text
+	 */
+	sDefaultInvitationText = true;
+	function invitationTextClicked
+		(
+		inInputId
+		)
+	{
+		if( sDefaultInvitationText )
+		{
+			sDefaultInvitationText = false;
+			document.getElementById( inInputId ).value = "";
+		}
+	}
+
 	generateGraphWordsThisWeek( "div_graph_words_this_week" );
 	generateGraphWordsEveryWeek( "div_graph_words_every_week" );
 	generateGraphWordsEachWeek( "div_graph_words_each_week" );
 	
-	switchTab( 'div_tab_log' );
+	if( "social" == "<%= @tab %>" )
+	{
+		switchTab( 'div_tab_social' );
+	}
+	else if( "stats" == "<%= @tab %>" )
+	{
+		switchTab( 'div_tab_stats' );
+	}
+	else
+	{
+		switchTab( 'div_tab_log' );
+	}
+
 	
 	document.body.style.height = "100px;"
 </script>

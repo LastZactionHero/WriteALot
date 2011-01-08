@@ -148,7 +148,9 @@ class UsersController < ApplicationController
 
   # User Home Page
   def home
-            
+    # Starting Tab
+    @tab = params[:tab];
+    
     # Get info for the current user
     @user_id = session[:user_id]
     @user_name = session[:user_name]
@@ -169,7 +171,27 @@ class UsersController < ApplicationController
     
     # Get writing stats
     @writing_stats = @user.get_writing_stats
+    
+    # Get Invitations
+    @invites = Invite.find( :all, :conditions => [ "host_user = #{session[:user_id].to_i}" ] )
+    
+    @invites_pending = Array.new
+    @invites_target = Invite.find( :all, :conditions => [ "target_user = #{session[:user_id]}" ] )
+    @invites_target.each do |pending|
+      if( !pending.accepted )
+        @invites_pending.push( pending )
+      end
+    end
    
+    @message = "";
+    if( params[:message] )
+      case params[:message]
+        when "e_user_not_found": @message = "The requested user was not found. Note: User names are case sensitive."
+        when "e_server_error": @message = "Unknown server error"
+        when "e_invite_exists": @message = "You are already friends with this user."
+        when "e_invite_self": @message = "You cannot invite yourself."  
+      end
+    end
   end
   
   def signout
@@ -189,6 +211,154 @@ class UsersController < ApplicationController
     puts "User ID: #{session[:user_id]}"  
       
     redirect_to :action => "home"
+  end
+  
+  
+  # Add Invitation
+  # invite_add
+  def invite_add
+    fail = false
+    
+    username = params[:username]
+    
+    # Find the Target User
+    target_user = User.find( :first, :conditions => [ "twitter = \"#{username}\"" ] )
+    if( target_user.nil? )
+      redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
+      fail = true
+    end
+    
+    # Find the Host User
+    host_user = User.find( session[:user_id].to_i )
+    if( host_user.nil? )
+      redirect_to :action => "home", :tab => "social", :message => "e_server_error"
+      fail = true
+    end
+    
+    # Make sure the user isn't inviting themselves
+    if( !fail )
+      if( host_user.id == target_user.id )
+        redirect_to :action => "home", :tab => "social", :message => "e_invite_self"
+        fail = true
+      end
+    end
+    
+    # Check to see if this invitation already exists
+    if( !fail )
+      existing_invite = host_user.invites.find( :first, :conditions => [ "target_user = #{target_user.id}" ] )
+      if( existing_invite )
+        redirect_to :action => "home", :tab => "social", :message => "e_invite_exists"
+        fail = true
+      end
+    end
+    
+    
+    # Create a New Invitation
+    if( !fail )
+      invite = Invite.new
+      invite.accepted = false
+      invite.active = true
+      invite.target_user = target_user.id
+      invite.host_user = host_user.id
+      invite.users << target_user
+      invite.users << host_user
+      invite.save
+      
+      #host_user.invites << invite
+      #host_user.save
+      
+      redirect_to :action => "home", :tab => "social"
+    end
+
+  end
+
+  # Ignore Invitation
+  # invite_ignore
+  def invite_ignore
+    
+    # Fetch the invitation
+    invite_id = params[:id]
+    invite = Invite.find( invite_id )
+    
+    # Make sure user has permission to ignore invitation
+    if( invite.target_user == session[:user_id].to_i )
+      invite.destroy
+    end
+    
+    redirect_to :action => "home", :tab => "social"
+  end
+  
+  # Accept Invitation
+  def invite_accept
+    
+    # Fetch invitation
+    invite_id = params[:id].to_i
+    invite = Invite.find( invite_id )
+      
+    # Make sure user has permission to accept invitation
+    if( invite.target_user == session[:user_id].to_i )
+      
+      # Mark invitation as accepted
+      invite.accepted = true
+      invite.save
+      
+      # Create new invitation in opposite direction
+      invite_new = Invite.new
+      invite_new.accepted = true
+      invite_new.active = true
+      invite_new.host_user = invite.target_user
+      invite_new.target_user = invite.host_user
+      invite_new.users << invite.users[1]
+      invite_new.users << invite.users[0]
+      invite_new.save
+      
+      host_user = User.find( session[:user_id].to_i )
+      host_user.invites << invite_new
+      host_user.save
+      
+    end
+    
+    redirect_to :action => "home", :tab => "social"
+  end
+  
+  # Delete Invitation
+  def invite_delete
+    puts "invite_delete"
+    
+    # Fetch invitation
+    invite_id = params[:id].to_i
+    puts "removing invite id: #{invite_id}"
+    
+    invite = Invite.find( invite_id )
+    puts invite.inspect
+    
+    # Make sure user has permission to delete this invitation
+    if( invite.host_user == session[:user_id].to_i )
+      puts "User has permission to delete"
+        
+      # Delete invitation
+      target_id = -1
+      if( invite )
+        puts "Invite found."
+        target_id = invite.target_user
+        puts "Invite is for target user:#{target_id}"
+        invite.destroy
+        puts "Deleting invitation"
+      end
+      
+      # Delete inviations in opposite direction
+      if( target_id >= 0 )
+        target_user = User.find( target_id )
+        if( target_user )
+          target_user_invitations = target_user.invites.find( :all, :conditions => [ "target_user = #{session[:user_id].to_i}" ] )
+          target_user_invitations.each do |t|
+            t.destroy
+          end
+        end
+      end  
+    end
+    
+    redirect_to :action => "home", :tab => "social"
   end
   
 end

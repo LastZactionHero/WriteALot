@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_many :charts
   has_many :entries
+  has_and_belongs_to_many :invites, :join_table => "invites_users_join"
   
   # Get the Days Since Last Entry by this User
   def get_days_last_use
