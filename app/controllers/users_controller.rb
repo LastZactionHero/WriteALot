@@ -228,6 +228,8 @@ class UsersController < ApplicationController
       fail = true
     end
     
+    redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
+    
     # Find the Host User
     #host_user = User.find( session[:user_id].to_i )
     #if( host_user.nil? )
