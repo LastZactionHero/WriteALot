@@ -217,18 +217,20 @@ class UsersController < ApplicationController
   # Add Invitation
   # invite_add
   def invite_add
-    fail = false
+    #fail = false
     
-    username = params[:username]
+    #username = params[:username]
     
     # Find the Target User
-    target_user = User.find( :first, :conditions => [ "twitter = \"#{username}\"" ] )
-    if( target_user.nil? )
-      redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
-      fail = true
-    end
+    #target_user = User.find( :first, :conditions => [ "twitter = \"#{username}\"" ] )
+    #if( target_user.nil? )
+    #  redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
+    #  fail = true
+    #end
     
-    redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
+    #redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
+    
+    redirect_to :action => "home"
     
     # Find the Host User
     #host_user = User.find( session[:user_id].to_i )
