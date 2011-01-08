@@ -219,7 +219,7 @@ class UsersController < ApplicationController
   def invite_add
     #fail = false
     
-    #username = params[:username]
+    username = params[:username]
     
     # Find the Target User
     target_user = User.find( :first, :conditions => [ "twitter = \"#{username}\"" ] )
