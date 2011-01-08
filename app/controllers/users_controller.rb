@@ -222,7 +222,7 @@ class UsersController < ApplicationController
     #username = params[:username]
     
     # Find the Target User
-    #target_user = User.find( :first, :conditions => [ "twitter = \"#{username}\"" ] )
+    target_user = User.find( :first, :conditions => [ "twitter = \"#{username}\"" ] )
     #if( target_user.nil? )
     #  redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
     #  fail = true
