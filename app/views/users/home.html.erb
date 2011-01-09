@@ -1,4 +1,5 @@
 <script language="javascript" type="text/javascript" src="javascripts/graph.js"></script>
+<script language="javascript" type="text/javascript" src="javascripts/invitations.js"></script>
 
 <script type="text/javascript">
 
@@ -24,9 +25,22 @@
  	{
  		<%= "dataString = '#{@user.get_data_words_each_week() }';" %>
  	}
+ 	else if( in_data_type == "social_words_this_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_words_this_week_social()}';" %>
+ 	}
  	 	
  	return dataString;
  }
+ 
+ /**
+  * Get User String
+  */
+ function getUserString()
+ {
+ 	return "<%= @user.get_friends_list %>";
+ }
+ 
   
  /**
  * Expand New Entry Dialog Box
@@ -372,7 +386,9 @@
 	</div>
 	
 	<div id="div_social_graphs" style="position:relative; float:left; top:0px; left:0px; width:80%; height:100%; background-color:white;">
-		Graphs
+
+		<div id="div_graph_social_words_each_week"></div>
+		
 	</div>
 
 </div>
@@ -381,7 +397,7 @@
 	<p class="font_devnotes_title">You are using a development version of Writealot.<br>You can track this project in more detail on Github: <a href="https://github.com/LastZactionHero/WriteALot">https://github.com/LastZactionHero/WriteALot</a></p>
 
 	<% @devnotes.each do |note| %>
-		<br><br><span class="font_devnotes_date"><%= note.created_at.strftime( "%D" ) %></span> - <span class="font_devnotes_author"><%= note.author %></span><br><br>
+		<br><br><br><span class="font_devnotes_date"><%= note.created_at.strftime( "%D" ) %></span> - <span class="font_devnotes_author"><%= note.author %></span><br><br>
 		<span class="font_devnotes_note"><%= note.note %></span>
 	<% end %>
 
@@ -391,82 +407,10 @@
 
 <script type="text/javascript">
 
-    /**
-     * Add New Invitation
-     */
-   function inviteAdd
-   		(
-   		inInputId
-   		)
-   	{
-   		if( sDefaultInvitationText )
-   			return;
-   			
-   		username = String( document.getElementById( inInputId ).value );
-   		username = encodeURIComponent( username );
-   		
-   		if( username.length > 0 )
-   		{
-   			window.location = "/users/invite_add/" + encodeURIComponent( username );
-   		}
-   	}
-
-	/**
-	 * Accept Invitation
-	 */
-	function inviteAccept
-		(
-		inId
-		)
-	{
-		window.location = "/users/invite_accept/" + inId;
-	}
-	
-	/** 
-	 * Ignore Invite
-	 */
-    function inviteIgnore
-    	(
-    	inId
-    	)
-    {
-    	window.location = "/users/invite_ignore/" + inId;
-    }
-       	
-    /**
-     * Delete Invitation
-     */
-    function inviteDelete
-    	(
-    	inId
-    	)
-    {
-    	var deleteConfirmation = confirm ( "Are you sure you would like to remove this contact?" );
-    	if( deleteConfirmation )
-    	{
-    		window.location = "/users/invite_delete/" + inId;
-    	}
-    }
-    
-	/** 
-	 * Remove Default Invitation Text
-	 */
-	sDefaultInvitationText = true;
-	function invitationTextClicked
-		(
-		inInputId
-		)
-	{
-		if( sDefaultInvitationText )
-		{
-			sDefaultInvitationText = false;
-			document.getElementById( inInputId ).value = "";
-		}
-	}
-
 	generateGraphWordsThisWeek( "div_graph_words_this_week" );
 	generateGraphWordsEveryWeek( "div_graph_words_every_week" );
 	generateGraphWordsEachWeek( "div_graph_words_each_week" );
+	generateGraphSocialWordsThisWeek( "div_graph_social_words_each_week" );
 	
 	if( "social" == "<%= @tab %>" )
 	{

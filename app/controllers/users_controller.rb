@@ -196,6 +196,19 @@ class UsersController < ApplicationController
     
     # Developer Notes
     @devnotes = DeveloperNote.find( :all, :order => "created_at desc" )
+    
+    
+    
+    # Social Graphs
+    puts "Invitations:"
+    @user.invites.find( :all, :conditions => { :host_user => @user.id } ).each do |invite|
+      puts invite.inspect
+      puts "This week:  #{invite.users[0].get_data_words_this_week}"
+      puts "Every week: #{invite.users[0].get_data_words_every_week}"
+      puts "All year:   #{invite.users[0].get_data_words_each_week}"
+
+    end
+    
   end
   
   def signout
@@ -268,7 +281,7 @@ class UsersController < ApplicationController
       invite.users << host_user
       invite.save
       
-      host_user.invites << invite
+      #host_user.invites << invite
       host_user.save
       
       redirect_to :action => "home", :tab => "social"
@@ -316,9 +329,9 @@ class UsersController < ApplicationController
       invite_new.users << invite.users[0]
       invite_new.save
       
-      host_user = User.find( session[:user_id].to_i )
-      host_user.invites << invite_new
-      host_user.save
+      #host_user = User.find( session[:user_id].to_i )
+      #host_user.invites << invite_new
+      #host_user.save
       
     end
     

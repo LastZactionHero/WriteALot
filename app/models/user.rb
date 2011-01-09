@@ -248,4 +248,42 @@ def get_data_words_each_week
   return data_string
 end
       
+# Get Words this Week for All Friends
+def get_data_words_this_week_social
+
+  # Append user string  
+  data_string = "-1"
+  data_string = data_string + "|" + get_data_words_this_week
+
+  # Append friend strings
+  invites.find( :all, :conditions => { :host_user => id } ).each do |invite|
+    
+    if( invite.accepted )
+    friend = invite.users[0]
+    data_string = data_string + "|" + "-1" + "|" + friend.get_data_words_this_week
+    end
+    
+  end
+
+  return data_string
+end
+
+# Get List of All Friends
+def get_friends_list
+  # Append user string  
+  data_string = twitter
+
+  # Append friend strings
+  invites.find( :all, :conditions => { :host_user => id } ).each do |invite|
+    
+    if( invite.accepted )
+      friend = invite.users[0]
+      data_string = data_string + "|" + friend.twitter
+    end
+    
+  end  
+  
+  return data_string
+end
+
 end
