@@ -29,7 +29,15 @@
  	{
  		<%= "dataString = '#{@user.get_data_words_this_week_social()}';" %>
  	}
- 	 	
+ 	else if( in_data_type == "social_words_every_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_words_every_week_social()}';" %>
+ 	}
+ 	else if( in_data_type == "social_words_each_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_words_each_week_social()}';" %>
+ 	}
+ 	 	 	
  	return dataString;
  }
  
@@ -385,10 +393,12 @@
 				
 	</div>
 	
-	<div id="div_social_graphs" style="position:relative; float:left; top:0px; left:0px; width:80%; height:100%; background-color:white;">
+	<div id="div_social_graphs" style="position:relative; float:left; top:0px; left:0px; width:80%; height:100%; background-color:white; overflow-x:scroll;">
 
-		<div id="div_graph_social_words_each_week"></div>
-		
+		<table>
+		<tr><td><div id="div_graph_social_words_this_week"></div></td><td><div id="div_graph_social_words_every_week"></div></td></tr>
+		<tr><td><div id="div_graph_social_words_each_week"></div></td><td></td></tr>
+		</table>
 	</div>
 
 </div>
@@ -410,7 +420,9 @@
 	generateGraphWordsThisWeek( "div_graph_words_this_week" );
 	generateGraphWordsEveryWeek( "div_graph_words_every_week" );
 	generateGraphWordsEachWeek( "div_graph_words_each_week" );
-	generateGraphSocialWordsThisWeek( "div_graph_social_words_each_week" );
+	generateGraphSocialWordsThisWeek( "div_graph_social_words_this_week" );
+	generateGraphSocialWordsEveryWeek( "div_graph_social_words_every_week" );
+	generateGraphSocialWordsEachWeek( "div_graph_social_words_each_week" );
 	
 	if( "social" == "<%= @tab %>" )
 	{
