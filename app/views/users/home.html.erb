@@ -1,5 +1,6 @@
 <script language="javascript" type="text/javascript" src="javascripts/graph.js"></script>
 <script language="javascript" type="text/javascript" src="javascripts/invitations.js"></script>
+<script language="javascript" type="text/javascript" src="javascripts/display.js"></script>
 
 <script type="text/javascript">
 
@@ -417,6 +418,10 @@
 
 <script type="text/javascript">
 
+	alert( getWindowHeight() );
+	var windowHeight = getWindowHeight();
+	document.getElementById( 'div_panel' ).style.height = ( windowHeight - 170 ) + "px";
+	
 	generateGraphWordsThisWeek( "div_graph_words_this_week" );
 	generateGraphWordsEveryWeek( "div_graph_words_every_week" );
 	generateGraphWordsEachWeek( "div_graph_words_each_week" );
