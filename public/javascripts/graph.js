@@ -280,7 +280,6 @@ if( div_graph )
 								"&chd=t:" + getDataString( "social_words_each_week" ) + 
 								"&chdl=" + getUserString() +
 								"&chdlp=b" +
-								"&chls=2,4,1|1" +
 								"&chma=5,5,5,25" +
 								"&chtt=Words+Each+Week+this+Year\" " + 
 								"width=\"500\" " + 
