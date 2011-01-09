@@ -1,0 +1,25 @@
+<h1>Listing developer_notes</h1>
+
+<table>
+  <tr>
+    <th>Author</th>
+    <th>Note</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @developer_notes.each do |developer_note| %>
+  <tr>
+    <td><%= developer_note.author %></td>
+    <td><%= developer_note.note %></td>
+    <td><%= link_to 'Show', developer_note %></td>
+    <td><%= link_to 'Edit', edit_developer_note_path(developer_note) %></td>
+    <td><%= link_to 'Destroy', developer_note, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Developer note', new_developer_note_path %>

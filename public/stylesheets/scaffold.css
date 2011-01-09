@@ -77,6 +77,30 @@ div.field, div.actions {
   font-family: Georgia,Serif;Times;
 }
 
+.font_devnotes_date {
+  font-family: Georgia,Serif;Times;
+  font-size: 30px;
+  color: #CCCCCC;
+}
+
+.font_devnotes_author {
+  font-family: Georgia,Serif;Times;
+  font-size: 30px;
+  color: #000000;
+}
+
+.font_devnotes_note {
+  font-family: Georgia,Serif;Times;
+  font-size: 14px;
+  color: #000000;
+}
+
+.font_devnotes_title {
+  font-family: Georgia,Serif;Times;
+  font-size: 14px;
+  color: #000000;
+}
+
 .box_watermark {
   position:absolute; top:0px; left:0px; color:#EEEEEE; font-size:256px; font-family: Georgia,Serif;Times;
 }

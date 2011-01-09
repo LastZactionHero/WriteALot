@@ -183,6 +183,7 @@ class UsersController < ApplicationController
       end
     end
    
+    # Alert Messaging
     @message = "";
     if( params[:message] )
       case params[:message]
@@ -192,6 +193,9 @@ class UsersController < ApplicationController
         when "e_invite_self": @message = "You cannot invite yourself."  
       end
     end
+    
+    # Developer Notes
+    @devnotes = DeveloperNote.find( :all, :order => "created_at desc" )
   end
   
   def signout
