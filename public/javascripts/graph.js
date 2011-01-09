@@ -63,7 +63,7 @@ function generateGraphWordsEveryWeek
 									"&chco=003DF5" +
 									"&chds=0," + chartMax + 
 									"&chd=t:" + getDataString( "words_every_week" ) + 
-									"&chtt=Cumulative+Words+per+Weekday\"" +
+									"&chtt=Cumulative+Words+per+Weekday+(60+Days)\"" +
 									" width=\"400\"" +
 									" height=\"225\"" +
 									" alt=\"Words this Week\" />";
@@ -220,7 +220,7 @@ if( div_graph )
 								"&chdl=" + getUserString() +
 								"&chdlp=b" +
 								"&chma=5,5,5,25" +
-								"&chtt=Cumulative+Words+per+Weekday\" " + 
+								"&chtt=Cumulative+Words+per+Weekday+(60+Days)\" " + 
 								"width=\"500\" " +
 								"height=\"320\" " +
 								"alt=\"Cumulative Words per Weekday\" />";

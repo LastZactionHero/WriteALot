@@ -134,7 +134,11 @@ class User < ActiveRecord::Base
   # Get Words Every Week Data String
   def get_data_words_every_week
     words_per_day = Array.new( 7, 0 )
-        
+    
+    # Get current day
+    timeNow = Time.now
+    time60Days = timeNow - 60 * 24 * 60 * 60
+     
     # Loop through entries and increment totals
     user_entries = Entry.find( :all, :conditions => ["userid = #{id}"] )
       
@@ -143,6 +147,11 @@ class User < ActiveRecord::Base
         next      
       end
     
+      # Must have occurred in the last 60 days
+      if( entry.starttime.time < time60Days )
+        next
+      end
+      
       dayEntry = entry.starttime.wday().to_i
 
       words_per_day[dayEntry] += entry.words
