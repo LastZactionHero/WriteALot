@@ -18,5 +18,11 @@ function getWindowWidth()
  */
 function getWindowHeight()
 {
-	return window.innerHeight;
+	height = 500;
+	if( window.innerHeight )
+		height = window.innerHeight;
+	else if( document.documentElement.clientHeight )
+		height = document.documentElement.clientHeight;
+	
+	return height;
 }
