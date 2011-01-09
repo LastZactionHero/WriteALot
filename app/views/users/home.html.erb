@@ -377,11 +377,11 @@
 
 </div>
 
-<div id="div_devnotes">
-	<p class="font_devnotes_title">You are using a development version of Writealot.</p><br><br>
+<div id="div_devnotes" style="overflow:hidden; height:0px;">
+	<p class="font_devnotes_title">You are using a development version of Writealot.<br>You can track this project in more detail on Github: <a href="https://github.com/LastZactionHero/WriteALot">https://github.com/LastZactionHero/WriteALot</a></p>
 
 	<% @devnotes.each do |note| %>
-		<span class="font_devnotes_date"><%= note.created_at.strftime( "%D" ) %></span> - <span class="font_devnotes_author"><%= note.author %></span><br><br>
+		<br><br><span class="font_devnotes_date"><%= note.created_at.strftime( "%D" ) %></span> - <span class="font_devnotes_author"><%= note.author %></span><br><br>
 		<span class="font_devnotes_note"><%= note.note %></span>
 	<% end %>
 
