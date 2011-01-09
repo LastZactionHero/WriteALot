@@ -217,62 +217,58 @@ class UsersController < ApplicationController
   # Add Invitation
   # invite_add
   def invite_add
-    #fail = false
+    fail = false
     
-    #username = params[:username]
+    username = params[:username]
     
     # Find the Target User
-    #target_user = User.find( :first, :conditions => [ "twitter = :username", { :username => "%#{username}" ] )
-    #if( target_user.nil? )
-    #  redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
-    #  fail = true
-    #end
-    
-    #redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
-    
-    redirect_to :action => "home"
-    
+    target_user = User.find( :first, :conditions => { :twitter => username  } )
+    if( target_user.nil? )
+      redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
+      fail = true
+    end
+      
     # Find the Host User
-    #host_user = User.find( session[:user_id].to_i )
-    #if( host_user.nil? )
-    #  redirect_to :action => "home", :tab => "social", :message => "e_server_error"
-    #  fail = true
-    #end
+    host_user = User.find( session[:user_id].to_i )
+    if( host_user.nil? )
+      redirect_to :action => "home", :tab => "social", :message => "e_server_error"
+      fail = true
+    end
     
     # Make sure the user isn't inviting themselves
-    #if( !fail )
-    #  if( host_user.id == target_user.id )
-    #    redirect_to :action => "home", :tab => "social", :message => "e_invite_self"
-    #    fail = true
-    #  end
-    #end
+    if( !fail )
+      if( host_user.id == target_user.id )
+        redirect_to :action => "home", :tab => "social", :message => "e_invite_self"
+        fail = true
+      end
+    end
     
     # Check to see if this invitation already exists
-    #if( !fail )
-    #  existing_invite = host_user.invites.find( :first, :conditions => [ "target_user = #{target_user.id}" ] )
-    #  if( existing_invite )
-    #    redirect_to :action => "home", :tab => "social", :message => "e_invite_exists"
-    #    fail = true
-    #  end
-    #end
+    if( !fail )
+      existing_invite = host_user.invites.find( :first,:conditions => { :target_user => target_user.id } )      
+      if( existing_invite )
+        redirect_to :action => "home", :tab => "social", :message => "e_invite_exists"
+        fail = true
+      end
+    end
     
     
     # Create a New Invitation
-    #if( !fail )
-    #  invite = Invite.new
-    #  invite.accepted = false
-    #  invite.active = true
-    #  invite.target_user = target_user.id
-    #  invite.host_user = host_user.id
-    #  invite.users << target_user
-    #  invite.users << host_user
-    #  invite.save
+    if( !fail )
+      invite = Invite.new
+      invite.accepted = false
+      invite.active = true
+      invite.target_user = target_user.id
+      invite.host_user = host_user.id
+      invite.users << target_user
+      invite.users << host_user
+      invite.save
       
-      #host_user.invites << invite
-      #host_user.save
+      host_user.invites << invite
+      host_user.save
       
-    #  redirect_to :action => "home", :tab => "social"
-    #end
+      redirect_to :action => "home", :tab => "social"
+    end
 
   end
 
@@ -354,7 +350,8 @@ class UsersController < ApplicationController
       if( target_id >= 0 )
         target_user = User.find( target_id )
         if( target_user )
-          target_user_invitations = target_user.invites.find( :all, :conditions => [ "target_user = #{session[:user_id].to_i}" ] )
+          #target_user_invitations = target_user.invites.find( :all, :conditions => [ "target_user = #{session[:user_id].to_i}" ] )
+          target_user_invitations = target_user.invites.find( :all, :conditions => { :target_user => session[:user_id].to_i } )
           target_user_invitations.each do |t|
             t.destroy
           end
