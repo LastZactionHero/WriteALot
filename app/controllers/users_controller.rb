@@ -187,7 +187,7 @@ class UsersController < ApplicationController
     @message = "";
     if( params[:message] )
       case params[:message]
-        when "e_user_not_found": @message = "The requested user was not found. Note: User names are case sensitive."
+        when "e_user_not_found": @message = "The requested user was not found."
         when "e_server_error": @message = "Unknown server error"
         when "e_invite_exists": @message = "You are already friends with this user."
         when "e_invite_self": @message = "You cannot invite yourself."  
@@ -239,7 +239,14 @@ class UsersController < ApplicationController
     username = params[:username]
     
     # Find the Target User
-    target_user = User.find( :first, :conditions => { :twitter => username  } )
+    #target_user = User.find( :first, :conditions => { :twitter => username  } )
+    target_user = nil
+    User.all.each do |t|
+      if( t.twitter.downcase == username.downcase )
+        target_user = t
+        break
+      end
+    end
     if( target_user.nil? )
       redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
       fail = true
