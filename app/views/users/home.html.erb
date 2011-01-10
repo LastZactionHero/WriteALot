@@ -356,7 +356,7 @@
 		<div class="font_friend" style="background-color:#BBBBBB; width=100%;">Friends</div>
 		
 		Add Friend:<br>
-		<input id="form_social_add" type="text" maxlength=20 value="Twitter Name" onclick="javascript:invitationTextClicked( 'form_social_add' )">
+		<input id="form_social_add" type="text" maxlength=20 value="Twitter/Facebook Name" onclick="javascript:invitationTextClicked( 'form_social_add' )">
 		<a onclick="javascript:inviteAdd( 'form_social_add' )">Add Friend</a>
 		
 		<% if !@message.empty? %>
@@ -388,7 +388,7 @@
 		<% end %>
 		
 		<% if @invites.empty? && @invites_pending.empty? %>
-		  <br><br>You are not following any users.<br><br>Enter the Twitter name of another Writealot user to start tracking your writing together.
+		  <br><br>You are not following any users.<br><br>Enter the Twitter or Facebook name of another Writealot user to start tracking your writing together.
 		
 		<% end%>
 				

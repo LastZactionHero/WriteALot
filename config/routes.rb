@@ -20,7 +20,9 @@ AuthTest::Application.routes.draw do
   match 'signout' => 'users#signout'
 
   match '/twitter_callback' => 'users#proc_twitter_login'
+  match '/facebook_callback' => 'users#proc_facebook_login'
   match '/auth/twitter/callback' => 'users#proc_twitter_login'
+  match '/auth/facebook/callback' => 'users#proc_facebook_login'  
   root :to => "users#login"
   
   # The priority is based upon order of creation:

@@ -94,9 +94,15 @@ class UsersController < ApplicationController
   # prior to Twitter login
   def login_browserstats
     session[:timezone_offset] = params[:timezone_offset].to_i
+    mode = params[:mode]
+    
+    #puts "Timezone Offset: #{session[:timezone_offset]}"
       
-    puts "Timezone Offset: #{session[:timezone_offset]}"
-    redirect_to( "/auth/twitter" )
+    if( mode == "facebook" )
+      redirect_to( "/auth/facebook" )    
+    else
+      redirect_to( "/auth/twitter" )
+    end
   end
   
   # Process Twitter Login Success
@@ -141,7 +147,58 @@ class UsersController < ApplicationController
       @user_id = new_user.id
       session[:user_id] = @user_id
     end
+
+  end
     
+  # Process Facebook Login Success
+  def proc_facebook_login
+       
+    puts "proc_facebook_login"
+      
+     puts request.env['rack.auth'].inspect
+     
+         
+     # If user is already logged in, grab session variables
+     if session[:user_name] && !session[:user_name].empty?
+       @real_name = session[:real_name] 
+       @user_name = session[:user_name]
+       @user_image = session[:user_image]       
+     else
+      # If user is not logged in, grab authentication varaibles
+       @real_name = request.env['rack.auth']['user_info']['name']
+       @user_name = request.env['rack.auth']['user_info']['name']
+       #@user_image = request.env['rack.auth']['user_info']['image']
+       @user_image = ""
+         
+       session[:user_name] = @user_name
+       session[:real_name] = @real_name
+       session[:user_image] = @user_image     
+      end
+         
+      @exists = false
+      @user_id = -1
+      
+      #puts "Checking if user already exists in database..."
+      
+      # Check if user already exists in database
+      User.all.each do |user|
+        if user[:twitter] == @user_name
+          @exists = true
+          @user_id = user.id
+          session[:user_id] = @user_id
+        break;
+        end
+      end
+      
+      # User does not exist in database. Add new user
+      if !@exists
+        new_user = User.new( :twitter => @user_name, :name => @real_name )
+        new_user.save
+        
+        @user_id = new_user.id
+        session[:user_id] = @user_id
+      end
+      
     # Redirect to the user home page
     redirect_to :action => "home"
   end

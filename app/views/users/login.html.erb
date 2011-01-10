@@ -5,21 +5,36 @@
 	Writealot is simple tool to track your writing over a period of time. Chart your progress alone or with friends.
 </div>
 <div style="position:relative; top:100px; width:500px; margin-left:auto; margin-right:auto; font-size: 24px; line-height: 36px; font-family:'Times New Roman';">
-	<br><center><a id="link_login" onclick="javascript:authenticate()" border=0 style="color:transparent;"><image border=0 src="http://a0.twimg.com/images/dev/buttons/sign-in-with-twitter-d.png"></a></center>
+	<br><center><a id="link_login" onclick="javascript:authenticate_twitter()" border=0 style="color:transparent;"><image border=0 src="http://a0.twimg.com/images/dev/buttons/sign-in-with-twitter-d.png"></a>
+				<a id="link_login" onclick="javascript:authenticate_facebook()" border=0 style="color:transparent;"><image border=0 src="http://developers.facebook.com/images/devsite/login-button.png"></a>
+		</center>
+	
+	
 </div>
+
 
 <script type="text/javascript">
 	
 	/**
-	 * Get browser data and foward to authentication
+	 * Get browser data and foward to Twitter authentication
 	 */
-	function authenticate()
+	function authenticate_twitter()
 	{
 		var offset = calc_local_timezone_offset();
 		
-		window.location.href = 'users/login_browserstats?timezone_offset=' + offset;
+		window.location.href = 'users/login_browserstats?mode=twitter&timezone_offset=' + offset;
 	}
-	
+
+	/**
+	 * Get browser data and foward to Facebook authentication
+	 */
+	function authenticate_facebook()
+	{
+		var offset = calc_local_timezone_offset();
+		
+		window.location.href = 'users/login_browserstats?mode=facebook&timezone_offset=' + offset;
+	}
+		
 	/**
 	 * Get local server and local machine timezone offsets
 	 * 
