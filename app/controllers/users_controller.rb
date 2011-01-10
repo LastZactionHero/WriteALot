@@ -148,6 +148,8 @@ class UsersController < ApplicationController
       session[:user_id] = @user_id
     end
 
+    # Redirect to the user home page
+    redirect_to :action => "home"    
   end
     
   # Process Facebook Login Success
