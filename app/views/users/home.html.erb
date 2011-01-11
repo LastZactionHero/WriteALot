@@ -381,7 +381,7 @@
 				<tr><td class="font_friend">Friends:</td><td></td></tr>
 				
 				<% @invites.each do |invite| %>
-					<tr><td class="font_friend"><%= invite.users[0].twitter %><% if !invite.accepted? %><%= " (pending)" %><% end %></td>
+					<tr><td class="font_friend"><%= invite.users[1].twitter %><% if !invite.accepted? %><%= " (pending)" %><% end %></td>
 					<td class="font_friend" style="text-align:right"><a onclick="javascript:inviteDelete( <%= invite.id %> )">Delete</a></td></tr>
 				<% end %>
 			</table>		
