@@ -345,6 +345,10 @@ class UsersController < ApplicationController
       invite.host_user = host_user.id
       invite.users << target_user
       invite.users << host_user
+      
+      invite.users[0] = target_user
+      invite.users[1] = host_user
+      
       invite.save
       
       #host_user.invites << invite
@@ -395,6 +399,10 @@ class UsersController < ApplicationController
       invite_new.users << User.find( invite.target_user )
       #invite_new.users << invite.users[1]
       #invite_new.users << invite.users[0]
+      
+      invite_new.users[0] = invite.users[1]
+      invite_new.users[1] = invite.users[0]
+      
       invite_new.save
       
       #host_user = User.find( session[:user_id].to_i )
