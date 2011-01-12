@@ -369,7 +369,7 @@
 				<tr><td class="font_friend">Friend Requests:</td><td></td></tr>
 				
 				<% @invites_pending.each do |invite| %>
-				  <tr><td class="font_friend" ><%= invite.users[0].twitter %></td><td class="font_friend" style="text-align:right"><a onclick="inviteAccept( <%= invite.id %> )">Add</a> / <a onclick="inviteIgnore( <%= invite.id %> )">Ignore</a></td></tr>
+				  <tr><td class="font_friend" ><%= invite.users[1].twitter %></td><td class="font_friend" style="text-align:right"><a onclick="inviteAccept( <%= invite.id %> )">Add</a> / <a onclick="inviteIgnore( <%= invite.id %> )">Ignore</a></td></tr>
 				<% end %>
 				
 			</table>
@@ -381,8 +381,10 @@
 				<tr><td class="font_friend">Friends:</td><td></td></tr>
 				
 				<% @invites.each do |invite| %>
-					<tr><td class="font_friend"><%= invite.users[1].twitter %><% if !invite.accepted? %><%= " (pending)" %><% end %></td>
+				    <% if invite.users[0] %>
+					<tr><td class="font_friend"><%= invite.users[0].twitter %><% if !invite.accepted? %><%= " (pending)" %><% end %></td>
 					<td class="font_friend" style="text-align:right"><a onclick="javascript:inviteDelete( <%= invite.id %> )">Delete</a></td></tr>
+					<% end %>
 				<% end %>
 			</table>		
 		<% end %>

@@ -391,8 +391,10 @@ class UsersController < ApplicationController
       invite_new.active = true
       invite_new.host_user = invite.target_user
       invite_new.target_user = invite.host_user
-      invite_new.users << invite.users[1]
-      invite_new.users << invite.users[0]
+      invite_new.users << User.find( invite.host_user )
+      invite_new.users << User.find( invite.target_user )
+      #invite_new.users << invite.users[1]
+      #invite_new.users << invite.users[0]
       invite_new.save
       
       #host_user = User.find( session[:user_id].to_i )
