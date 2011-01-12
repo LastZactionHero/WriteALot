@@ -1,0 +1,7 @@
+<% @invites.each do |invite| %>
+  <%= invite.inspect %><br>
+  <% invite.users.each do |user| %>
+    <%= user.inspect %><br>
+  <% end %>
+  <br>
+<% end %>

@@ -1,6 +1,9 @@
 AuthTest::Application.routes.draw do
   resources :developer_notes
 
+  match 'invites/list_all' => 'invites#list_all'
+  match 'invites/clear_all' => 'invites#clear_all'
+  
   match 'entries/createinline' => 'entries#createinline'
   match 'entries/removeinline' => 'entries#removeinline'
   resources :entries
