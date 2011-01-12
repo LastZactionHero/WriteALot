@@ -265,10 +265,12 @@ def get_data_words_this_week_social
   data_string = data_string + "|" + get_data_words_this_week
 
   # Append friend strings
-  invites.find( :all, :conditions => { :host_user => id } ).each do |invite|
+  #invites.find( :all, :conditions => { :host_user => id } ).each do |invite|
+  Invite.find( :all, :conditions => { :host_user => id } ).each do |invite|
     
     if( invite.accepted )
-    friend = invite.users[0]
+    #friend = invite.users[0]
+    friend = User.find( invite.target_user )
     data_string = data_string + "|" + "-1" + "|" + friend.get_data_words_this_week
     end
     
