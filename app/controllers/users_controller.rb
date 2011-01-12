@@ -343,11 +343,11 @@ class UsersController < ApplicationController
       invite.active = true
       invite.target_user = target_user.id
       invite.host_user = host_user.id
-      invite.users << target_user
-      invite.users << host_user
+      #invite.users << target_user
+      #invite.users << host_user
       
-      invite.users[0] = target_user
-      invite.users[1] = host_user
+      #invite.users[0] = target_user
+      #invite.users[1] = host_user
       
       invite.save
       
@@ -395,13 +395,13 @@ class UsersController < ApplicationController
       invite_new.active = true
       invite_new.host_user = invite.target_user
       invite_new.target_user = invite.host_user
-      invite_new.users << User.find( invite.host_user )
-      invite_new.users << User.find( invite.target_user )
+      #invite_new.users << User.find( invite.host_user )
+      #invite_new.users << User.find( invite.target_user )
       #invite_new.users << invite.users[1]
       #invite_new.users << invite.users[0]
       
-      invite_new.users[0] = invite.users[1]
-      invite_new.users[1] = invite.users[0]
+      #invite_new.users[0] = invite.users[1]
+      #invite_new.users[1] = invite.users[0]
       
       invite_new.save
       
@@ -442,13 +442,14 @@ class UsersController < ApplicationController
       # Delete inviations in opposite direction
       if( target_id >= 0 )
         target_user = User.find( target_id )
-        if( target_user )
+        #if( target_user )
           #target_user_invitations = target_user.invites.find( :all, :conditions => [ "target_user = #{session[:user_id].to_i}" ] )
-          target_user_invitations = target_user.invites.find( :all, :conditions => { :target_user => session[:user_id].to_i } )
+          #target_user_invitations = target_user.invites.find( :all, :conditions => { :target_user => session[:user_id].to_i } )
+          target_user_invitations = Invite.find( :all, :conditions => { :target_user => session[:user_id].to_i, :host_user => target_id } )
           target_user_invitations.each do |t|
             t.destroy
           end
-        end
+        #end
       end  
     end
     

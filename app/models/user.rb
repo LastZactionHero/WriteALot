@@ -324,10 +324,11 @@ def get_friends_list
   data_string = twitter
 
   # Append friend strings
-  invites.find( :all, :conditions => { :host_user => id } ).each do |invite|
+  Invite.find( :all, :conditions => { :host_user => id } ).each do |invite|
     
     if( invite.accepted )
-      friend = invite.users[0]
+      #friend = invite.users[0]
+      friend = User.find( invite.target_user )
       data_string = data_string + "|" + friend.twitter
     end
     
