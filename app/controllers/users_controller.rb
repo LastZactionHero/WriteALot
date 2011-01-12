@@ -1,3 +1,5 @@
+require 'cgi'
+
 class UsersController < ApplicationController
   # GET /users
   # GET /users.xml
@@ -293,9 +295,12 @@ class UsersController < ApplicationController
   # Add Invitation
   # invite_add
   def invite_add
+    puts "invite_add:"
+    
     fail = false
     
-    username = params[:username]
+    username = params[:username] 
+    username = username.sub( "%20", " " )
     
     # Find the Target User
     #target_user = User.find( :first, :conditions => { :twitter => username  } )
