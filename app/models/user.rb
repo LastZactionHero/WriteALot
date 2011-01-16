@@ -504,8 +504,11 @@ end
           next
         elsif( existing_invite && new_friend_id != id )
           puts "You are not friends with #{new_friend_id}"
-          possible_friends.push( User.find( new_friend_id ) )
-          add_count = add_count + 1         
+          new_friend = User.find( new_friend_id )
+          if( new_friend.get_days_last_use < 9999 )
+            possible_friends.push( new_friend )
+            add_count = add_count + 1
+          end         
         end   
                 
         #if( add_count == limit )
