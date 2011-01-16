@@ -15,6 +15,7 @@ AuthTest::Application.routes.draw do
   match 'users/invite_accept/:id' => 'users#invite_accept'
   match 'users/invite_ignore/:id' => 'users#invite_ignore'
   match 'users/invite_add/:username' => 'users#invite_add'
+  match 'users/invite_activate/:id' => 'users#invite_activate'
   match 'users/become' => 'users#become'
   match 'users/login_browserstats' => 'users#login_browserstats'
   resources :users

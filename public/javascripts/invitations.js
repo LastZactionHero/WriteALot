@@ -23,6 +23,23 @@ function inviteAdd
 }
 
 /**
+ * Add New Invitation
+ */
+function inviteAddByName
+(
+		inName
+)
+{
+	username = encodeURIComponent( inName );
+
+	if( username.length > 0 )
+	{
+		window.location = "/users/invite_add/" + encodeURIComponent( username );
+	}
+}
+
+
+/**
  * Accept Invitation
  */
 function inviteAccept
@@ -73,4 +90,15 @@ function invitationTextClicked
 		sDefaultInvitationText = false;
 		document.getElementById( inInputId ).value = "";
 	}
+}
+
+/**
+ * Activate/Deactive Invitation
+ */
+function inviteActivate
+	(
+	inId
+	)
+{
+	window.location = "/users/invite_activate/" + inId;
 }

@@ -244,6 +244,9 @@ class UsersController < ApplicationController
       end
     end
    
+    # New Invitations
+    @possible_friends = @user.get_friends_of_friends( 2 )
+    
     # Alert Messaging
     @message = "";
     if( params[:message] )
@@ -459,6 +462,30 @@ class UsersController < ApplicationController
     end
     
     redirect_to :action => "home", :tab => "social"
+  end
+  
+  
+  # Activate/Deactivate Invitation
+  def invite_activate
+    
+    # Get Invitation
+    invite_id = params[:id].to_i
+    invitation = Invite.find( invite_id )
+    
+    if( invitation )
+      # Make sure user is allowed to toggle activation
+      user_id = session[:user_id].to_i
+      invitation_user_id = invitation.host_user
+      
+      if( user_id == invitation_user_id )
+        invitation.active = !invitation.active      
+        invitation.save  
+      end
+      
+    end
+    
+    redirect_to :action => "home", :tab => "social"
+      
   end
   
 end

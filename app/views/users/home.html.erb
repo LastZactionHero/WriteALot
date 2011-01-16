@@ -38,6 +38,14 @@
  	{
  		<%= "dataString = '#{@user.get_data_words_each_week_social()}';" %>
  	}
+ 	else if( in_data_type == "social_minutes_this_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_minutes_this_week_social()}';" %> 	
+ 	}
+ 	else if( in_data_type == "social_minutes_every_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_minutes_every_week_social()}';" %> 	
+ 	}
  	 	 	
  	return dataString;
  }
@@ -383,7 +391,7 @@
 				
 				<% @invites.each do |invite| %>
 				    <% twitter_name = User.find( invite.target_user ).twitter %>
-					<tr><td class="font_friend"><%= twitter_name %><% if !invite.accepted? %><%= " (pending)" %><% end %></td>
+					<tr><td class="font_friend"><input type=checkbox id="cb_invite_<%= invite.id %>" <% if invite.active %>checked<% end %> onclick="javascript:inviteActivate( <%= invite.id %> )"><%= twitter_name %><% if !invite.accepted? %><%= " (pending)" %><% end %></td>
 					<td class="font_friend" style="text-align:right"><a onclick="javascript:inviteDelete( <%= invite.id %> )">Delete</a></td></tr>
 				<% end %>
 			</table>		
@@ -393,14 +401,28 @@
 		  <br><br>You are not following any users.<br><br>Enter the Twitter or Facebook name of another Writealot user to start tracking your writing together.
 		
 		<% end%>
+
+		<% if !@possible_friends.empty? %>
+			<br><br>
+			<table width=100%>
+				<tr><td class="font_friend">Suggested Users:</td><td></td></tr>
 				
+				<% @possible_friends.each do |possible_friend| %>
+				    <% twitter_name = possible_friend.twitter %>
+					<tr><td class="font_friend"><%= possible_friend.twitter %></td>
+					<td class="font_friend" style="text-align:right"><a onclick="javascript:inviteAddByName( '<%= possible_friend.twitter %>' )">Add</a></td></tr>
+				<% end %>
+			</table>		
+		<% end %>
+						
 	</div>
 	
 	<div id="div_social_graphs" style="position:relative; float:left; top:0px; left:0px; width:80%; height:100%; background-color:white; overflow-x:scroll;">
 
 		<table>
 		<tr><td><div id="div_graph_social_words_this_week"></div></td><td><div id="div_graph_social_words_every_week"></div></td></tr>
-		<tr><td><div id="div_graph_social_words_each_week"></div></td><td></td></tr>
+		<tr><td><div id="div_graph_social_minutes_this_week"></div></td><td><div id="div_graph_social_minutes_every_week"></div></td></tr>
+		<tr><td><div id="div_graph_social_words_each_week"></div></td><td><div id="div_graph_social_words_minute"></div></td></td></tr>
 		</table>
 	</div>
 
@@ -429,6 +451,8 @@
 	generateGraphSocialWordsThisWeek( "div_graph_social_words_this_week" );
 	generateGraphSocialWordsEveryWeek( "div_graph_social_words_every_week" );
 	generateGraphSocialWordsEachWeek( "div_graph_social_words_each_week" );
+	generateGraphSocialMinutesThisWeek( "div_graph_social_minutes_this_week" );
+	generateGraphSocialMinutesEveryWeek( "div_graph_social_minutes_every_week" );
 	
 	if( "social" == "<%= @tab %>" )
 	{

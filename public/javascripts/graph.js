@@ -27,7 +27,7 @@ function generateGraphWordsThisWeek
 									"&cht=bvg" +
 									"&chco=003DF5" +
 									"&chds=0," + chartMax + 
-									"&chd=t:" + getDataString( "words_this_week" ) + 
+									"&chd=t:" + getDataString( "words_this_week" ) +  
 									"&chtt=Words+this+Week\"" +
 									" width=\"400\"" +
 									" height=\"225\"" +
@@ -154,6 +154,7 @@ if( div_graph )
 								"&cht=lxy" +
 								"&chco=" + colorString +
 								"&chds=0," + chartMax +
+								"&curveType=function"+								
 								"&chd=t:" + getDataString( "social_words_this_week" ) +
 								"&chdl=" + getUserString() +
 								"&chdlp=b" +
@@ -228,6 +229,69 @@ if( div_graph )
 	}
 }
 
+
+function generateGraphSocialMinutesEveryWeek
+(
+in_div_graph		
+)
+{
+div_graph = document.getElementById( in_div_graph );
+if( div_graph )
+{
+	var chartMax = 0;
+	var data_sets = getDataString( "social_minutes_every_week" ).split( '|' );
+	
+	for( var setIdx = 0; setIdx < data_sets.length; setIdx++ )
+	{
+		if( data_sets[setIdx] != "-1" )
+		{
+			data = data_sets[setIdx].split( ',' );
+			
+			for( var dayIdx = 0; dayIdx < data.length; dayIdx++ )
+			{
+				if( parseInt( data[dayIdx] ) > chartMax ) 
+				{
+					chartMax = parseInt( data[dayIdx] );
+				}
+			}
+			
+		}
+	}
+	
+	var userList = getUserString().split( '|' );
+	
+	colorString = "";
+	for( var colorIdx = 0; colorIdx < userList.length; colorIdx++ )
+	{
+		colorString = colorString + getColor( colorIdx );
+		if( colorIdx != userList.length -1 )
+		{
+			colorString = colorString + ",";
+		}
+	}
+	
+	
+	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
+								"?chxl=1:|Sun|Mon|Tues|Wed|Thurs|Fri|Sat" +
+								"&chxr=0,0," + chartMax + "|1,0,7" +
+								"&chxt=y,x" +
+								"&chs=500x320" +
+								"&cht=lxy" +
+								"&chco=" + colorString +
+								"&chds=0," + chartMax +
+								"&chd=t:" + getDataString( "social_minutes_every_week" ) +
+								"&chdl=" + getUserString() +
+								"&chdlp=b" +
+								"&chma=5,5,5,25" +
+								"&chtt=Cumulative+Minutes+per+Weekday+(60+Days)\" " + 
+								"width=\"500\" " +
+								"height=\"320\" " +
+								"alt=\"Cumulative Minutes per Weekday\" />";
+
+	}
+}
+
+
 /**
  * Social Words Each Week
  */
@@ -289,6 +353,70 @@ if( div_graph )
 }
 
 
+function generateGraphSocialMinutesThisWeek
+(
+in_div_graph		
+)
+{
+div_graph = document.getElementById( in_div_graph );
+if( div_graph )
+{
+	var chartMax = 0;
+	var data_sets = getDataString( "social_minutes_this_week" ).split( '|' );
+	
+	for( var setIdx = 0; setIdx < data_sets.length; setIdx++ )
+	{
+		if( data_sets[setIdx] != "-1" )
+		{
+			data = data_sets[setIdx].split( ',' );
+			
+			for( var dayIdx = 0; dayIdx < data.length; dayIdx++ )
+			{
+				if( parseInt( data[dayIdx] ) > chartMax ) 
+				{
+					chartMax = parseInt( data[dayIdx] );
+				}
+			}
+			
+		}
+	}
+	
+	var userList = getUserString().split( '|' );
+	
+	colorString = "";
+	for( var colorIdx = 0; colorIdx < userList.length; colorIdx++ )
+	{
+		colorString = colorString + getColor( colorIdx );
+		if( colorIdx != userList.length -1 )
+		{
+			colorString = colorString + ",";
+		}
+	}
+	
+	
+	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
+								"?chxl=1:|Sun|Mon|Tues|Wed|Thurs|Fri|Sat" +
+								"&chxr=0,0," + chartMax + "|1,0,7" +
+								"&chxt=y,x" +
+								"&chs=500x320" +
+								"&cht=lxy" +
+								"&chco=" + colorString +
+								"&chds=0," + chartMax +
+								"&curveType=function"+								
+								"&chd=t:" + getDataString( "social_minutes_this_week" ) +
+								"&chdl=" + getUserString() +
+								"&chdlp=b" +
+								"&chma=5,5,5,25" +
+								"&chtt=Minutes+this+Week\" " + 
+								"width=\"500\" " +
+								"height=\"320\" " +
+								"alt=\"Minutes this Week\" />";
+
+	}
+}
+
+
+
 /**
  * Get Color for Index
  */
@@ -300,3 +428,5 @@ function getColor
 	colors = [ "4E00EB", "44FF00", "FF7029", "FFFF33", "5CB800", "33FFFF", "666600", "660033", "000066" ];
 	return colors[inIdx];
 }
+
+

@@ -169,8 +169,91 @@ class User < ActiveRecord::Base
     
     return data_string
   end
-    
+
+# Get Minutes Every Week Data String
+def get_data_minutes_every_week
+  minutes_per_day = Array.new( 7, 0 )
   
+  # Get current day
+  timeNow = Time.now
+  time60Days = timeNow - 60 * 24 * 60 * 60
+   
+  # Loop through entries and increment totals
+  user_entries = Entry.find( :all, :conditions => ["userid = #{id}"] )
+    
+  user_entries.each do |entry|
+    if( entry.hours.nil? || entry.minutes.nil? )
+      next      
+    end
+  
+    # Must have occurred in the last 60 days
+    if( entry.starttime.time < time60Days )
+      next
+    end
+    
+    dayEntry = entry.starttime.wday().to_i
+
+    minutes_per_day[dayEntry] += ( 60 * entry.hours + entry.minutes )
+  end
+  
+  # Assemble Data String
+  data_string = ""
+  
+  (0..(minutes_per_day.length - 1)).each do |i|
+    data_string = data_string + minutes_per_day[i].to_s
+    if( i < minutes_per_day.length - 1 )
+      data_string = data_string + ","
+    end
+  end
+  
+  return data_string
+end
+
+    
+# Get Minutes this Week Data String
+def get_data_minutes_this_week
+  minutes_per_day = Array.new( 7, 0 )
+  
+  # Get the current day of week
+  dateCurrent = DateTime.now
+  dayCurrent = dateCurrent.wday().to_i
+  
+  # Get date at the start of the week
+  timeStart = Time.utc( dateCurrent.year, dateCurrent.month, dateCurrent.day )
+  timeStart = timeStart - 24 * 60 * 60 * dayCurrent
+  
+  # Get date at the end of the week
+  timeEnd = Time.utc( dateCurrent.year, dateCurrent.month, dateCurrent.day )
+  timeEnd = timeEnd + 24 * 60 * 60 * ( 7 - dayCurrent )
+  
+  # Loop through entries and increment totals
+  user_entries = Entry.find( :all, :conditions => ["userid = #{id}"] )
+    
+  user_entries.each do |entry|
+    if( entry.words.nil? || entry.hours.nil? || entry.minutes.nil? )
+      next      
+    end
+  
+    dayEntry = entry.starttime.wday().to_i
+    timeEntry = Time.utc( entry.starttime.year, entry.starttime.month, entry.starttime.day, entry.starttime.hour, entry.starttime.min )
+    
+    if( timeStart.to_i <= timeEntry.to_i && timeEnd.to_i >= timeEntry.to_i )
+      minutes_per_day[dayEntry] += ( 60 * entry.hours + entry.minutes ) 
+    end
+  end
+  
+  # Assemble Data String
+  data_string = ""
+  
+  (0..(minutes_per_day.length - 1)).each do |i|
+    data_string = data_string + minutes_per_day[i].to_s
+    if( i < minutes_per_day.length - 1 )
+      data_string = data_string + ","
+    end
+  end
+  
+  return data_string
+end  
   # Get Words this Week Data String
   def get_data_words_this_week
     words_per_day = Array.new( 7, 0 )
@@ -268,10 +351,30 @@ def get_data_words_this_week_social
   #invites.find( :all, :conditions => { :host_user => id } ).each do |invite|
   Invite.find( :all, :conditions => { :host_user => id } ).each do |invite|
     
-    if( invite.accepted )
+    if( invite.accepted && invite.active)
     #friend = invite.users[0]
     friend = User.find( invite.target_user )
     data_string = data_string + "|" + "-1" + "|" + friend.get_data_words_this_week
+    end
+    
+  end
+
+  return data_string
+end
+
+# Get Minutes this Week for All Friends
+def get_data_minutes_this_week_social
+
+  # Append user string  
+  data_string = "-1"
+  data_string = data_string + "|" + get_data_minutes_this_week
+
+  # Append friend strings
+  Invite.find( :all, :conditions => { :host_user => id } ).each do |invite|
+    
+    if( invite.accepted && invite.active )
+    friend = User.find( invite.target_user )
+    data_string = data_string + "|" + "-1" + "|" + friend.get_data_minutes_this_week
     end
     
   end
@@ -290,10 +393,32 @@ def get_data_words_every_week_social
   #invites.find( :all, :conditions => { :host_user => id } ).each do |invite|
   Invite.find( :all, :conditions => { :host_user => id } ).each do |invite|
     
-    if( invite.accepted )
+    if( invite.accepted && invite.active )
     #friend = invite.users[0]
     friend = User.find( invite.target_user )
     data_string = data_string + "|" + "-1" + "|" + friend.get_data_words_every_week
+    end
+    
+  end
+
+  return data_string
+end
+
+# Get Cumulative Minutes Every Week for All Friends
+def get_data_minutes_every_week_social
+
+  # Append user string  
+  data_string = "-1"
+  data_string = data_string + "|" + get_data_minutes_every_week
+
+  # Append friend strings
+  #invites.find( :all, :conditions => { :host_user => id } ).each do |invite|
+  Invite.find( :all, :conditions => { :host_user => id } ).each do |invite|
+    
+    if( invite.accepted && invite.active )
+    #friend = invite.users[0]
+    friend = User.find( invite.target_user )
+    data_string = data_string + "|" + "-1" + "|" + friend.get_data_minutes_every_week
     end
     
   end
@@ -312,7 +437,7 @@ def get_data_words_each_week_social
   #invites.find( :all, :conditions => { :host_user => id } ).each do |invite|
   Invite.find( :all, :conditions => { :host_user => id } ).each do |invite|
     
-    if( invite.accepted )
+    if( invite.accepted && invite.active )
       #friend = invite.users[0]
       friend = User.find( invite.target_user )
       data_string = data_string + "|" + "-1" + "|" + friend.get_data_words_each_week
@@ -332,7 +457,7 @@ def get_friends_list
   # Append friend strings
   Invite.find( :all, :conditions => { :host_user => id } ).each do |invite|
     
-    if( invite.accepted )
+    if( invite.accepted && invite.active )
       #friend = invite.users[0]
       friend = User.find( invite.target_user )
       data_string = data_string + "|" + friend.twitter
@@ -343,4 +468,57 @@ def get_friends_list
   return data_string
 end
 
+  # Get Friends of Friends List
+  # List of Friends of Friends that does not
+  # include user's own friends
+  def get_friends_of_friends( in_limit )
+    puts "get_friends_of_friends()"
+    
+    limit = 5
+    if( in_limit && in_limit > 0 )
+      limit = in_limit
+    end
+    
+    puts "Limit: #{limit}"
+    
+    possible_friends = Array.new
+    
+    # Loop through all users invitaitons
+    add_count = 0
+    Invite.find( :all, :conditions => { :host_user => id } ).each do |invite_personal|
+    
+      # Loop through all friend invitations
+      target_id = invite_personal.target_user
+      puts "Checking Friend: #{target_id}"
+      
+      Invite.find( :all, :conditions => { :host_user => target_id } ).each do |invite_target|
+       
+        # Get potential new friend 
+        new_friend_id = invite_target.target_user
+        puts "Friend #{target_id} is also friends with #{new_friend_id}"
+          
+        # See if this users is already a friend
+        existing_invite = Invite.find( :all, :conditions => { :host_user => id, :target_user => new_friend_id  } )
+        if( existing_invite && existing_invite.length > 0 )
+          puts "You are already friends with #{new_friend_id}"
+          next
+        elsif( existing_invite && new_friend_id != id )
+          puts "You are not friends with #{new_friend_id}"
+          possible_friends.push( User.find( new_friend_id ) )
+          add_count = add_count + 1         
+        end   
+        
+        if( add_count == limit )
+          break
+        end
+        
+      end
+    
+      return possible_friends
+          
+    end       
+    
+  end
+  
+  
 end
