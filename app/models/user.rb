@@ -507,13 +507,15 @@ end
           possible_friends.push( User.find( new_friend_id ) )
           add_count = add_count + 1         
         end   
-        
+                
         if( add_count == limit )
           break
         end
         
       end
     
+      # Sort by last use
+      possible_friends.sort! { |a,b| a.get_days_last_use <=> b.get_days_last_use } 
       return possible_friends
           
     end       
