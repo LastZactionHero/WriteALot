@@ -508,14 +508,18 @@ end
           add_count = add_count + 1         
         end   
                 
-        if( add_count == limit )
-          break
-        end
+        #if( add_count == limit )
+        #  break
+        #end
         
       end
     
       # Sort by last use
       possible_friends.sort! { |a,b| a.get_days_last_use <=> b.get_days_last_use } 
+      
+      if( possible_friends.length > limit )
+        possible_friends = possible_friends.slice( 0, limit )
+      end
       return possible_friends
           
     end       

@@ -245,7 +245,7 @@ class UsersController < ApplicationController
     end
    
     # New Invitations
-    @possible_friends = @user.get_friends_of_friends( 2 )
+    @possible_friends = @user.get_friends_of_friends( 3 )
     
     # Alert Messaging
     @message = "";
