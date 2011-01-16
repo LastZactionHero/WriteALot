@@ -210,7 +210,7 @@
         <% day_string = "None" %>
         <% if @days_last_use == 0 %>
         <%   day_string = "Today" %>
-        <% elsif @days_last_use > 0 %>
+        <% elsif @days_last_use > 0 && @days_last_use < 9999 %>
         <%   day_string = "#{@days_last_use} Days Ago" %>
         <% end %>
         

@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   
   # Get the Days Since Last Entry by this User
   def get_days_last_use
-    days_last_use = -1
+    days_last_use = 9999
     
     # Get all entries from this user
     user_entries = Entry.find( :all, :conditions => ["userid = #{id}"], :order => "starttime desc" )
