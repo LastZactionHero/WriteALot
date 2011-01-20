@@ -261,8 +261,6 @@ class UsersController < ApplicationController
     # Developer Notes
     @devnotes = DeveloperNote.find( :all, :order => "created_at desc" )
     
-    
-    
     # Social Graphs
     puts "Invitations:"
     @user.invites.find( :all, :conditions => { :host_user => @user.id } ).each do |invite|
@@ -274,6 +272,89 @@ class UsersController < ApplicationController
     end
     
   end
+  
+  
+  def silver
+    # Starting Tab
+    @tab = params[:tab];
+    
+    # Get info for the current user
+    @user_id = session[:user_id]
+    @user_name = session[:user_name]
+    @user_image = session[:user_image]
+    @real_name = session[:real_name]
+    
+    # If information is missing, redirect to log in
+    if @user_id.nil?
+      redirect_to :action => "login"
+    end
+    
+    # Get all entries for this user
+    @user_entries = Entry.find( :all, :conditions => ["userid = #{session[:user_id]}"], :order => "starttime desc" )
+    @user = User.find( @user_id )
+      
+    # Configure Local Time
+    @localServerTime = Time.now
+    if !session[:timezone_offset].nil?
+      @localServerTime = @localServerTime + ( session[:timezone_offset] * 3600 )
+    end
+    
+    # Get the days since last entry
+    @days_last_use = @user.get_days_last_use
+    
+    # Last Use String
+    @last_use_text = ""
+    if( @days_last_use == 0 )
+      @last_use_text = "Today"
+    elsif( @days_last_use == 9999 )
+      @last_use_text = "None"
+    else
+      @last_use_text = "#{@days_last_use} Days Ago"
+    end
+        
+    # Get writing stats
+    @writing_stats = @user.get_writing_stats
+    
+    # Get Invitations
+    @invites = Invite.find( :all, :conditions => [ "host_user = #{session[:user_id].to_i}" ] )
+    
+    @invites_pending = Array.new
+    @invites_target = Invite.find( :all, :conditions => [ "target_user = #{session[:user_id]}" ] )
+    @invites_target.each do |pending|
+      if( !pending.accepted )
+        @invites_pending.push( pending )
+      end
+    end
+   
+    # New Invitations
+    @possible_friends = @user.get_friends_of_friends( 3 )
+    
+    # Alert Messaging
+    @message = "";
+    if( params[:message] )
+      case params[:message]
+        when "e_user_not_found": @message = "The requested user was not found."
+        when "e_server_error": @message = "Unknown server error"
+        when "e_invite_exists": @message = "You are already friends with this user."
+        when "e_invite_self": @message = "You cannot invite yourself."  
+      end
+    end
+    
+    # Developer Notes
+    @devnotes = DeveloperNote.find( :all, :order => "created_at desc" )
+    
+    # Social Graphs
+    puts "Invitations:"
+    @user.invites.find( :all, :conditions => { :host_user => @user.id } ).each do |invite|
+      puts invite.inspect
+      puts "This week:  #{invite.users[0].get_data_words_this_week}"
+      puts "Every week: #{invite.users[0].get_data_words_every_week}"
+      puts "All year:   #{invite.users[0].get_data_words_each_week}"
+
+    end
+        
+  end
+  
   
   def signout
     session[:user_id] = ""

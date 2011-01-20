@@ -20,6 +20,7 @@ AuthTest::Application.routes.draw do
   match 'users/login_browserstats' => 'users#login_browserstats'
   resources :users
   
+  match 'silver' => 'users#silver'
   match 'home' => 'users#home'
   match 'signout' => 'users#signout'
 

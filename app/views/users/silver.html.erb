@@ -1,0 +1,197 @@
+<%= stylesheet_link_tag "home_log" %>
+
+<script type="text/javascript">
+
+ /**
+  * Pull Date Time
+  */
+ function getStartEndTimes()
+ {
+ 	var times = new Object();
+ 	
+ 	if( document.getElementById( "form_starttime_year" ) )
+ 	{
+	    times.start_hour =  document.getElementById( "form_starttime_hour" ).value;
+	    times.start_minute =  document.getElementById( "form_starttime_minute" ).value;
+
+	    times.end_hour =  document.getElementById( "form_endtime_hour" ).value;
+	    times.end_minute =  document.getElementById( "form_endtime_minute" ).value;
+	    
+	    times.year = document.getElementById( "form_date_year" ).value;
+	    times.month = document.getElementById( "form_date_month" ).value;
+	    times.day = document.getElementById( "form_date_day" ).value;
+ 	}
+ 	
+ 	return times;
+ }
+
+
+  /**
+  * Submit New Entry to the Log
+  */ 
+  function submitNewEntry()
+  {
+    // Get parameters from the form
+    var hours = 0;
+    var minutes = 0;
+    var words = parseInt( document.getElementById( "form_entry_words" ).value );
+    var comments = document.getElementById( "form_entry_comments" ).value;
+    var editing = document.getElementById( "form_entry_editing" ).checked;
+    
+    // Get start and end times
+    var times = getStartEndTimes();
+    var start_date = new Date( times.year, times.month, times.day, times.start_hour, times.start_minute, 0 );
+    var end_date = new Date( times.year, times.month, times.day, times.end_hour, times.end_minute,  0 );
+    
+    
+    // Validate data
+    var fail = false;
+    if( isNaN( words ) )
+    {
+      document.getElementById( "form_entry_words" ).value = "0"
+      fail = true;
+    }
+    if( end_date - start_date <= 0 )
+    {
+    	alert( "Start Time must be before End Time" );
+    	fail = true;
+    }
+        
+    // If data is valid, submit
+    if( !fail )
+    {
+      words = Math.floor( words )
+      var submitString = "start_year=" + times.year + "&start_month=" + times.month + "&start_day=" + times.day + "&start_hour=" + times.start_hour + "&start_minute=" + times.start_minute + "&end_year=" + times.year + "&end_month=" + times.month + "&end_day=" + times.day + "&end_hour=" + times.end_hour + "&end_minute=" + times.end_minute + "&words=" + words + "&editing=" + editing + "&comment=" + encodeURIComponent( comments );  
+      var httpString = "/entries/createinline?" + submitString;
+      window.location = httpString;
+    }
+  }
+
+ /**
+  * Update Hours and Minutes Text
+  * Updates Hours and Minutes text field with the difference between the Start Time and End Time fields
+  */
+ function updateHoursMinutes()
+ {	
+ 	// Get times
+ 	var times = getStartEndTimes();
+ 	var start_date = new Date( times.year, times.month, times.day, times.start_hour, times.start_minute, 0 );
+    var end_date = new Date( times.year, times.month, times.day, times.end_hour, times.end_minute,  0 );
+    
+    // Calculate times
+    var seconds = ( ( end_date - start_date ) / 1000 );
+	var hours = Math.floor( seconds / 3600 );
+	var minutes = Math.floor( ( seconds / 60 ) - 60 * hours );
+	
+	// Update field
+ 	document.getElementById( "div_hours_minutes" ).innerHTML = Math.floor( hours ) + " hr, " + Math.floor( minutes ) + " min" 
+ }
+ 
+</script>
+
+
+<div class="style_container" id="div_container">
+
+  <div class="style_sidebar">
+    <div class="style_logo_bar_back">
+      <div class="style_logo_bar_front"><img src="images/img_logo.png" width="250" height="65" /></div>
+    </div>
+    
+    <div class="style_tab_log" id="div_tab_log">Log</div>
+    <div class="style_tab_log_content" id="div_tab_log_content">
+    		<form onchange="javascript:updateHoursMinutes()">
+			<table>
+				<tr><td class="font_new_entry">Date:</td><td class="font_new_entry"></tr>
+				<tr><td class="font_new_entry"><%= select_date(date = @localServerTime, { :prefix => "form_date", :order => [:month, :day, :year] } ) %></td></tr>
+				<tr><td class="font_new_entry">Start Time:</td><td class="font_new_entry"></tr>
+				<tr><td class="font_new_entry"><%= select_time(date = @localServerTime, { :prefix => "form_starttime" } ) %></td></tr>
+				<tr><td class="font_new_entry">End Time:</td></tr>
+				<tr><td class="font_new_entry"><%= select_time(date = @localServerTime, :prefix => "form_endtime" ) %><span id="div_hours_minutes"></span></td></tr>
+				<tr><td class="font_new_entry">Words:</td></tr>
+				<tr><td class="font_new_entry"><input value="0" id="form_entry_words"type=text size=4 name="entry_words"><input id="form_entry_editing" value="editing" type="checkbox" />Editing</td></tr>
+				<tr><td class="font_new_entry">Notes:</td></tr>
+				<tr><td class="font_new_entry"><input id="form_entry_comments" type=text name="entry_comments"></td></tr>
+				<tr><td><a onclick="javascript:submitNewEntry()">Add New Entry</a></td></tr>
+			</table>
+			<br>
+		</form>
+    </div>
+    
+    
+	<div class="style_tab_stats" id="div_tab_stats">Stats</div>
+	<div class="style_tab_stats_content" id="div_tab_stats_content"></div>
+	
+	
+	<div class="style_tab_social" id="div_tab_social">Social</div>
+	<div class="style_tab_social_content" id="div_tab_social_content"></div>
+	
+  </div>
+  
+  
+  <div class="style_content" id="div_content">
+  
+    <div class="style_id_bar" id="div_id_bar">
+      <div class="style_id_bar_pic" id="div_id_bar_pic"><image height=50 width=48 src=" <%= @user_image %> "></div>
+      <div class="style_id_bar_info" id="div_id_bar_info"></div>
+      <div class="style_id_bar_info_name" id="div_id_bar_info_name"><%= @user_name %> <span style="font-size:12px;"><%= link_to "(sign out)", :action=>'signout' %></span></div>
+      <div class="style_id_bar_info_data" id="div_id_bar_info_data">Last Updated: <%= @last_use_text %> | Words this Week: <%= @writing_stats[ "seven_days" ][ "words" ] %> | Hours this Week: <%= '%.2f' % @writing_stats[ "seven_days" ][ "total" ] %></div> 
+    </div>
+    
+    <div class="style_page_content" id="div_page_content">
+    
+		<% if !@user_entries.empty? %>
+			<table style="width:100%" cellspacing="0" cellpadding="0" >
+	  			<tr style="background-color:#333333;">
+	  				<td class="log_row_title" width="15%" >Date</td>
+	  				<td class="log_row_title" width="10%" >Activity</td>
+	  				<td class="log_row_title" style="text-align:right;" width="7%">Words</td>
+	  				<td class="log_row_title" style="text-align:right;" width="7%">Time</td>
+	  				<td width="5%"></td>
+	  				<td class="log_row_title">Notes</td>
+	  				<td class="log_row_title" width="10%"></td>
+	  			</tr>
+	  	
+	  			<% shadedCol = false %>
+	  			<% @user_entries.each do |entry| %>
+		    		<% editing_text = "" %>
+		    		<% if entry.editing? %>
+		    		<%   editing_text = "Editing" %>
+		    		<% else %>
+		    		<%   editing_text = "Writing" %>
+		    		<% end %>
+		    
+		    		<% notes_text = "" %>
+		    		<% if !entry.comments.empty? %>
+		    		<%   notes_text = entry.comments %>
+	    			<% end %>
+	   
+	   				<% rowColor = ( shadedCol ) ? "#DDDDDD" : "#FFFFFF" %>
+	   				<% shadedCol = !shadedCol %>
+	   				
+					<tr style="background-color:<%= rowColor %>;">
+						<td class="log_row_weak" style=""><%= entry.starttime.strftime( "%m/%d/%Y" ) %></td>
+						<td class="log_row_weak"><%= editing_text %></td>
+						<td class="log_row_strong" style="text-align:right;"><%= entry.words %></td>
+						<td class="log_row_strong" style="text-align:right;">			
+							<%= entry.hours %>:<% if entry.minutes >= 10 %><%= entry.minutes %><% else %><%= "#{entry.minutes}0" %><% end %>
+						</td>
+						<td class="log_row_strong"></td>
+						<td class="log_row_weak"><%= notes_text %></td>
+						<td class="log_row_weak"><a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a></td>
+					</tr>
+	  			<% end %>
+	  		</table>
+  		<% end %>
+  
+  		<% if @user_entries.empty? %>
+    		<div class="box_log_empty">
+    			<br>
+    			No Log Entries
+    		</div>
+  		<% end %>     
+    
+    </div>
+    
+  </div>
+ 
+</div>
