@@ -113,9 +113,12 @@
 </div>
 
 <script type="text/javascript">
-	setTabHighlight( "stats" );
+	function startup()
+	{
+		setTabHighlight( "stats" );
 
-	generateGraphWordsThisWeek( "div_graph_words_this_week" );
-	generateGraphWordsEveryWeek( "div_graph_words_every_week" );
-	generateGraphWordsEachWeek( "div_graph_words_each_week" );
+		generateGraphWordsThisWeek( "div_graph_words_this_week" );
+		generateGraphWordsEveryWeek( "div_graph_words_every_week" );
+		generateGraphWordsEachWeek( "div_graph_words_each_week" );
+	}
 </script>

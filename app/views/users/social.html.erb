@@ -159,17 +159,20 @@
 </div>
 
 <script type="text/javascript">
-	setTabHighlight( "social" );
-	
-	generateGraphSocialWordsThisWeek( "div_graph_display", "full" );
-	
-	generateGraphSocialWordsThisWeek( "div_graph_thumbnail_0", "thumbnail" );
-	generateGraphSocialWordsEveryWeek( "div_graph_thumbnail_1", "thumbnail" );
-	generateGraphSocialWordsEachWeek( "div_graph_thumbnail_2", "thumbnail" );
-	generateGraphSocialMinutesThisWeek( "div_graph_thumbnail_3", "thumbnail" );
-	generateGraphSocialMinutesEveryWeek( "div_graph_thumbnail_4", "thumbnail" );
-	
-	document.getElementById( "div_tab_social_content" ).style.height = "340px";
-	document.getElementById( "div_tab_social_content" ).style.overflowY = "scroll";
-	document.getElementById( "div_page_content" ).style.overflowY = "hidden";
+	function startup()
+	{
+		setTabHighlight( "social" );
+		
+		generateGraphSocialWordsThisWeek( "div_graph_display", "full" );
+		
+		generateGraphSocialWordsThisWeek( "div_graph_thumbnail_0", "thumbnail" );
+		generateGraphSocialWordsEveryWeek( "div_graph_thumbnail_1", "thumbnail" );
+		generateGraphSocialWordsEachWeek( "div_graph_thumbnail_2", "thumbnail" );
+		generateGraphSocialMinutesThisWeek( "div_graph_thumbnail_3", "thumbnail" );
+		generateGraphSocialMinutesEveryWeek( "div_graph_thumbnail_4", "thumbnail" );
+		
+		document.getElementById( "div_tab_social_content" ).style.height = "340px";
+		document.getElementById( "div_tab_social_content" ).style.overflowY = "scroll";
+		document.getElementById( "div_page_content" ).style.overflowY = "hidden";
+	}
 </script>
