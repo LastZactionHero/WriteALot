@@ -267,6 +267,8 @@ div.field, div.actions {
   font-size:24px; 
   color:black; 
   text-align:center;
+  position:relative;
+  top:-400px;
 }
 
 .box_graphs{

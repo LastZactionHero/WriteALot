@@ -1,0 +1,175 @@
+<%= stylesheet_link_tag "home_log" %>
+
+<script language="javascript" type="text/javascript" src="javascripts/graph.js"></script>
+<script language="javascript" type="text/javascript" src="javascripts/interface.js"></script>
+<script language="javascript" type="text/javascript" src="javascripts/invitations.js"></script>
+
+<script type="text/javascript">
+
+ /**
+  * Get Data
+  */
+ function getDataString
+ 	(
+ 	in_data_type
+ 	)
+ {
+ 	var dataString = "";
+ 	
+ 	if( in_data_type == "social_words_this_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_words_this_week_social()}';" %>
+ 	}
+ 	else if( in_data_type == "social_words_every_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_words_every_week_social()}';" %>
+ 	}
+ 	else if( in_data_type == "social_words_each_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_words_each_week_social()}';" %>
+ 	}
+ 	else if( in_data_type == "social_minutes_this_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_minutes_this_week_social()}';" %> 	
+ 	}
+ 	else if( in_data_type == "social_minutes_every_week" )
+ 	{
+ 		<%= "dataString = '#{@user.get_data_minutes_every_week_social()}';" %> 	
+ 	}
+ 	 	 	
+ 	return dataString;
+ }
+ 
+ /**
+  * Get User String
+  */
+ function getUserString()
+ {
+ 	return "<%= @user.get_friends_list %>";
+ } 
+</script>
+
+
+<div class="style_container" id="div_container">
+
+  <div class="style_sidebar">
+    <div class="style_logo_bar_back">
+      <div class="style_logo_bar_front"><img src="images/img_logo.png" width="250" height="65" /></div>
+    </div>
+    
+    <a href="/home"><div class="style_tab_log" id="div_tab_log">Log</div></a>
+    <div class="style_tab_log_content" id="div_tab_log_content"></div>
+    
+    
+	<a href="/stats"><div class="style_tab_stats" id="div_tab_stats">Stats</div></a>
+	<div class="style_tab_stats_content" id="div_tab_stats_content"></div>
+	
+	
+	<a href="/social"><div class="style_tab_social" id="div_tab_social">Social</div></a>
+	<div class="style_tab_social_content" id="div_tab_social_content">
+		<input id="form_social_add" type="text" maxlength=50 value="Twitter/Facebook Name" onclick="javascript:invitationTextClicked( 'form_social_add' )">
+		<a onclick="javascript:inviteAdd( 'form_social_add' )">Invite</a>
+		
+		<% if !@message.empty? %>
+			<br><span style="color:red;"><%= @message %></span>
+		<% end %>
+	
+		<% if !@invites_pending.empty? %>
+			<br><br>
+			<table width=100%>
+				<tr><td class="font_friend">Friend Requests:</td><td></td></tr>
+				
+				<% @invites_pending.each do |invite| %>
+				  <% twitter_name = User.find( invite.host_user ).twitter %>
+				  <tr><td class="font_friend" ><%= twitter_name %></td><td class="font_friend" style="text-align:right"><a onclick="inviteAccept( <%= invite.id %> )">Add</a> / <a onclick="inviteIgnore( <%= invite.id %> )">Ignore</a></td></tr>
+				<% end %>
+				
+			</table>
+		<% end %>
+		
+		<% if !@invites.empty? %>
+			<br><br>
+			<table width=100%>
+				<tr><td class="font_friend">Friends:</td><td></td></tr>
+				
+				<% @invites.each do |invite| %>
+				    <% twitter_name = User.find( invite.target_user ).twitter %>
+					<tr><td class="font_friend"><input type=checkbox id="cb_invite_<%= invite.id %>" <% if invite.active %>checked<% end %> onclick="javascript:inviteActivate( <%= invite.id %> )"><%= twitter_name %><% if !invite.accepted? %><%= " (pending)" %><% end %></td>
+					<td class="font_friend" style="text-align:right"><a onclick="javascript:inviteDelete( <%= invite.id %> )">Delete</a></td></tr>
+				<% end %>
+			</table>		
+		<% end %>
+		
+		<% if @invites.empty? && @invites_pending.empty? %>
+		  <br><br>You are not following any users.<br><br>Enter the Twitter or Facebook name of another Writealot user to start tracking your writing together.
+		
+		<% end%>
+
+		<% if !@possible_friends.empty? %>
+			<br><br>
+			<table width=100%>
+				<tr><td class="font_friend">Suggested Users:</td><td></td></tr>
+				
+				<% @possible_friends.each do |possible_friend| %>
+				    <% twitter_name = possible_friend.twitter %>
+					<tr><td class="font_friend"><%= possible_friend.twitter %></td>
+					<td class="font_friend" style="text-align:right"><a onclick="javascript:inviteAddByName( '<%= possible_friend.twitter %>' )">Add</a></td></tr>
+				<% end %>
+			</table>		
+		<% end %>
+						
+	</div>
+	
+  </div>
+  
+  
+  <div class="style_content" id="div_content">
+  
+    <div class="style_id_bar" id="div_id_bar">
+      <div class="style_id_bar_pic" id="div_id_bar_pic"><image height=50 width=48 src=" <%= @user_image %> "></div>
+      <div class="style_id_bar_info" id="div_id_bar_info"></div>
+      <div class="style_id_bar_info_name" id="div_id_bar_info_name"><%= @user_name %> <span style="font-size:12px;"><%= link_to "(sign out)", :action=>'signout' %></span></div>
+      <div class="style_id_bar_info_data" id="div_id_bar_info_data">Last Updated: <%= @last_use_text %> | Words this Week: <%= @writing_stats[ "seven_days" ][ "words" ] %> | Hours this Week: <%= '%.2f' % @writing_stats[ "seven_days" ][ "total" ] %></div> 
+    </div>
+    
+    <div class="style_page_content" id="div_page_content"> 
+		
+		<div id="div_graph_container">
+			<div id="div_graph_display" style="position:relative; margin-left: auto; margin-right: auto; width: 550px; height: 300px;"></div>
+			<div id="div_graph_select" style="position:relative; margin-left: auto; margin-right: auto; top: 20px;width: 550px; height: 100px;">
+				<div id="div_graph_thumbnail_0" onclick="javascript:generateGraphSocialWordsThisWeek( 'div_graph_display', 'full' )" style="position:relative; float:left; left: 0px; width: 100px; height:100px; text-align:center; border: 1px dotted black;"></div>
+				<div id="div_graph_thumbnail_1" onclick="javascript:generateGraphSocialWordsEveryWeek( 'div_graph_display', 'full' )" style="position:relative; float:left; left: 10px; width: 100px; height:100px; text-align:center; border: 1px dotted black;""></div>
+				<div id="div_graph_thumbnail_2" onclick="javascript:generateGraphSocialWordsEachWeek( 'div_graph_display', 'full' )" style="position:relative; float:left; left: 20px; width: 100px; height:100px; text-align:center; border: 1px dotted black;""></div>
+				<div id="div_graph_thumbnail_3" onclick="javascript:generateGraphSocialMinutesThisWeek( 'div_graph_display', 'full' )" style="position:relative; float:left; left: 30px; width: 100px; height:100px; text-align:center; border: 1px dotted black;""></div>
+				<div id="div_graph_thumbnail_4" onclick="javascript:generateGraphSocialMinutesEveryWeek( 'div_graph_display', 'full' )" style="position:relative; float:left; left: 40px; width: 100px; height:100px; text-align:center; border: 1px dotted black;""></div>
+			</div>
+						
+		</div>
+		<!--
+		<table>
+		<tr><td><div id="div_graph_social_words_this_week"></div></td><td><div id="div_graph_social_words_every_week"></div></td></tr>
+		<tr><td><div id="div_graph_social_minutes_this_week"></div></td><td><div id="div_graph_social_minutes_every_week"></div></td></tr>
+		<tr><td><div id="div_graph_social_words_each_week"></div></td><td><div id="div_graph_social_words_minute"></div></td></td></tr>
+		</table>
+		--/>
+    </div>
+    
+  </div>
+ 
+</div>
+
+<script type="text/javascript">
+	setTabHighlight( "social" );
+	
+	generateGraphSocialWordsThisWeek( "div_graph_display", "full" );
+	
+	generateGraphSocialWordsThisWeek( "div_graph_thumbnail_0", "thumbnail" );
+	generateGraphSocialWordsEveryWeek( "div_graph_thumbnail_1", "thumbnail" );
+	generateGraphSocialWordsEachWeek( "div_graph_thumbnail_2", "thumbnail" );
+	generateGraphSocialMinutesThisWeek( "div_graph_thumbnail_3", "thumbnail" );
+	generateGraphSocialMinutesEveryWeek( "div_graph_thumbnail_4", "thumbnail" );
+	
+	document.getElementById( "div_tab_social_content" ).style.height = "340px";
+	document.getElementById( "div_tab_social_content" ).style.overflowY = "scroll";
+	document.getElementById( "div_page_content" ).style.overflowY = "hidden";
+</script>

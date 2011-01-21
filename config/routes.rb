@@ -22,6 +22,8 @@ AuthTest::Application.routes.draw do
   
   match 'silver' => 'users#silver'
   match 'home' => 'users#home'
+  match 'stats' => 'users#stats'
+  match 'social' => 'users#social'
   match 'signout' => 'users#signout'
 
   match '/twitter_callback' => 'users#proc_twitter_login'

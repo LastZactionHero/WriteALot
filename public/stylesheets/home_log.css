@@ -23,7 +23,7 @@ a#link_login:hover {color: transparent; background-color: transparent;}
 .style_container {
 	height: 700px;
 	width: 900px;
-	margin-top: 50px;
+	margin-top: 25px;
 	margin-right: auto;
 	margin-bottom: 50px;
 	margin-left: auto;
@@ -65,7 +65,7 @@ a#link_login:hover {color: transparent; background-color: transparent;}
 	vertical-align: text-bottom;
 }
 .style_tab_log {
-	background-color: #00aef0;
+	background-color: #000000;
 	position: relative;
 	width: 100%;
 	font-family: Georgia, "Times New Roman", Times, serif;
@@ -161,6 +161,14 @@ a#link_login:hover {color: transparent; background-color: transparent;}
 	font-family: Georgia, "Times New Roman", Times, serif;
 	font-size: 12px;
 	overflow-y: scroll;
+}
+
+.style_stats_heading {
+	height:20px; 
+	font-family: Georgia,Serif;Times; 
+	font-size:14px; 
+	font-weight:bold;
+	background-color:#eaeaea;
 }
 
 .log_row_title{

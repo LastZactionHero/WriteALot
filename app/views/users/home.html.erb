@@ -1,82 +1,9 @@
-<%= stylesheet_link_tag "scaffold" %>
-<script language="javascript" type="text/javascript" src="javascripts/graph.js"></script>
-<script language="javascript" type="text/javascript" src="javascripts/invitations.js"></script>
-<script language="javascript" type="text/javascript" src="javascripts/display.js"></script>
+<%= stylesheet_link_tag "home_log" %>
+
+<script language="javascript" type="text/javascript" src="javascripts/interface.js"></script>
 
 <script type="text/javascript">
 
- /**
-  * Get Data
-  */
- function getDataString
- 	(
- 	in_data_type
- 	)
- {
- 	var dataString = "";
- 	
- 	if( in_data_type == "words_this_week" )
- 	{
- 		<%= "dataString = '#{@user.get_data_words_this_week() }';" %>
- 	}
- 	else if( in_data_type == "words_every_week" )
- 	{
- 		<%= "dataString = '#{@user.get_data_words_every_week() }';" %>
- 	}
- 	else if( in_data_type == "words_each_week" )
- 	{
- 		<%= "dataString = '#{@user.get_data_words_each_week() }';" %>
- 	}
- 	else if( in_data_type == "social_words_this_week" )
- 	{
- 		<%= "dataString = '#{@user.get_data_words_this_week_social()}';" %>
- 	}
- 	else if( in_data_type == "social_words_every_week" )
- 	{
- 		<%= "dataString = '#{@user.get_data_words_every_week_social()}';" %>
- 	}
- 	else if( in_data_type == "social_words_each_week" )
- 	{
- 		<%= "dataString = '#{@user.get_data_words_each_week_social()}';" %>
- 	}
- 	else if( in_data_type == "social_minutes_this_week" )
- 	{
- 		<%= "dataString = '#{@user.get_data_minutes_this_week_social()}';" %> 	
- 	}
- 	else if( in_data_type == "social_minutes_every_week" )
- 	{
- 		<%= "dataString = '#{@user.get_data_minutes_every_week_social()}';" %> 	
- 	}
- 	 	 	
- 	return dataString;
- }
- 
- /**
-  * Get User String
-  */
- function getUserString()
- {
- 	return "<%= @user.get_friends_list %>";
- }
- 
-  
- /**
- * Expand New Entry Dialog Box
- */
-  var newEntryDialogVisible = false;
-  function showDialogNewEntry()
-  {
-    if( !newEntryDialogVisible )
-      document.getElementById( "div_entry_new" ).style.height = "150px";
-    else
-      document.getElementById( "div_entry_new" ).style.height = "20px";    
- 
-    newEntryDialogVisible = !newEntryDialogVisible;
-    
-    updateHoursMinutes();
-  }
- 
- 
  /**
   * Pull Date Time
   */
@@ -86,42 +13,21 @@
  	
  	if( document.getElementById( "form_starttime_year" ) )
  	{
-	    times.start_year = document.getElementById( "form_starttime_year" ).value;
-	    times.start_month = document.getElementById( "form_starttime_month" ).value; 
-	    times.start_day =  document.getElementById( "form_starttime_day" ).value;
 	    times.start_hour =  document.getElementById( "form_starttime_hour" ).value;
 	    times.start_minute =  document.getElementById( "form_starttime_minute" ).value;
-	
-	    times.end_year = document.getElementById( "form_endtime_year" ).value;
-	    times.end_month = document.getElementById( "form_endtime_month" ).value; 
-	    times.end_day =  document.getElementById( "form_endtime_day" ).value;
+
 	    times.end_hour =  document.getElementById( "form_endtime_hour" ).value;
 	    times.end_minute =  document.getElementById( "form_endtime_minute" ).value;
+	    
+	    times.year = document.getElementById( "form_date_year" ).value;
+	    times.month = document.getElementById( "form_date_month" ).value;
+	    times.day = document.getElementById( "form_date_day" ).value;
  	}
  	
  	return times;
  }
- 
- /**
-  * Update Hours and Minutes Text
-  * Updates Hours and Minutes text field with the difference between the Start Time and End Time fields
-  */
- function updateHoursMinutes()
- {	
- 	// Get times
- 	var times = getStartEndTimes();
- 	var start_date = new Date( times.start_year, times.start_month, times.start_day, times.start_hour, times.start_minute, 0 );
-    var end_date = new Date( times.end_year, times.end_month, times.end_day, times.end_hour, times.end_minute,  0 );
-    
-    // Calculate times
-    var seconds = ( ( end_date - start_date ) / 1000 );
-	var hours = Math.floor( seconds / 3600 );
-	var minutes = Math.floor( ( seconds / 60 ) - 60 * hours );
-	
-	// Update field
- 	document.getElementById( "div_hours_minutes" ).innerHTML = Math.floor( hours ) + " hr, " + Math.floor( minutes ) + " min" 
- }
- 
+
+
   /**
   * Submit New Entry to the Log
   */ 
@@ -136,8 +42,8 @@
     
     // Get start and end times
     var times = getStartEndTimes();
-    var start_date = new Date( times.start_year, times.start_month, times.start_day, times.start_hour, times.start_minute, 0 );
-    var end_date = new Date( times.end_year, times.end_month, times.end_day, times.end_hour, times.end_minute,  0 );
+    var start_date = new Date( times.year, times.month, times.day, times.start_hour, times.start_minute, 0 );
+    var end_date = new Date( times.year, times.month, times.day, times.end_hour, times.end_minute,  0 );
     
     
     // Validate data
@@ -157,319 +63,157 @@
     if( !fail )
     {
       words = Math.floor( words )
-      var submitString = "start_year=" + times.start_year + "&start_month=" + times.start_month + "&start_day=" + times.start_day + "&start_hour=" + times.start_hour + "&start_minute=" + times.start_minute + "&end_year=" + times.end_year + "&end_month=" + times.end_month + "&end_day=" + times.end_day + "&end_hour=" + times.end_hour + "&end_minute=" + times.end_minute + "&words=" + words + "&editing=" + editing + "&comment=" + encodeURIComponent( comments );  
+      var submitString = "start_year=" + times.year + "&start_month=" + times.month + "&start_day=" + times.day + "&start_hour=" + times.start_hour + "&start_minute=" + times.start_minute + "&end_year=" + times.year + "&end_month=" + times.month + "&end_day=" + times.day + "&end_hour=" + times.end_hour + "&end_minute=" + times.end_minute + "&words=" + words + "&editing=" + editing + "&comment=" + encodeURIComponent( comments );  
       var httpString = "/entries/createinline?" + submitString;
       window.location = httpString;
     }
   }
-  
-  /**
-   * Switch Visible Tab
-   */
-  function switchTab
-  	(
-  	aDivActive
-  	)
-  {
-  	var tabs = [ "div_tab_log", "div_tab_stats", "div_tab_social", "div_tab_devnotes" ];
-  	var panel = [ "div_entry_list", "div_graph_box", "div_social", "div_devnotes" ];
-  	
-  	for( var i = 0; i < tabs.length; i++ )
-  	{
-  		if( aDivActive != tabs[i] )
-  		{
-  			//document.getElementById( panel[i] ).style.visibility = "hidden";
-  			document.getElementById( tabs[i] ).style.backgroundColor = "#333333";
-  			document.getElementById( tabs[i] ).style.color = "#EEEEEE";
-  		}
-  		else
-  		{
-  			//document.getElementById( panel[i] ).style.visibility = "visible";
-  			document.getElementById( tabs[i] ).style.backgroundColor = "#003DF5";
-  			document.getElementById( tabs[i] ).style.color = "#EEEEEE";
-  			document.getElementById( "div_panel" ).innerHTML = document.getElementById( panel[i] ).innerHTML;
-  		}
-  	}	
-  }
-  	
+
+ /**
+  * Update Hours and Minutes Text
+  * Updates Hours and Minutes text field with the difference between the Start Time and End Time fields
+  */
+ function updateHoursMinutes()
+ {	
+ 	// Get times
+ 	var times = getStartEndTimes();
+ 	var start_date = new Date( times.year, times.month, times.day, times.start_hour, times.start_minute, 0 );
+    var end_date = new Date( times.year, times.month, times.day, times.end_hour, times.end_minute,  0 );
+    
+    // Calculate times
+    var seconds = ( ( end_date - start_date ) / 1000 );
+	var hours = Math.floor( seconds / 3600 );
+	var minutes = Math.floor( ( seconds / 60 ) - 60 * hours );
+	
+	// Update field
+ 	document.getElementById( "div_hours_minutes" ).innerHTML = Math.floor( hours ) + " hr, " + Math.floor( minutes ) + " min" 
+ }
+ 
 </script>
 
-<!-- Watermark -->
-<div id="div_watermark" class="box_watermark">writealot</div>
 
-<div id="div_titlebar" class="box_titlebar">
-  <div id="div_titlebar_row_1" class="box_titlebar_row_1">
-    <span class="font_title">
-      <%= @user_name %>
-      <image height=30 width=30 src=" <%= @user_image %> ">
-      <span class="font_signout"><%= link_to "Sign Out", :action=>'signout' %></span>
-    </span>  
-  </div>
-  
-  <div id="div_titlebar_row_2" class="box_titlebar_row_2">
-      <table width=50%><tr>
-        <% day_string = "None" %>
-        <% if @days_last_use == 0 %>
-        <%   day_string = "Today" %>
-        <% elsif @days_last_use > 0 && @days_last_use < 9999 %>
-        <%   day_string = "#{@days_last_use} Days Ago" %>
-        <% end %>
-        
-        <td class="font_title_stats">Last Entry: <%= day_string %></td> 
-        <td class="font_title_stats">Hours This Week: <%= '%.2f' % @writing_stats[ "seven_days" ][ "total" ] %></td>
-        <td class="font_title_stats">Words This Week: <%= @writing_stats[ "seven_days" ][ "words" ] %></td>
-      </tr></table>
-  </div>
-</div>
+<div class="style_container" id="div_container">
 
-
-<% localServerTime = Time.now %>
-<% if !session[:timezone_offset].nil? %>
-  <% localServerTime = localServerTime + ( session[:timezone_offset] * 3600 ) %>
-<% end %>
-
-<div id="div_title_divider" class="box_titlebar_divider"></div>
-
-<div id="div_tab_bar" class="box_tab_container">
-	<div id="div_tab_log" onclick="javascript:switchTab( 'div_tab_log' )" class="box_tab" style="float:left;">
-		<table><tr><td><img src="images/tab_log.png"></td><td class="font_tab">Log</td></tr></table>
-	</div>
-	<div id="div_tab_stats" onclick="javascript:switchTab( 'div_tab_stats' )" class="box_tab" style="float:left;">
-		<table><tr><td><img src="images/tab_stats.png"></td><td class="font_tab">Stats</td></tr></table>
-	</div>
-	<div id="div_tab_social" onclick="javascript:switchTab( 'div_tab_social' )" class="box_tab" style="float:left;">
-		<table><tr><td><img src="images/tab_social.png"></td><td class="font_tab">Social <% if !@invites_pending.empty? %> <span style="color:red"> (+)</span><% end %></td></tr></table>
-	</div>	
-	<div id="div_tab_devnotes" onclick="javascript:switchTab( 'div_tab_devnotes' )" class="box_tab" style="float:right;">
-		<table><tr><td></td><td class="font_tab" style="text-align:right;">Developer Notes</td></tr></table>
-	</div>	
-	
-</div>
-
-
-<div id="div_panel" class="box_panel"></div>
-
-<div id="div_bottom_divider" class="box_bottom_divider"></div>
-
-
-
-
-<div id="div_entry_list" class="box_entry_list">
-  <div id="div_entry_new" class="box_entry_new">
-		<div id="div_entry_new_title" class="box_entry_new_title" onclick="javascript:showDialogNewEntry()">Add New Log Entry</div>
-		<form onchange="javascript:updateHoursMinutes()">
-			<table>
-				<tr><td class="font_new_entry">Start Time:</td><td class="font_new_entry"><%= select_datetime(date = localServerTime, { :prefix => "form_starttime" } ) %></td></tr>
-				<tr><td class="font_new_entry">End Time:</td><td class="font_new_entry"><%= select_datetime(date = localServerTime, :prefix => "form_endtime" ) %><span id="div_hours_minutes"></span></td></tr>
-				<tr><td class="font_new_entry">Words:</td><td class="font_new_entry"><input value="0" id="form_entry_words"type=text size=4 name="entry_words"><input id="form_entry_editing" value="editing" type="checkbox" />Editing</td></tr>
-				<tr><td class="font_new_entry">Notes:</td><td class="font_new_entry"><input id="form_entry_comments" type=text name="entry_comments">&nbsp&nbsp&nbsp<a onclick="javascript:submitNewEntry()">Add Entry</a></td></tr>
-			</table>
-		</form>
-  </div>
-  
-  <% if !@user_entries.empty? %>
-	  <table style="width:100%">
-	  	<tr>
-	  		<td class="row_log_title" width="10%" >Date</td>
-	  		<td class="row_log_title" width="5%" >Activity</td>
-	  		<td class="row_log_title" style="text-align:right;" width="7%">Words</td>
-	  		<td class="row_log_title" style="text-align:right;" width="7%">Duration</td>
-	  		<td width="5%"></td>
-	  		<td class="row_log_title">Notes</td>
-	  		<td class="row_log_title" width="10%"></td>
-	  	</tr>
-	  	
-	  	<% @user_entries.each do |entry| %>
-		    <% editing_text = "" %>
-		    <% if entry.editing? %>
-		    <%   editing_text = "Editing" %>
-		    <% else %>
-		    <%   editing_text = "Writing" %>
-		    <% end %>
-		    
-		    <% notes_text = "" %>
-		    <% if !entry.comments.empty? %>
-		    <%   notes_text = entry.comments %>
-	    <% end %>
-	   
-		<tr>
-			<td class="row_log_weak" style=""><%= entry.starttime.strftime( "%m/%d/%Y" ) %></td>
-			<td class="row_log_weak"><%= editing_text %></td>
-			<td class="row_log_strong" style="text-align:right;"><%= entry.words %></td>
-			<td class="row_log_strong" style="text-align:right;">			
-				<%= entry.hours %>:<% if entry.minutes >= 10 %><%= entry.minutes %><% else %><%= "#{entry.minutes}0" %><% end %>
-			</td>
-			<td class="row_log_strong"></td>
-			<td class="row_log_weak"><%= notes_text %></td>
-			<td class="row_log_weak"><a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a></td>
-		</tr>
-	  <% end %>
-	  </table>
-  <% end %>
-  
-  <% if @user_entries.empty? %>
-    <div class="box_log_empty">
-    <br>
-    No Log Entries
+  <div class="style_sidebar">
+    <div class="style_logo_bar_back">
+      <div class="style_logo_bar_front"><img src="images/img_logo.png" width="250" height="65" /></div>
     </div>
-  <% end %> 
-</div>
-
-
-<div id="div_graph_box" class="box_graphs">
-	<!-- Weekly Stats -->
-	<div id="div_stats_heading_this_week" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">This Week</div>
-	
-	<table>
-	<tr><td>Words:</td><td><%= @writing_stats[ "this_week" ][ "words" ] %></td></tr>
-	<tr><td>Time, Total:</td><td><%= '%.2f' % @writing_stats[ "this_week" ][ "total" ] %> hrs</td></tr>
-	<tr><td>Time, Writing:</td><td><%= '%.2f' % @writing_stats[ "this_week" ][ "writing" ] %> hrs</td></tr>
-	<tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "this_week" ][ "editing" ] %> hrs</td></tr>
-	</table>
-	<br>
-	<table>
-	<tr>
-	<td><div id="div_graph_words_this_week"></div></td>
-	<td><div id="div_graph_words_every_week"></div></td>
-	</tr>
-	</table>
-	<br><br>
-	
-	<!-- 30 Stats -->
-	<div id="div_stats_heading_monthly" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">Last 30 Days</div>
-	
-	<table>
-	<tr><td>Words:</td><td><%= @writing_stats[ "thirty_days" ][ "words" ] %></td></tr>
-	<tr><td>Time, Total:</td><td><%= '%.2f' % @writing_stats[ "thirty_days" ][ "total" ] %></td></tr>
-	<tr><td>Time, Writing:</td><td><%= '%.2f' % @writing_stats[ "thirty_days" ][ "writing" ] %></td></tr>
-	<tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "thirty_days" ][ "editing" ] %></td></tr>
-	</table>
-	
-	<br><br>
-	
-	<!-- All-Time Stats -->
-	<div id="div_stats_heading_alltime" style="height:20px; font-family: Georgia,Serif;Times; font-height:12px; background-color:#CCCCCC;">All Time</div>
-	
-	<table>
-	<tr><td>Words:</td><td><%= @writing_stats[ "all_time" ][ "words" ] %></td></tr>
-	<tr><td>Time, Total:</td><td><%= '%.2f' % @writing_stats[ "all_time" ][ "total" ] %></td></tr>
-	<tr><td>Time, Writing:</td><td><%= '%.2f' % @writing_stats[ "all_time" ][ "writing" ] %></td></tr>
-	<tr><td>Time, Editing:</td><td><%= '%.2f' % @writing_stats[ "all_time" ][ "editing" ] %></td></tr>
-	</table>
-	<div id="div_graph_words_each_week"></div>
-</div>
-
-
-<div id="div_social" style="height:0px; overflow:hidden;">
-	<div id="div_social_friends" style="position:relative; float:left; top:0px; left:0px; width:20%; height:100%; background-color:#EEEEEE; font-family: Georgia,Serif;Times; font-height:12px;">
-		<div class="font_friend" style="background-color:#BBBBBB; width=100%;">Friends</div>
-		
-		Add Friend:<br>
-		<input id="form_social_add" type="text" maxlength=50 value="Twitter/Facebook Name" onclick="javascript:invitationTextClicked( 'form_social_add' )">
-		<a onclick="javascript:inviteAdd( 'form_social_add' )">Add Friend</a>
-		
-		<% if !@message.empty? %>
-			<br><span style="color:red;"><%= @message %></span>
-		<% end %>
-	
-		<% if !@invites_pending.empty? %>
-			<br><br>
-			<table width=100%>
-				<tr><td class="font_friend">Friend Requests:</td><td></td></tr>
-				
-				<% @invites_pending.each do |invite| %>
-				  <% twitter_name = User.find( invite.host_user ).twitter %>
-				  <tr><td class="font_friend" ><%= twitter_name %></td><td class="font_friend" style="text-align:right"><a onclick="inviteAccept( <%= invite.id %> )">Add</a> / <a onclick="inviteIgnore( <%= invite.id %> )">Ignore</a></td></tr>
-				<% end %>
-				
+    
+    <div class="style_tab_log" id="div_tab_log">Log</div>
+    <div class="style_tab_log_content" id="div_tab_log_content">
+    		<form onchange="javascript:updateHoursMinutes()">
+			<table>
+				<tr><td class="font_new_entry">Date:</td><td class="font_new_entry"></tr>
+				<tr><td class="font_new_entry"><%= select_date(date = @localServerTime, { :prefix => "form_date", :order => [:month, :day, :year] } ) %></td></tr>
+				<tr><td class="font_new_entry">Start Time:</td><td class="font_new_entry"></tr>
+				<tr><td class="font_new_entry"><%= select_time(date = @localServerTime, { :prefix => "form_starttime" } ) %></td></tr>
+				<tr><td class="font_new_entry">End Time:</td></tr>
+				<tr><td class="font_new_entry"><%= select_time(date = @localServerTime, :prefix => "form_endtime" ) %><span id="div_hours_minutes"></span></td></tr>
+				<tr><td class="font_new_entry">Words:</td></tr>
+				<tr><td class="font_new_entry"><input value="0" id="form_entry_words"type=text size=4 name="entry_words"><input id="form_entry_editing" value="editing" type="checkbox" />Editing</td></tr>
+				<tr><td class="font_new_entry">Notes:</td></tr>
+				<tr><td class="font_new_entry"><input id="form_entry_comments" type=text name="entry_comments"></td></tr>
+				<tr><td><a onclick="javascript:submitNewEntry()">Add New Entry</a></td></tr>
 			</table>
-		<% end %>
-		
-		<% if !@invites.empty? %>
-			<br><br>
-			<table width=100%>
-				<tr><td class="font_friend">Friends:</td><td></td></tr>
-				
-				<% @invites.each do |invite| %>
-				    <% twitter_name = User.find( invite.target_user ).twitter %>
-					<tr><td class="font_friend"><input type=checkbox id="cb_invite_<%= invite.id %>" <% if invite.active %>checked<% end %> onclick="javascript:inviteActivate( <%= invite.id %> )"><%= twitter_name %><% if !invite.accepted? %><%= " (pending)" %><% end %></td>
-					<td class="font_friend" style="text-align:right"><a onclick="javascript:inviteDelete( <%= invite.id %> )">Delete</a></td></tr>
-				<% end %>
-			</table>		
-		<% end %>
-		
-		<% if @invites.empty? && @invites_pending.empty? %>
-		  <br><br>You are not following any users.<br><br>Enter the Twitter or Facebook name of another Writealot user to start tracking your writing together.
-		
-		<% end%>
-
-		<% if !@possible_friends.empty? %>
-			<br><br>
-			<table width=100%>
-				<tr><td class="font_friend">Suggested Users:</td><td></td></tr>
-				
-				<% @possible_friends.each do |possible_friend| %>
-				    <% twitter_name = possible_friend.twitter %>
-					<tr><td class="font_friend"><%= possible_friend.twitter %></td>
-					<td class="font_friend" style="text-align:right"><a onclick="javascript:inviteAddByName( '<%= possible_friend.twitter %>' )">Add</a></td></tr>
-				<% end %>
-			</table>		
-		<% end %>
-						
-	</div>
+			<br>
+		</form>
+    </div>
+    
+    
+	<a href="/stats"><div class="style_tab_stats" id="div_tab_stats">Stats</div></a>
+	<div class="style_tab_stats_content" id="div_tab_stats_content"></div>
 	
-	<div id="div_social_graphs" style="position:relative; float:left; top:0px; left:0px; width:80%; height:100%; background-color:white; overflow-x:scroll;">
+	
+	<a href="/social"><div class="style_tab_social" id="div_tab_social">Social</div></a>
+	<div class="style_tab_social_content" id="div_tab_social_content"></div>
+	
+  </div>
+  
+  
+  <div class="style_content" id="div_content">
+  
+    <div class="style_id_bar" id="div_id_bar">
+      <div class="style_id_bar_pic" id="div_id_bar_pic"><image height=50 width=48 src=" <%= @user_image %> "></div>
+      <div class="style_id_bar_info" id="div_id_bar_info"></div>
+      <div class="style_id_bar_info_name" id="div_id_bar_info_name"><%= @user_name %> <span style="font-size:12px;"><%= link_to "(sign out)", :action=>'signout' %></span></div>
+      <div class="style_id_bar_info_data" id="div_id_bar_info_data">Last Updated: <%= @last_use_text %> | Words this Week: <%= @writing_stats[ "seven_days" ][ "words" ] %> | Hours this Week: <%= '%.2f' % @writing_stats[ "seven_days" ][ "total" ] %></div> 
+    </div>
+    
+    <div class="style_page_content" id="div_page_content">
+    
+    	<% blankEntryCount = 23 - @user_entries.size %>
 
-		<table>
-		<tr><td><div id="div_graph_social_words_this_week"></div></td><td><div id="div_graph_social_words_every_week"></div></td></tr>
-		<tr><td><div id="div_graph_social_minutes_this_week"></div></td><td><div id="div_graph_social_minutes_every_week"></div></td></tr>
-		<tr><td><div id="div_graph_social_words_each_week"></div></td><td><div id="div_graph_social_words_minute"></div></td></td></tr>
-		</table>
-	</div>
+			<table style="width:100%" cellspacing="0" cellpadding="0" >
+	  			<tr style="background-color:#333333;">
+	  				<td class="log_row_title" width="15%" >Date</td>
+	  				<td class="log_row_title" width="10%" >Activity</td>
+	  				<td class="log_row_title" style="text-align:right;" width="7%">Words</td>
+	  				<td class="log_row_title" style="text-align:right;" width="7%">Time</td>
+	  				<td width="5%"></td>
+	  				<td class="log_row_title">Notes</td>
+	  				<td class="log_row_title" width="10%"></td>
+	  			</tr>
+	  	
+	  			<% shadedCol = false %>
+	  			<% @user_entries.each do |entry| %>
+		    		<% editing_text = "" %>
+		    		<% if entry.editing? %>
+		    		<%   editing_text = "Editing" %>
+		    		<% else %>
+		    		<%   editing_text = "Writing" %>
+		    		<% end %>
+		    
+		    		<% notes_text = "" %>
+		    		<% if !entry.comments.empty? %>
+		    		<%   notes_text = entry.comments %>
+	    			<% end %>
+	   
+	   				<% rowColor = ( shadedCol ) ? "#DDDDDD" : "#FFFFFF" %>
+	   				<% shadedCol = !shadedCol %>
+	   				
+					<tr style="background-color:<%= rowColor %>;">
+						<td class="log_row_weak" style=""><%= entry.starttime.strftime( "%m/%d/%Y" ) %></td>
+						<td class="log_row_weak"><%= editing_text %></td>
+						<td class="log_row_strong" style="text-align:right;"><%= entry.words %></td>
+						<td class="log_row_strong" style="text-align:right;">			
+							<%= entry.hours %>:<% if entry.minutes >= 10 %><%= entry.minutes %><% else %><%= "#{entry.minutes}0" %><% end %>
+						</td>
+						<td class="log_row_strong"></td>
+						<td class="log_row_weak"><%= notes_text %></td>
+						<td class="log_row_weak"><a href="/entries/removeinline?entry=<%= entry[:id] %>">Delete</a></td>
+					</tr>
+	  			<% end %>
+	  			
+	  			<% (0..blankEntryCount).each do |i| %>
+	   				<% rowColor = ( shadedCol ) ? "#DDDDDD" : "#FFFFFF" %>
+	   				<% shadedCol = !shadedCol %>
+	   				
+					<tr style="background-color:<%= rowColor %>;">
+						<td class="log_row_weak" style="">-</td>
+						<td class="log_row_weak"></td>
+						<td class="log_row_strong" style="text-align:right;"></td>
+						<td class="log_row_strong" style="text-align:right;"></td>
+						<td class="log_row_strong"></td>
+						<td class="log_row_weak"></td>
+						<td class="log_row_weak"></td>
+					</tr>
+	  			<% end %>
+	  			
+	  		</table>
 
+  		<% if @user_entries.empty? %>
+    		<div class="box_log_empty">
+    			<br><br><br>
+    			No Log Entries
+    		</div>
+  		<% end %>     
+    
+    </div>
+    
+  </div>
+ 
 </div>
-
-<div id="div_devnotes" style="overflow:hidden; height:0px;">
-	<p class="font_devnotes_title">You are using a development version of Writealot.<br>You can track this project in more detail on Github: <a href="https://github.com/LastZactionHero/WriteALot">https://github.com/LastZactionHero/WriteALot</a></p>
-
-	<% @devnotes.each do |note| %>
-		<br><br><br><span class="font_devnotes_date"><%= note.created_at.strftime( "%D" ) %></span> - <span class="font_devnotes_author"><%= note.author %></span><br><br>
-		<span class="font_devnotes_note"><%= note.note %></span>
-	<% end %>
-
-</div>
-
-
 
 <script type="text/javascript">
-
-	var windowHeight = getWindowHeight();
-	document.getElementById( 'div_panel' ).style.height = ( windowHeight - 170 ) + "px";
-	
-	generateGraphWordsThisWeek( "div_graph_words_this_week" );
-	generateGraphWordsEveryWeek( "div_graph_words_every_week" );
-	generateGraphWordsEachWeek( "div_graph_words_each_week" );
-	generateGraphSocialWordsThisWeek( "div_graph_social_words_this_week" );
-	generateGraphSocialWordsEveryWeek( "div_graph_social_words_every_week" );
-	generateGraphSocialWordsEachWeek( "div_graph_social_words_each_week" );
-	generateGraphSocialMinutesThisWeek( "div_graph_social_minutes_this_week" );
-	generateGraphSocialMinutesEveryWeek( "div_graph_social_minutes_every_week" );
-	
-	if( "social" == "<%= @tab %>" )
-	{
-		switchTab( 'div_tab_social' );
-	}
-	else if( "stats" == "<%= @tab %>" )
-	{
-		switchTab( 'div_tab_stats' );
-	}
-	else
-	{
-		switchTab( 'div_tab_log' );
-	}
-
-	
-	document.body.style.height = "100px;"
+	setTabHighlight( "log" );
 </script>
-
-<div style="position:absolute; top:0px; width:100%; text-align:right; font-size:20px;"><a href="/silver">Test Development Layout!</a></div>

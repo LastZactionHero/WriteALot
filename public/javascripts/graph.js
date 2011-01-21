@@ -23,13 +23,13 @@ function generateGraphWordsThisWeek
 									"&chxr=0,0," + chartMax + "|1,0,6" +
 									"&chxt=y,x" +
 									"&chbh=a" +
-									"&chs=400x225" +
+									"&chs=250x225" +
 									"&cht=bvg" +
 									"&chco=003DF5" +
 									"&chds=0," + chartMax + 
 									"&chd=t:" + getDataString( "words_this_week" ) +  
 									"&chtt=Words+this+Week\"" +
-									" width=\"400\"" +
+									" width=\"250\"" +
 									" height=\"225\"" +
 									" alt=\"Words this Week\" />";
 
@@ -58,13 +58,13 @@ function generateGraphWordsEveryWeek
 									"&chxr=0,0," + chartMax + "|1,0,6" +
 									"&chxt=y,x" +
 									"&chbh=a" +
-									"&chs=400x225" +
+									"&chs=250x225" +
 									"&cht=bvg" +
 									"&chco=003DF5" +
 									"&chds=0," + chartMax + 
 									"&chd=t:" + getDataString( "words_every_week" ) + 
-									"&chtt=Cumulative+Words+per+Weekday+(60+Days)\"" +
-									" width=\"400\"" +
+									"&chtt=Words/Weekday+(60+Days)\"" +
+									" width=\"250\"" +
 									" height=\"225\"" +
 									" alt=\"Words this Week\" />";
 
@@ -92,13 +92,13 @@ if( div_graph )
 								"&chxs=1,676767,9,0,l,676767" +
 								"&chxt=y,x" +
 								"&chbh=a" +
-								"&chs=700x225" +
+								"&chs=575x225" +
 								"&cht=bvg" +
 								"&chco=003DF5" +
 								"&chds=0," + chartMax +
 								"&chd=t:" + getDataString( "words_each_week" ) +
 								"&chtt=Words+Each+Week+this+Year\"" + 
-								" width=\"700\"" +
+								" width=\"575\"" +
 								" height=\"225\"" +
 								" alt=\"Words Each Week\" />";
 	}
@@ -107,7 +107,8 @@ if( div_graph )
 
 function generateGraphSocialWordsThisWeek
 (
-in_div_graph		
+in_div_graph,
+in_size
 )
 {
 div_graph = document.getElementById( in_div_graph );
@@ -145,12 +146,13 @@ if( div_graph )
 		}
 	}
 	
+	var chartDim = getDimensions( in_size );
 	
 	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
 								"?chxl=1:|Sun|Mon|Tues|Wed|Thurs|Fri|Sat" +
 								"&chxr=0,0," + chartMax + "|1,0,7" +
 								"&chxt=y,x" +
-								"&chs=500x320" +
+								"&chs=" + 550 + "x" + 300 +
 								"&cht=lxy" +
 								"&chco=" + colorString +
 								"&chds=0," + chartMax +
@@ -160,17 +162,19 @@ if( div_graph )
 								"&chdlp=b" +
 								"&chma=5,5,5,25" +
 								"&chtt=Words+this+Week\" " + 
-								"width=\"500\" " +
-								"height=\"320\" " +
+								"width=\"" + chartDim[0] + "\" " +
+								"height=\"" + chartDim[1] + "\" " +
 								"alt=\"Words this Week\" />";
-
+	if( in_size == "thumbnail" )
+		div_graph.innerHTML += "<br>Words this Week"
 	}
 }
 
 
 function generateGraphSocialWordsEveryWeek
 (
-in_div_graph		
+in_div_graph,
+in_size		
 )
 {
 div_graph = document.getElementById( in_div_graph );
@@ -208,12 +212,13 @@ if( div_graph )
 		}
 	}
 	
+	var chartDim = getDimensions( in_size );
 	
 	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
 								"?chxl=1:|Sun|Mon|Tues|Wed|Thurs|Fri|Sat" +
 								"&chxr=0,0," + chartMax + "|1,0,7" +
 								"&chxt=y,x" +
-								"&chs=500x320" +
+								"&chs=" + 550 + "x" + 300 +
 								"&cht=lxy" +
 								"&chco=" + colorString +
 								"&chds=0," + chartMax +
@@ -222,17 +227,19 @@ if( div_graph )
 								"&chdlp=b" +
 								"&chma=5,5,5,25" +
 								"&chtt=Cumulative+Words+per+Weekday+(60+Days)\" " + 
-								"width=\"500\" " +
-								"height=\"320\" " +
+								"width=\"" + chartDim[0] + "\" " +
+								"height=\"" + chartDim[1] + "\" " +
 								"alt=\"Cumulative Words per Weekday\" />";
-
+	if( in_size == "thumbnail" )
+		div_graph.innerHTML += "<br>Words/Weekday"
 	}
 }
 
 
 function generateGraphSocialMinutesEveryWeek
 (
-in_div_graph		
+in_div_graph,
+in_size		
 )
 {
 div_graph = document.getElementById( in_div_graph );
@@ -270,12 +277,13 @@ if( div_graph )
 		}
 	}
 	
+	var chartDim = getDimensions( in_size );
 	
 	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
 								"?chxl=1:|Sun|Mon|Tues|Wed|Thurs|Fri|Sat" +
 								"&chxr=0,0," + chartMax + "|1,0,7" +
 								"&chxt=y,x" +
-								"&chs=500x320" +
+								"&chs=" + 550 + "x" + 300 +
 								"&cht=lxy" +
 								"&chco=" + colorString +
 								"&chds=0," + chartMax +
@@ -284,10 +292,12 @@ if( div_graph )
 								"&chdlp=b" +
 								"&chma=5,5,5,25" +
 								"&chtt=Cumulative+Minutes+per+Weekday+(60+Days)\" " + 
-								"width=\"500\" " +
-								"height=\"320\" " +
+								"width=\"" + chartDim[0] + "\" " +
+								"height=\"" + chartDim[1] + "\" " +
 								"alt=\"Cumulative Minutes per Weekday\" />";
-
+	
+	if( in_size == "thumbnail" )
+		div_graph.innerHTML += "<br>Time/Weekday"
 	}
 }
 
@@ -297,7 +307,8 @@ if( div_graph )
  */
 function generateGraphSocialWordsEachWeek
 (
-in_div_graph		
+in_div_graph,
+in_size		
 )
 {
 div_graph = document.getElementById( in_div_graph );
@@ -334,10 +345,12 @@ if( div_graph )
 		}
 	}
 	
+	var chartDim = getDimensions( in_size );
+	
 	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
 								"?chxr=0,1,52|1,0," + chartMax +
 								"&chxt=x,y" +
-								"&chs=500x320" +
+								"&chs=" + 550 + "x" + 300 +
 								"&cht=lxy" +
 								"&chco=" + colorString +
 								"&chds=0," + chartMax +
@@ -346,21 +359,24 @@ if( div_graph )
 								"&chdlp=b" +
 								"&chma=5,5,5,25" +
 								"&chtt=Words+Each+Week+this+Year\" " + 
-								"width=\"500\" " + 
-								"height=\"320\" " +
+								"width=\"" + chartDim[0] + "\" " +
+								"height=\"" + chartDim[1] + "\" " +
 								"alt=\"Words Each Week this Year\" />";
+	if( in_size == "thumbnail" )
+		div_graph.innerHTML += "<br>Words Each Week"
 	}
 }
 
 
 function generateGraphSocialMinutesThisWeek
 (
-in_div_graph		
+in_div_graph,
+in_size		
 )
 {
 div_graph = document.getElementById( in_div_graph );
 if( div_graph )
-{
+{	
 	var chartMax = 0;
 	var data_sets = getDataString( "social_minutes_this_week" ).split( '|' );
 	
@@ -393,12 +409,13 @@ if( div_graph )
 		}
 	}
 	
+	var chartDim = getDimensions( in_size );
 	
 	div_graph.innerHTML = "<img src=\"http://chart.apis.google.com/chart" +
 								"?chxl=1:|Sun|Mon|Tues|Wed|Thurs|Fri|Sat" +
 								"&chxr=0,0," + chartMax + "|1,0,7" +
 								"&chxt=y,x" +
-								"&chs=500x320" +
+								"&chs=" + 550 + "x" + 300 +
 								"&cht=lxy" +
 								"&chco=" + colorString +
 								"&chds=0," + chartMax +
@@ -408,14 +425,43 @@ if( div_graph )
 								"&chdlp=b" +
 								"&chma=5,5,5,25" +
 								"&chtt=Minutes+this+Week\" " + 
-								"width=\"500\" " +
-								"height=\"320\" " +
+								"width=\"" + chartDim[0] + "\" " +
+								"height=\"" + chartDim[1] + "\" " +
 								"alt=\"Minutes this Week\" />";
-
+	if( in_size == "thumbnail" )
+		div_graph.innerHTML += "<br>Time This Week"
 	}
 }
 
 
+/**
+ * Get Chart Dimensions
+ */
+function getDimensions
+	(
+	in_type
+	)
+{
+	var size = new Array;
+
+	if( in_type == "full" )
+	{
+		size[0] = 550;
+		size[1] = 300;
+	}
+	else if( in_type == "thumbnail" )
+	{
+		size[0] = 100;
+		size[1] = 75;
+	}
+	else
+	{
+		size[0] = 0;
+		size[1] = 0;
+	}
+	
+	return size;
+}
 
 /**
  * Get Color for Index

@@ -208,7 +208,7 @@ class UsersController < ApplicationController
   end
 
   # User Home Page
-  def home
+  def home_backup
     # Starting Tab
     @tab = params[:tab];
     
@@ -274,7 +274,7 @@ class UsersController < ApplicationController
   end
   
   
-  def silver
+  def home
     # Starting Tab
     @tab = params[:tab];
     
@@ -355,6 +355,108 @@ class UsersController < ApplicationController
         
   end
   
+  # Statistics Tab
+  def stats
+    # Starting Tab
+    @tab = params[:tab];
+    
+    # Get info for the current user
+    @user_id = session[:user_id]
+    @user_name = session[:user_name]
+    @user_image = session[:user_image]
+    @real_name = session[:real_name]
+    @user = User.find( @user_id )
+    
+    # If information is missing, redirect to log in
+    if @user_id.nil?
+      redirect_to :action => "login"
+    end
+          
+    # Get the days since last entry
+    @days_last_use = @user.get_days_last_use
+    
+    # Last Use String
+    @last_use_text = ""
+    if( @days_last_use == 0 )
+      @last_use_text = "Today"
+    elsif( @days_last_use == 9999 )
+      @last_use_text = "None"
+    else
+      @last_use_text = "#{@days_last_use} Days Ago"
+    end
+        
+    # Get writing stats
+    @writing_stats = @user.get_writing_stats
+        
+  end
+  
+  def social
+    # Starting Tab
+    @tab = params[:tab];
+    
+    # Get info for the current user
+    @user_id = session[:user_id]
+    @user_name = session[:user_name]
+    @user_image = session[:user_image]
+    @real_name = session[:real_name]
+    @user = User.find( @user_id )
+    
+    # If information is missing, redirect to log in
+    if @user_id.nil?
+      redirect_to :action => "login"
+    end
+          
+    # Get the days since last entry
+    @days_last_use = @user.get_days_last_use
+    
+    # Last Use String
+    @last_use_text = ""
+    if( @days_last_use == 0 )
+      @last_use_text = "Today"
+    elsif( @days_last_use == 9999 )
+      @last_use_text = "None"
+    else
+      @last_use_text = "#{@days_last_use} Days Ago"
+    end
+        
+    # Get writing stats
+    @writing_stats = @user.get_writing_stats
+     
+    # Get Invitations
+    @invites = Invite.find( :all, :conditions => [ "host_user = #{session[:user_id].to_i}" ] )
+    
+    @invites_pending = Array.new
+    @invites_target = Invite.find( :all, :conditions => [ "target_user = #{session[:user_id]}" ] )
+    @invites_target.each do |pending|
+      if( !pending.accepted )
+        @invites_pending.push( pending )
+      end
+    end
+   
+    # New Invitations
+    @possible_friends = @user.get_friends_of_friends( 3 )
+    
+    # Alert Messaging
+    @message = "";
+    if( params[:message] )
+      case params[:message]
+        when "e_user_not_found": @message = "The requested user was not found."
+        when "e_server_error": @message = "Unknown server error"
+        when "e_invite_exists": @message = "You are already friends with this user."
+        when "e_invite_self": @message = "You cannot invite yourself."  
+      end
+    end
+    
+    # Social Graphs
+    puts "Invitations:"
+    @user.invites.find( :all, :conditions => { :host_user => @user.id } ).each do |invite|
+      puts invite.inspect
+      puts "This week:  #{invite.users[0].get_data_words_this_week}"
+      puts "Every week: #{invite.users[0].get_data_words_every_week}"
+      puts "All year:   #{invite.users[0].get_data_words_each_week}"
+
+    end           
+  end
   
   def signout
     session[:user_id] = ""
@@ -396,21 +498,23 @@ class UsersController < ApplicationController
       end
     end
     if( target_user.nil? )
-      redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
+      #redirect_to :action => "home", :tab => "social", :message => "e_user_not_found"
+      redirect_to :action => "social", :message => "e_user_not_found"
       fail = true
     end
       
     # Find the Host User
     host_user = User.find( session[:user_id].to_i )
     if( host_user.nil? )
-      redirect_to :action => "home", :tab => "social", :message => "e_server_error"
+      #redirect_to :action => "home", :tab => "social", :message => "e_server_error"
+      redirect_to :action => "social", :message => "e_server_error"
       fail = true
     end
     
     # Make sure the user isn't inviting themselves
     if( !fail )
       if( host_user.id == target_user.id )
-        redirect_to :action => "home", :tab => "social", :message => "e_invite_self"
+        redirect_to :action => "social", :message => "e_invite_self"
         fail = true
       end
     end
@@ -419,7 +523,7 @@ class UsersController < ApplicationController
     if( !fail )
       existing_invite = host_user.invites.find( :first,:conditions => { :target_user => target_user.id } )      
       if( existing_invite )
-        redirect_to :action => "home", :tab => "social", :message => "e_invite_exists"
+        redirect_to :action => "social", :message => "e_invite_exists"
         fail = true
       end
     end
@@ -443,7 +547,7 @@ class UsersController < ApplicationController
       #host_user.invites << invite
       host_user.save
       
-      redirect_to :action => "home", :tab => "social"
+      redirect_to :action => "social"
     end
 
   end
@@ -461,7 +565,7 @@ class UsersController < ApplicationController
       invite.destroy
     end
     
-    redirect_to :action => "home", :tab => "social"
+    redirect_to :action => "social"
   end
   
   # Accept Invitation
@@ -500,7 +604,7 @@ class UsersController < ApplicationController
       
     end
     
-    redirect_to :action => "home", :tab => "social"
+    redirect_to :action => "social"
   end
   
   # Delete Invitation
@@ -542,7 +646,7 @@ class UsersController < ApplicationController
       end  
     end
     
-    redirect_to :action => "home", :tab => "social"
+    redirect_to :action => "social"
   end
   
   
@@ -565,7 +669,7 @@ class UsersController < ApplicationController
       
     end
     
-    redirect_to :action => "home", :tab => "social"
+    redirect_to :action => "social"
       
   end
   
