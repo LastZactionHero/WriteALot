@@ -133,7 +133,11 @@
   <div class="style_content" id="div_content">
   
     <div class="style_id_bar" id="div_id_bar">
-      <div class="style_id_bar_pic" id="div_id_bar_pic"><image height=50 width=48 src=" <%= @user_image %> "></div>
+      <div class="style_id_bar_pic" id="div_id_bar_pic">
+      	<% if !@user_image.empty? %>
+      		<image height=50 width=48 src=" <%= @user_image %> ">
+      	<% end %>
+      </div>
       <div class="style_id_bar_info" id="div_id_bar_info"></div>
       <div class="style_id_bar_info_name" id="div_id_bar_info_name"><%= @user_name %> <span style="font-size:12px;"><%= link_to "(sign out)", :action=>'signout' %></span></div>
       <div class="style_id_bar_info_data" id="div_id_bar_info_data">Last Updated: <%= @last_use_text %> | Words this Week: <%= @writing_stats[ "seven_days" ][ "words" ] %> | Hours this Week: <%= '%.2f' % @writing_stats[ "seven_days" ][ "total" ] %></div> 
